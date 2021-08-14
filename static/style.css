@@ -1,0 +1,208 @@
+:root {
+  --text: #dddddd;
+  --bg: #0d0d1c;
+  --blue: #111f4d;
+  --red: #fd0054;
+}
+
+@font-face {
+  font-family: "Roboto-Regular";
+  src: url("./fonts/Roboto-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto-Bold";
+  src: url("./fonts/Roboto-Bold.ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: "Roboto-Regular";
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+strong {
+  font-family: "Roboto-Bold";
+}
+
+.container {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 532px;
+  padding: 16px;
+  padding-top: 5em;
+}
+
+.container h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5em;
+}
+
+.container > p {
+  font-size: 1.4rem;
+  margin-bottom: 2.5em;
+}
+
+.legend {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 0 16px;
+  margin-bottom: 1em;
+}
+
+.legend span {
+  font-size: 1.1rem;
+}
+
+.track {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.track .track-player {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 8px;
+}
+
+.track .track-player p {
+  display: block;
+  font-size: 1.2rem;
+}
+
+.track .track-player img {
+  border-radius: 2px;
+  display: block;
+  max-height: 12px;
+  max-width: 18px;
+}
+
+.track details > summary:first-of-type {
+  list-style-type: none;
+}
+
+.track details[open] summary {
+  background-color: var(--blue);
+}
+
+.track details summary {
+  -webkit-transition: 0.2s all ease-in-out;
+  transition: 0.2s all ease-in-out;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 12px 16px;
+  gap: 16px;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  cursor: pointer;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  border-radius: 8px;
+  border: 1px solid var(--blue);
+}
+
+.track details summary:hover {
+  background-color: var(--blue);
+}
+
+.track details summary ::-webkit-details-marker {
+  display: none;
+}
+
+.track details summary .track-name h2 {
+  font-size: 1.6rem;
+}
+
+.track details summary .track-name span {
+  font-size: 1.2rem;
+  opacity: 0.75;
+}
+
+.track details summary .track-record {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  text-align: right;
+}
+
+.track details summary .track-record strong {
+  font-size: 2rem;
+  color: var(--red);
+  font-weight: 900;
+}
+
+.track details summary .track-record p {
+  display: block;
+  font-size: 1.2rem;
+}
+
+.track .track-content {
+  padding: 8px 16px;
+  margin-top: 12px;
+}
+
+.track .track-content .track-time {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  gap: 32px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.track .track-content .track-time:last-child {
+  border-bottom: none;
+}
+
+.track .track-content .track-time strong {
+  font-size: 1.8rem;
+}
+
+.track .track-content .track-time span {
+  font-size: 1.2rem;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  text-align: right;
+  opacity: 0.75;
+}
+/*# sourceMappingURL=style.css.map */
