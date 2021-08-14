@@ -205,4 +205,76 @@ strong {
   text-align: right;
   opacity: 0.75;
 }
+
+.search {
+  display: block;
+  position: relative;
+  z-index: 10;
+}
+
+.search input[type="text"] {
+  -webkit-transition: 0.2s all ease-in-out;
+  transition: 0.2s all ease-in-out;
+  font-family: "Roboto-Regular";
+  border: 1px solid var(--red);
+  color: var(--red);
+  display: block;
+  margin-bottom: 32px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 1.4rem;
+  width: 100%;
+  padding-right: 48px;
+  background-color: transparent;
+  z-index: 5;
+}
+
+.search input[type="text"] ::-webkit-input-placeholder {
+  color: var(--red);
+}
+
+.search input[type="text"] :-ms-input-placeholder {
+  color: var(--red);
+}
+
+.search input[type="text"] ::-ms-input-placeholder {
+  color: var(--red);
+}
+
+.search input[type="text"] ::placeholder {
+  color: var(--red);
+}
+
+.search input[type="text"]:focus {
+  background-color: var(--red);
+  border-color: var(--red);
+  color: var(--text);
+}
+
+.search input[type="text"]:not(:placeholder-shown) + button {
+  display: block;
+}
+
+.search button {
+  all: unset;
+  display: none;
+  width: 40px;
+  position: absolute;
+  font-size: 1rem;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  cursor: pointer;
+  background-color: transparent;
+  text-align: center;
+  z-index: 25;
+}
+
+.search button img {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  -webkit-transform: translateY(2px);
+          transform: translateY(2px);
+}
 /*# sourceMappingURL=style.css.map */

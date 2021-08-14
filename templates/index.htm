@@ -14,6 +14,13 @@
         <h1>TMNF Map list</h1>
         <p>Collection of records grouped per map from the Hivecom community members.</p>
 
+        <div class="search">
+            <input type="text" id="search" placeholder="Search maps/users" />
+            <button id="clear">
+                <img src="static/icons/times-solid.svg" />
+            </button>
+        </div>
+
         <div class="legend">
           <span>Track</span>
           <span>Record</span>
@@ -21,7 +28,7 @@
 
         {% for (map, records) in maps %}
           {% let record = records.get(0).unwrap() %}
-          <div class="track" data-keyword="['{{map.name}}', '{{record.player}}']">
+          <div class="track" data-keyword="{{map.name}};;{{record.player}}">
             <details>
               <summary>
                 <div class="track-name">
@@ -53,4 +60,5 @@
       </div>
     </main>
   </body>
+<script type="text/javascript" src="static/index.js"></script>
 </html>

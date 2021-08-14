@@ -110,10 +110,10 @@ async fn root(
             JOIN records ON challenges.Id = records.ChallengeId
             JOIN players ON records.PlayerId = players.Id",
             (),
-            //Name,   Author, Env,    Login,  Nation, Score, Date
         )
         .await
         .unwrap()
+                  //Name,   Author, Env,    Login,  Nation, Score, Date
         .collect::<(String, String, String, String, String, i64, NaiveDateTime)>()
         .await
         .unwrap();
@@ -170,7 +170,7 @@ mod filters {
 
     pub fn fmt_duration(duration: &Duration) -> Result<String, askama::Error> {
         let minutes = duration.num_minutes();
-        let seconds = (duration.num_milliseconds() - minutes * 60) as f64 / 1000.0;
+        let seconds = (duration.num_milliseconds() - minutes * 60000) as f64 / 1000.0;
         Ok(format!(
             "{:02}:{:05.2}",
             minutes,
