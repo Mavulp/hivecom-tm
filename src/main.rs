@@ -27,6 +27,8 @@ async fn main() {
 
     let database_url: String =
         std::env::var("DATABASE_URL").expect("SQL_CONNECTION string should be set");
+    let bind_addr: SocketAddr =
+        std::env::var("BIND_ADDRESS").expect("BIND_ADDRESS string should be set").parse().unwrap();
 
     let pool = mysql_async::Pool::new(&database_url[..]);
 
@@ -43,9 +45,8 @@ async fn main() {
         )
         .layer(TraceLayer::new_for_http());
 
-    let addr = SocketAddr::from(([127, 0, 0, 1], 6969));
-    tracing::debug!("listening on {}", addr);
-    axum::Server::bind(&addr)
+    tracing::debug!("listening on {}", bind_addr);
+    axum::Server::bind(&bind_addr)
         .serve(app.into_make_service())
         .await
         .unwrap();
