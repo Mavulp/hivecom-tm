@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
-    <meta charset="utf-8" />
     <title>TM Records | Hivecom</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <link rel="stylesheet" type="text/css" href="static/reset.css" />
     <link rel="stylesheet" type="text/css" href="static/style.css" />
   </head>
@@ -15,10 +16,10 @@
         <p>Collection of records grouped per map from the Hivecom community members.</p>
 
         <div class="search">
-            <input type="text" id="search" placeholder="Search maps/users" />
-            <button id="clear">
-                <img src="static/icons/times-solid.svg" />
-            </button>
+          <input type="text" id="search" placeholder="Search maps/users" />
+          <button id="clear">
+            <img src="static/icons/times-solid.svg" />
+          </button>
         </div>
 
         <div class="legend">
@@ -26,39 +27,38 @@
           <span>Record</span>
         </div>
 
-        {% for (map, records) in maps %}
-          {% let record = records.get(0).unwrap() %}
-          <div class="track" data-keyword="{{map.name}};;{{record.player}}">
-            <details>
-              <summary>
-                <div class="track-name">
-                  <h2>{{map.name}}</h2>
-                  <span>{{map.author}}</span>
-                </div>
+        {% for (map, records) in maps %} {% let record = records.get(0).unwrap() %}
+        <div class="track" data-keyword="{{map.name}};;{{record.player}}">
+          <details>
+            <summary>
+              <div class="track-name">
+                <h2>{{map.name}}</h2>
+                <span>{{map.author}}</span>
+              </div>
 
-                <div class="track-record">
-                  <strong>{{record.time|fmt_duration}}</strong>
+              <div class="track-record">
+                <strong>{{record.time|fmt_duration}}</strong>
+                <p>{{record.player}}</p>
+              </div>
+            </summary>
+
+            <div class="track-content">
+              {% for record in records %}
+              <div class="track-time">
+                <strong>{{record.time|fmt_duration}}</strong>
+                <div class="track-player">
+                  <img src="static/flags/{{record.country}}.svg" alt="cz" />
                   <p>{{record.player}}</p>
                 </div>
-              </summary>
-
-              <div class="track-content">
-                {% for record in records %}
-                <div class="track-time">
-                  <strong>{{record.time|fmt_duration}}</strong>
-                  <div class="track-player">
-                    <img src="static/flags/{{record.country}}.svg" alt="cz">
-                    <p>{{record.player}}</p>
-                  </div>
-                  <span>{{record.date.format("%d.%m.%Y %H:%M")}}</span>
-                </div>
-                {% endfor %}
+                <span>{{record.date.format("%d.%m.%Y %H:%M")}}</span>
               </div>
-            </details>
-          </div>
+              {% endfor %}
+            </div>
+          </details>
+        </div>
         {% endfor %}
       </div>
     </main>
   </body>
-<script type="text/javascript" src="static/index.js"></script>
+  <script type="text/javascript" src="static/index.js"></script>
 </html>
