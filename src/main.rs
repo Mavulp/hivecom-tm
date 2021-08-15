@@ -12,6 +12,7 @@ use lazy_static::lazy_static;
 use mysql_async::prelude::*;
 use regex::Regex;
 use tower_http::{services::ServeDir, trace::TraceLayer};
+use tracing::{debug, error};
 
 use std::collections::BTreeMap;
 use std::net::SocketAddr;
@@ -23,6 +24,11 @@ lazy_static! {
 #[tokio::main]
 async fn main() {
     dotenv::dotenv().ok();
+
+    if std::env::var("RUST_LOG").is_err() {
+        std::env::set_var("RUST_LOG", "tracing_aka_logging=debug,tower_http=debug")
+    }
+
     tracing_subscriber::fmt::init();
 
     let database_url: String =
@@ -45,7 +51,7 @@ async fn main() {
         )
         .layer(TraceLayer::new_for_http());
 
-    tracing::debug!("listening on {}", bind_addr);
+    debug!("listening on {}", bind_addr);
     axum::Server::bind(&bind_addr)
         .serve(app.into_make_service())
         .await
@@ -155,7 +161,7 @@ fn map_country(name: &str) -> &'static str {
         "CAN" => "ca",
         "SUI" => "ch",
         _ => {
-            dbg!(&name);
+            error!("Unknown Country Code: {}", name);
             "global"
         }
     }
