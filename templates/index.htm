@@ -37,7 +37,7 @@
               </div>
 
               <div class="track-record">
-                <strong>{{record.time|fmt_duration}}</strong>
+                <strong>{{record.time}}</strong>
                 <p>{{record.player}}</p>
               </div>
             </summary>
@@ -45,9 +45,9 @@
             <div class="track-content">
               {% for record in records %}
               <div class="track-time">
-                <strong>{{record.time|fmt_duration}}</strong>
+                <strong>{{record.time}}</strong>
                 <div class="track-player">
-                  <img src="static/flags/{{record.country}}.svg" alt="cz" />
+                  <img src="static/flags/{{record.country}}.svg" alt="{{record.country}}" />
                   <p>{{record.player}}</p>
                 </div>
                 <span>{{record.date.format("%d.%m.%Y %H:%M")}}</span>
