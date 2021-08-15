@@ -26,7 +26,7 @@ async fn main() {
     dotenv::dotenv().ok();
 
     if std::env::var("RUST_LOG").is_err() {
-        std::env::set_var("RUST_LOG", "tracing_aka_logging=debug,tower_http=debug")
+        std::env::set_var("RUST_LOG", "tracing_aka_logging=debug,tower_http=debug,debug")
     }
 
     tracing_subscriber::fmt::init();
@@ -93,7 +93,7 @@ impl PartialEq for Map {
 struct Record<'a> {
     player: String,
     country: &'a str,
-    time: Duration,
+    time: DisplayDuration,
     date: NaiveDateTime,
 }
 
@@ -137,7 +137,7 @@ async fn root(
         let record = Record {
             player,
             country: map_country(&country),
-            time: Duration::milliseconds(time),
+            time: DisplayDuration(Duration::milliseconds(time)),
             date,
         };
         records.push(record);
@@ -171,16 +171,27 @@ fn sanitize_map_name(name: &str) -> String {
     RE.replace_all(name, "").to_string()
 }
 
-mod filters {
-    use chrono::Duration;
 
-    pub fn fmt_duration(duration: &Duration) -> Result<String, askama::Error> {
-        let minutes = duration.num_minutes();
-        let seconds = (duration.num_milliseconds() - minutes * 60000) as f64 / 1000.0;
-        Ok(format!(
+#[derive(Debug, Clone)]
+struct DisplayDuration(Duration);
+
+impl std::fmt::Display for DisplayDuration {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let minutes = self.num_minutes();
+        let seconds = (self.num_milliseconds() - minutes * 60000) as f64 / 1000.0;
+        write!(
+            f,
             "{:02}:{:05.2}",
             minutes,
             seconds,
-        ))
+        )
+    }
+}
+
+impl std::ops::Deref for DisplayDuration {
+    type Target = Duration;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
     }
 }
