@@ -65,42 +65,50 @@ function showAll(items) {
  * Add notifications since last login
  */
 
-async function fetchRecords() {
+async function fetchRecords(init = true) {
   // Get the time when data was last fetched
-  const since = localStorage.getItem('since')
+  const since = localStorage.getItem('since') ?? 1629133137
+  // const since = 1629133137
 
-  await fetch('url', {
-    method: 'POST',
-    body: JSON.stringify({ since: since }),
-  })
-    .then((response) => {
-      const data = response.json()
-      // New records since last fetch?, render new notifications
-      if (data) renderAlerts(data)
+  await fetch(`https://records.hivecom.net/api/records?since=${since}`)
+    .then((response) => response.json())
+    .then((data) => {
+      if (data) renderAlerts(data.map((item) => item.mapId))
     })
     .catch((e) => {
-      console.log('err:')
-      alert('Error fetching data. Fuck off.')
+      console.log('err:', e)
     })
     .finally(() => {
       // Get current fetch timestamp and save it
-      const now = new Date() / 1000
+      const now = (new Date() / 1000).toFixed(0)
       localStorage.setItem('since', now)
     })
 }
 
-function renderAlerts() {
-  // First clear all previous notifications
+function renderAlerts(ids) {
+  document.getElementsByClassName('track')
 
-  // Render new notifications
-  console.log('piss off')
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i]
+
+    // First clear all previous wins
+    item.classList.remove('new-record')
+
+    if (ids.includes(Number(item.id))) {
+      item.classList.add('new-record')
+    }
+  }
 }
 
 // Runtime
-// fetchRecords()
+fetchRecords()
+
+// TODO: Implement refresh notification, make it nicer
+// TODO: Add checkbox for "Filter new records"
 
 // const FETCH_TIMEOUT = 300000
 
 // const interval = setInterval(() => {
-//   fetchRecords()
+//   // Set init to false, this renders the notification
+//   fetchRecords(false)
 // }, FETCH_TIMEOUT)

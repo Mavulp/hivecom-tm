@@ -25,11 +25,11 @@
 
         <div class="legend">
           <span>Track</span>
-          <span>Record</span>
+          <span>Best Time</span>
         </div>
 
         {% for (map, records) in maps %} {% let record = records.get(0).unwrap() %}
-        <div class="track" data-keyword="{{map.name}};;{{record.player}}">
+        <div class="track" data-keyword="{{map.name}};;{{record.player}}" id="{{map.id}}">
           <details>
             <summary>
               <div class="track-name">
