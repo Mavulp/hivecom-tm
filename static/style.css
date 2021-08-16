@@ -6,14 +6,14 @@
 }
 
 @font-face {
-  font-family: "Roboto-Regular";
+  font-family: 'Roboto-Regular';
   src: url("./fonts/Roboto-Regular.ttf");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Roboto-Bold";
+  font-family: 'Roboto-Bold';
   src: url("./fonts/Roboto-Bold.ttf");
   font-weight: 700;
   font-style: normal;
@@ -24,7 +24,7 @@ html {
 }
 
 body {
-  font-family: "Roboto-Regular";
+  font-family: 'Roboto-Regular';
   background-color: var(--bg);
   color: var(--text);
 }
@@ -35,7 +35,7 @@ h3,
 h4,
 h5,
 strong {
-  font-family: "Roboto-Bold";
+  font-family: 'Roboto-Bold';
 }
 
 .container {
@@ -208,14 +208,18 @@ strong {
 
 .search {
   display: block;
-  position: relative;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  padding-top: 16px;
+  background-color: var(--bg);
   z-index: 10;
 }
 
-.search input[type="text"] {
+.search input[type='text'] {
   -webkit-transition: 0.2s all ease-in-out;
   transition: 0.2s all ease-in-out;
-  font-family: "Roboto-Regular";
+  font-family: 'Roboto-Regular';
   border: 1px solid var(--red);
   color: var(--red);
   display: block;
@@ -229,29 +233,29 @@ strong {
   z-index: 5;
 }
 
-.search input[type="text"] ::-webkit-input-placeholder {
+.search input[type='text'] ::-webkit-input-placeholder {
   color: var(--red);
 }
 
-.search input[type="text"] :-ms-input-placeholder {
+.search input[type='text'] :-ms-input-placeholder {
   color: var(--red);
 }
 
-.search input[type="text"] ::-ms-input-placeholder {
+.search input[type='text'] ::-ms-input-placeholder {
   color: var(--red);
 }
 
-.search input[type="text"] ::placeholder {
+.search input[type='text'] ::placeholder {
   color: var(--red);
 }
 
-.search input[type="text"]:focus {
+.search input[type='text']:not(:placeholder-shown), .search input[type='text']:focus {
   background-color: var(--red);
   border-color: var(--red);
   color: var(--text);
 }
 
-.search input[type="text"]:not(:placeholder-shown) + button {
+.search input[type='text']:not(:placeholder-shown) + button {
   display: block;
 }
 
@@ -262,7 +266,7 @@ strong {
   position: absolute;
   font-size: 1rem;
   right: 0;
-  top: 0;
+  top: 16px;
   bottom: 0;
   cursor: pointer;
   background-color: transparent;
@@ -276,5 +280,12 @@ strong {
   height: 16px;
   -webkit-transform: translateY(2px);
           transform: translateY(2px);
+}
+
+#results {
+  text-align: center;
+  margin: 0;
+  -webkit-transform: translateY(-16px);
+          transform: translateY(-16px);
 }
 /*# sourceMappingURL=style.css.map */

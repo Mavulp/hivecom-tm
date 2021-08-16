@@ -25,15 +25,15 @@
 }
 
 @font-face {
-  font-family: "Roboto-Regular";
-  src: url("./fonts/Roboto-Regular.ttf");
+  font-family: 'Roboto-Regular';
+  src: url('./fonts/Roboto-Regular.ttf');
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Roboto-Bold";
-  src: url("./fonts/Roboto-Bold.ttf");
+  font-family: 'Roboto-Bold';
+  src: url('./fonts/Roboto-Bold.ttf');
   font-weight: 700;
   font-style: normal;
 }
@@ -43,7 +43,7 @@ html {
 }
 
 body {
-  font-family: "Roboto-Regular";
+  font-family: 'Roboto-Regular';
   background-color: var(--bg);
   color: var(--text);
 }
@@ -54,7 +54,7 @@ h3,
 h4,
 h5,
 strong {
-  font-family: "Roboto-Bold";
+  font-family: 'Roboto-Bold';
 }
 
 .container {
@@ -204,13 +204,16 @@ strong {
 
 .search {
   display: block;
-  position: relative;
+  position: sticky;
+  top: 0;
+  padding-top: 16px;
+  background-color: var(--bg);
   z-index: 10;
 
-  input[type="text"] {
+  input[type='text'] {
     transition: 0.2s all ease-in-out;
 
-    font-family: "Roboto-Regular";
+    font-family: 'Roboto-Regular';
     border: 1px solid var(--red);
     color: var(--red);
     display: block;
@@ -227,6 +230,7 @@ strong {
       color: var(--red);
     }
 
+    &:not(:placeholder-shown),
     &:focus {
       background-color: var(--red);
       border-color: var(--red);
@@ -247,7 +251,7 @@ strong {
     position: absolute;
     font-size: 1rem;
     right: 0;
-    top: 0;
+    top: 16px;
     bottom: 0;
     cursor: pointer;
     background-color: transparent;
@@ -261,4 +265,10 @@ strong {
       transform: translateY(2px);
     }
   }
+}
+
+#results {
+  text-align: center;
+  margin: 0;
+  transform: translateY(-16px);
 }
