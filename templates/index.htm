@@ -15,12 +15,13 @@
         <h1>TMNF Map list</h1>
         <p>Collection of records grouped per map from the Hivecom community members.</p>
 
-        <div class="search">
-          <input type="text" id="search" placeholder="Search maps/users" />
+        <form class="search" autocomplete="off">
+          <input type="search" autocomplete="pleasedontautocomplete" id="search" placeholder="Search maps/users" />
           <button id="clear">
-            <img src="static/icons/times-solid.svg" />
+            <img src="../static/icons/times-solid.svg" />
           </button>
-        </div>
+        </form>
+        <p id="results" style="display: none"></p>
 
         <div class="legend">
           <span>Track</span>

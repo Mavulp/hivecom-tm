@@ -32,7 +32,12 @@ document.getElementById('search').addEventListener('input', function (e) {
 
   if (results < items.length) {
     // Show results
-    setResults(`Found <strong>${results}</strong> record(s)`, 'block')
+
+    if (results === 0) {
+      setResults(`No results for &#39;${search}&#39;`, 'block')
+    } else {
+      setResults(`Found <strong>${results}</strong> record(s)`, 'block')
+    }
   } else {
     // Hide results
     setResults('', 'none')
@@ -79,7 +84,7 @@ async function fetchRecords() {
     })
     .finally(() => {
       // Get current fetch timestamp and save it
-      const now = new Date()
+      const now = new Date() / 1000
       localStorage.setItem('since', now)
     })
 }
