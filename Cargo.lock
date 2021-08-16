@@ -609,6 +609,8 @@ dependencies = [
  "lazy_static",
  "mysql_async",
  "regex",
+ "serde",
+ "serde_json",
  "tokio",
  "tower-http",
  "tracing",

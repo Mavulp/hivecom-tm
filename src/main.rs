@@ -17,6 +17,8 @@ use tracing::{debug, error};
 use std::collections::BTreeMap;
 use std::net::SocketAddr;
 
+mod api;
+
 lazy_static! {
     static ref RE: Regex = Regex::new("\\$([\\dabcdefABCDEF]{3}|.)").unwrap();
 }
@@ -26,19 +28,25 @@ async fn main() {
     dotenv::dotenv().ok();
 
     if std::env::var("RUST_LOG").is_err() {
-        std::env::set_var("RUST_LOG", "tracing_aka_logging=debug,tower_http=debug,debug")
+        std::env::set_var(
+            "RUST_LOG",
+            "tracing_aka_logging=debug,tower_http=debug,debug",
+        )
     }
 
     tracing_subscriber::fmt::init();
 
     let database_url: String =
         std::env::var("DATABASE_URL").expect("SQL_CONNECTION string should be set");
-    let bind_addr: SocketAddr =
-        std::env::var("BIND_ADDRESS").expect("BIND_ADDRESS string should be set").parse().unwrap();
+    let bind_addr: SocketAddr = std::env::var("BIND_ADDRESS")
+        .expect("BIND_ADDRESS string should be set")
+        .parse()
+        .unwrap();
 
     let pool = mysql_async::Pool::new(&database_url[..]);
 
     let app = route("/", get(root))
+        .route("/api/records", get(api::records_get))
         .layer(AddExtensionLayer::new(pool))
         .nest(
             "/static",
@@ -66,6 +74,7 @@ struct IndexTemplate<'a> {
 
 #[derive(Debug, Clone, Eq)]
 struct Map {
+    id: u64,
     name: String,
     author: String,
     environment: String,
@@ -85,7 +94,7 @@ impl PartialOrd for Map {
 
 impl PartialEq for Map {
     fn eq(&self, other: &Self) -> bool {
-        self.name == other.name
+        self.id == other.id
     }
 }
 
@@ -105,7 +114,9 @@ async fn root(
 
     let loaded_scores = conn
         .exec_iter(
-            "SELECT challenges.Name,
+            "SELECT
+                challenges.Id,
+                challenges.Name,
                 challenges.Author,
                 challenges.Environment,
                 players.Login,
@@ -119,14 +130,31 @@ async fn root(
         )
         .await
         .unwrap()
-                  //Name,   Author, Env,    Login,  Nation, Score, Date
-        .collect::<(String, String, String, String, String, i64, NaiveDateTime)>()
+        .collect::<(
+            // Id
+            u64,
+            // Name
+            String,
+            // Author
+            String,
+            // Environment
+            String,
+            // Player
+            String,
+            // Country
+            String,
+            // Time
+            i64,
+            // Date
+            NaiveDateTime,
+        )>()
         .await
         .unwrap();
 
     let mut maps = BTreeMap::new();
-    for (name, author, environment, player, country, time, date) in loaded_scores {
+    for (id, name, author, environment, player, country, time, date) in loaded_scores {
         let map = Map {
+            id,
             name: sanitize_map_name(&name),
             author,
             environment,
@@ -171,20 +199,14 @@ fn sanitize_map_name(name: &str) -> String {
     RE.replace_all(name, "").to_string()
 }
 
-
 #[derive(Debug, Clone)]
-struct DisplayDuration(Duration);
+pub struct DisplayDuration(Duration);
 
 impl std::fmt::Display for DisplayDuration {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let minutes = self.num_minutes();
         let seconds = (self.num_milliseconds() - minutes * 60000) as f64 / 1000.0;
-        write!(
-            f,
-            "{:02}:{:05.2}",
-            minutes,
-            seconds,
-        )
+        write!(f, "{:02}:{:05.2}", minutes, seconds,)
     }
 }
 
