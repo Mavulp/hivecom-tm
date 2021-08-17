@@ -46,7 +46,9 @@ async fn main() {
     let pool = mysql_async::Pool::new(&database_url[..]);
 
     let app = route("/", get(root))
+        .route("/api/players", get(api::players_get))
         .route("/api/records", get(api::records_get))
+        .route("/api/maps", get(api::maps_get))
         .layer(AddExtensionLayer::new(pool))
         .nest(
             "/static",
@@ -68,8 +70,8 @@ async fn main() {
 
 #[derive(Template)]
 #[template(path = "index.htm")]
-struct IndexTemplate<'a> {
-    maps: BTreeMap<Map, Vec<Record<'a>>>,
+struct IndexTemplate {
+    maps: BTreeMap<Map, Vec<Record>>,
 }
 
 #[derive(Debug, Clone, Eq)]
@@ -99,14 +101,13 @@ impl PartialEq for Map {
 }
 
 #[derive(Debug, Clone)]
-struct Record<'a> {
+struct Record {
     player: String,
-    country: &'a str,
+    country: &'static str,
     time: DisplayDuration,
     date: NaiveDateTime,
 }
 
-// basic handler that responds with a static string
 async fn root(
     Extension(pool): Extension<mysql_async::Pool>,
 ) -> Result<Html<String>, (StatusCode, String)> {
@@ -160,7 +161,7 @@ async fn root(
             environment,
         };
 
-        let records = maps.entry(map).or_insert(Vec::new());
+        let records = maps.entry(map).or_insert_with(Vec::new);
 
         let record = Record {
             player,
@@ -171,7 +172,7 @@ async fn root(
         records.push(record);
     }
 
-    for (_, records) in &mut maps {
+    for records in maps.values_mut() {
         records.sort_by(|a, b| a.time.cmp(&b.time));
     }
 
