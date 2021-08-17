@@ -350,18 +350,34 @@ strong {
   position: fixed;
   bottom: 64px;
   right: 64px;
-  padding: 12px 16px;
+  padding: 16px;
   border-radius: 16px;
   background-color: var(--red);
   color: var(--bg);
 }
 
+.notification h2 {
+  font-size: 1.6rem;
+}
+
 .notification button {
   all: unset;
+  -webkit-transition: 0.2s all ease-in-out;
+  transition: 0.2s all ease-in-out;
   font-size: 1.6rem;
   color: #fff;
   display: block;
-  margin-left: 8px;
+  margin-left: 16px;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 32px;
+}
+
+.notification button:hover {
+  background-color: rgba(255, 255, 255, 0.25);
 }
 
 .notification button img {

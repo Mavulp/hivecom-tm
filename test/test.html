@@ -2,18 +2,21 @@
 <html lang="en">
   <!-- This html template is for quick developing of new front-end features without a local server -->
   <head>
-    <meta charset="utf-8" />
     <title>TM Records | Hivecom</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <link rel="stylesheet" type="text/css" href="../static/reset.css" />
     <link rel="stylesheet" type="text/css" href="../static/style.css" />
   </head>
 
   <body id="home">
     <main class="wrapper">
-      <div class="notification">
-        <h2>New records</h2>
-        <p>The site has been updated to include newly driven best times.</p>
-        <button>
+      <div class="notification" id="notification" style="display:none;">
+        <div>
+          <h2>New records available!</h2>
+          <p>The site has been updated to include newly driven best times.</p>
+        </div>
+        <button id="clear-notif">
           <img src="../static/icons/times-solid.svg" />
         </button>
       </div>

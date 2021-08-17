@@ -1,10 +1,11 @@
+const items = document.getElementsByClassName('track')
+const resultsEl = document.getElementById('results')
+const notifEl = document.getElementById('notification')
+
+
 /**
  * Search
- */
-
-const items = document.getElementsByClassName('track')
-// TODO: Implement showing of results & 'nothing found'
-const resultsEl = document.getElementById('results')
+*/
 
 document.getElementById('search').addEventListener('input', function (e) {
   const search = document.getElementById('search').value
@@ -68,12 +69,14 @@ function showAll(items) {
 async function fetchRecords(init = true) {
   // Get the time when data was last fetched
   const since = localStorage.getItem('since') ?? 1629133137
-  // const since = 1629133137
 
   await fetch(`https://records.hivecom.net/api/records?since=${since}`)
     .then((response) => response.json())
     .then((data) => {
-      if (data) renderAlerts(data.map((item) => item.mapId))
+      if (data.length > 0) {
+        renderAlerts(data.map((item) => item.mapId))
+        if (!init) renderNotif(true)
+      }
     })
     .catch((e) => {
       console.log('err:', e)
@@ -92,7 +95,6 @@ function renderAlerts(ids) {
     const item = items[i]
 
     // First clear all previous wins
-    item.classList.remove('new-record')
 
     if (ids.includes(Number(item.id))) {
       item.classList.add('new-record')
@@ -100,15 +102,27 @@ function renderAlerts(ids) {
   }
 }
 
-// Runtime
+function renderNotif(state) {
+  if (state) {
+    notifEl.style.display = "flex"
+  } else {
+    notifEl.style.display = "none"
+  }
+}
+
+document.getElementById('clear-notif').addEventListener('click', () => { renderNotif(false) })
+
+
+/**
+ * Fetching loop
+ */
 fetchRecords()
 
-// TODO: Implement refresh notification, make it nicer
 // TODO: Add checkbox for "Filter new records"
 
-// const FETCH_TIMEOUT = 300000
+const FETCH_TIMEOUT = 300000
 
-// const interval = setInterval(() => {
-//   // Set init to false, this renders the notification
-//   fetchRecords(false)
-// }, FETCH_TIMEOUT)
+const interval = setInterval(() => {
+  // Set init to false, this renders the notification as its not the first time this function is called
+  fetchRecords(false)
+}, FETCH_TIMEOUT)
