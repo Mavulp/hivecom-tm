@@ -30,7 +30,7 @@ async fn main() {
     if std::env::var("RUST_LOG").is_err() {
         std::env::set_var(
             "RUST_LOG",
-            "tracing_aka_logging=debug,tower_http=debug,debug",
+            "tracing_aka_logging=debug,tower_http=debug,info",
         )
     }
 
