@@ -34,7 +34,7 @@ pub async fn records_get(
 ) -> Result<Json<Vec<Record>>, (StatusCode, Json<String>)> {
     let mut conn = pool.get_conn().await.unwrap();
 
-    let records = conn
+    let loaded_records = conn
         .exec_iter(
             "SELECT
                 records.ChallengeId,
@@ -43,11 +43,8 @@ pub async fn records_get(
                 records.Score,
                 records.Date
             FROM records
-            JOIN players ON records.PlayerId = players.Id
-            WHERE records.Date > :requested",
-            params! {
-                "requested" => NaiveDateTime::from_timestamp(input.since, 0),
-            },
+            JOIN players ON records.PlayerId = players.Id",
+            (),
         )
         .await
         .unwrap()
@@ -55,15 +52,32 @@ pub async fn records_get(
         .await
         .unwrap();
 
-    let records = records
-        .into_iter()
-        .map(|(id, player, country, time, date)| Record {
-            map_id: id,
-            player,
+    let mut best_scores = HashMap::new();
+    for (map_id, player, country, time, date) in loaded_records {
+        let time = DisplayDuration(Duration::milliseconds(time));
+        let record = best_scores.entry(map_id).or_insert_with(|| Record {
+            map_id,
+            player: player.clone(),
             country: map_country(&country),
-            time: DisplayDuration(Duration::milliseconds(time)),
+            time,
             date,
-        })
+        });
+
+        if *record.time > *time || (*record.time == *time && record.date < date) {
+            *record = Record {
+                map_id,
+                player,
+                country: map_country(&country),
+                time,
+                date,
+            };
+        }
+    }
+
+    let since = NaiveDateTime::from_timestamp(input.since, 0);
+    let records = best_scores
+        .into_values()
+        .filter(|r| r.date >= since)
         .collect::<Vec<_>>();
 
     Ok(Json(records))
@@ -91,7 +105,7 @@ pub async fn maps_get(
 ) -> Result<Json<Vec<Map>>, (StatusCode, Json<String>)> {
     let mut conn = pool.get_conn().await.unwrap();
 
-    let loaded_scores = conn
+    let loaded_maps = conn
         .exec_iter(
             "SELECT
                 challenges.Id,
@@ -131,7 +145,7 @@ pub async fn maps_get(
         .unwrap();
 
     let mut maps: HashMap<u64, Map> = HashMap::new();
-    for (id, name, author, environment, player, country, time, date) in loaded_scores {
+    for (id, name, author, environment, player, country, time, date) in loaded_maps {
         if let Some(map) = maps.get_mut(&id) {
             let record = Record {
                 map_id: id,
@@ -193,7 +207,7 @@ pub async fn players_get(
 ) -> Result<Json<Vec<Player>>, (StatusCode, Json<String>)> {
     let mut conn = pool.get_conn().await.unwrap();
 
-    let loaded_scores = conn
+    let loaded_players = conn
         .exec_iter(
             "SELECT
                 players.Id,
@@ -225,7 +239,7 @@ pub async fn players_get(
 
     let mut players = HashMap::new();
     let mut records = HashMap::new();
-    for (player_id, map, player, time, date) in loaded_scores {
+    for (player_id, map, player, time, date) in loaded_players {
         let player = Player {
             name: player,
             maps: 0,

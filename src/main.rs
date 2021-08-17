@@ -200,7 +200,7 @@ fn sanitize_map_name(name: &str) -> String {
     RE.replace_all(name, "").to_string()
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct DisplayDuration(Duration);
 
 impl std::fmt::Display for DisplayDuration {
