@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>TM Records | Hivecom</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="stylesheet" type="text/css" href="../static/reset.css" />
+    <link rel="stylesheet" type="text/css" href="../static/style.css" />
+    <!-- <script src="../static/js/vue.js"></script> -->
+  </head>
+
+  <body>
+    <main id="app">
+      <!-- <noscript> -->
+      <div class="container">
+        <div class="description">
+          <h1>Hivecom Trackmania Leaderboard</h1>
+          <p>
+            Collection of records driven by our community's members on the
+            <i>hivecom</i> trackmania server. <br />
+          </p>
+          <p>
+            If you want to join, search for "hivecom" in the server list and
+            enter
+            <br />
+            the password <b>asdf</b>.
+          </p>
+        </div>
+
+        <div class="legend">
+          <span>Track</span>
+          <span>Best Time</span>
+        </div>
+
+        {% for (map, records) in maps %} {% let record = records.get(0).unwrap()
+        %}
+        <div
+          class="track"
+          data-keyword="{{map.name}};;{{record.player}}"
+          id="{{map.id}}"
+        >
+          <details>
+            <summary>
+              <div class="track-name">
+                <h2>{{map.name}}</h2>
+                <span>{{map.author}}</span>
+              </div>
+
+              <div class="track-record">
+                <strong>{{record.time}}</strong>
+                <p>{{record.player}}</p>
+              </div>
+            </summary>
+
+            <div class="track-content">
+              {% for record in records %}
+              <div class="track-time">
+                <strong>{{record.time}}</strong>
+                <div class="track-player">
+                  <img
+                    src="static/flags/{{record.country}}.svg"
+                    alt="{{record.country}}"
+                  />
+                  <p>{{record.player}}</p>
+                </div>
+                <span>{{record.date.format("%d.%m.%Y %H:%M")}}</span>
+              </div>
+              {% endfor %}
+            </div>
+          </details>
+        </div>
+      </div>
+      {% endfor %}
+      <!-- </noscript> -->
+    </main>
+  </body>
+  <!-- <script src="../static/js/main.js"></script> -->
+</html>
