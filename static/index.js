@@ -47,7 +47,7 @@ document.getElementById('search').addEventListener('input', function (e) {
 })
 
 document.getElementById('clear').addEventListener('click', function (e) {
-  document.getElementById('search').value = ''
+  searchEl.value = ''
   showAll(items)
 })
 
