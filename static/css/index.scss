@@ -1,0 +1,96 @@
+:root {
+  --text: rgb(221, 221, 221);
+  --bg: rgb(13, 13, 28);
+  --blue: rgb(17, 31, 77);
+  --red: rgb(253, 0, 84);
+  --highlight: rgb(255, 213, 96);
+}
+
+@font-face {
+  font-family: "Roboto-Regular";
+  src: url("../fonts/Roboto-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto-Bold";
+  src: url("../fonts/Roboto-Bold.ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: "Roboto-Regular";
+  background-color: var(--bg);
+  color: var(--text);
+  padding-top: 5em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+strong {
+  font-family: "Roboto-Bold";
+}
+
+@import "./generic.scss";
+@import "./tracks.scss";
+@import "./players.scss";
+@import "./search.scss";
+@import "./alerts.scss";
+
+.container {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 532px;
+  padding: 16px;
+  // padding-top: 5em;
+
+  &.container-wide {
+    max-width: 856px;
+  }
+}
+
+.description {
+  display: block;
+  margin-bottom: 3em;
+
+  h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5em;
+  }
+
+  p {
+    font-size: 1.4rem;
+    margin-bottom: 0.5em;
+    line-height: 1.4em;
+
+    b {
+      color: var(--red);
+    }
+
+    &:last-of-type {
+      margin-bottom: 1.5em;
+    }
+  }
+}
+
+.legend {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+  margin-bottom: 1em;
+
+  span {
+    font-size: 1.1rem;
+  }
+}

@@ -1,0 +1,178 @@
+.track-list {
+  display: block;
+}
+
+.track {
+  display: block;
+  margin-bottom: 16px;
+
+  &.new-record {
+    position: relative;
+
+    &:after {
+      content: "";
+      text-indent: 32px;
+      white-space: nowrap;
+      line-height: 24px;
+      display: block;
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      right: -8px;
+      top: -8px;
+      border-radius: 50%;
+      background-color: var(--highlight);
+      background-position: center;
+      background-size: 16px;
+      background-repeat: no-repeat;
+      background-image: url(../icons/medal-duotone.svg);
+    }
+
+    details {
+      &[open] {
+        summary {
+          background-color: var(--highlight);
+          color: var(--bg);
+        }
+      }
+      summary {
+        border-color: var(--highlight);
+
+        &:hover {
+          background-color: var(--highlight);
+          color: var(--bg);
+        }
+      }
+    }
+
+    .track-content {
+      .track-time:first-of-type {
+        position: relative;
+
+        .track-player {
+          p {
+            font-family: "Roboto-Bold";
+            font-size: 1.4rem;
+          }
+        }
+        strong {
+          &:before {
+            content: "NEW!";
+            display: block;
+            font-size: 1.4rem;
+            // margin-left: 8px;
+            color: var(--highlight);
+          }
+        }
+      }
+    }
+  }
+
+  .track-player {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    p {
+      display: block;
+      font-size: 1.2rem;
+    }
+
+    img {
+      display: block;
+      max-height: 12px;
+      max-width: 18px;
+    }
+  }
+
+  details {
+    & > summary:first-of-type {
+      list-style-type: none;
+    }
+
+    &[open] {
+      summary {
+        background-color: var(--blue);
+      }
+    }
+
+    summary {
+      transition: 0.2s all ease-in-out;
+      display: flex;
+      padding: 12px 16px;
+      gap: 16px;
+      justify-content: flex-start;
+      align-items: flex-start;
+      flex-direction: row;
+      cursor: pointer;
+      flex-wrap: nowrap;
+      border-radius: 8px;
+      border: 1px solid var(--blue);
+
+      &:hover {
+        background-color: var(--blue);
+      }
+
+      ::-webkit-details-marker {
+        display: none;
+      }
+
+      .track-name {
+        h2 {
+          font-size: 1.6rem;
+        }
+
+        span {
+          font-size: 1.2rem;
+          opacity: 0.75;
+        }
+      }
+
+      .track-record {
+        flex: 1;
+        text-align: right;
+
+        strong {
+          font-size: 2rem;
+          color: var(--red);
+          font-weight: 900;
+        }
+
+        p {
+          display: block;
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+
+  .track-content {
+    padding: 8px 16px;
+    margin-top: 12px;
+
+    .track-time {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 32px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(#fff, 0.1);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      strong {
+        font-size: 1.8rem;
+      }
+
+      span {
+        font-size: 1.2rem;
+        flex: 1;
+        text-align: right;
+        opacity: 0.75;
+      }
+    }
+  }
+}

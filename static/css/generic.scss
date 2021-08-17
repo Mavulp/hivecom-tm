@@ -1,0 +1,49 @@
+.tabs {
+  display: flex;
+  margin-bottom: 2em;
+  border-bottom: 1px solid var(--blue);
+
+  button {
+    all: unset;
+    transition: 0.2s all ease-in-out;
+
+    height: 40px;
+    line-height: 40px;
+    padding: 0 12px;
+    position: relative;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+
+    &:hover {
+      border-color: var(--blue);
+    }
+
+    &:after {
+      content: "";
+      transition: 0.2s all ease-in-out;
+      display: block;
+      position: absolute;
+      inset: 0;
+      background-color: var(--blue);
+      opacity: 0;
+    }
+
+    &.active {
+      border-color: var(--blue);
+
+      &:after {
+        opacity: 0.25;
+      }
+    }
+  }
+}
+
+.tabs-content {
+  & > div {
+    display: none;
+
+    &.active {
+      display: block;
+    }
+  }
+}
