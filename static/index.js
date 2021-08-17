@@ -1,14 +1,15 @@
 const items = document.getElementsByClassName('track')
 const resultsEl = document.getElementById('results')
 const notifEl = document.getElementById('notification')
-
+const searchEl = document.getElementById('search')
 
 /**
  * Search
 */
 
 document.getElementById('search').addEventListener('input', function (e) {
-  const search = document.getElementById('search').value
+  // const search = document.getElementById('search').value
+  const search = searchEl.value
 
   if (search !== '') {
     for (let i = 0; i < items.length; i++) {
@@ -111,6 +112,22 @@ function renderNotif(state) {
 }
 
 document.getElementById('clear-notif').addEventListener('click', () => { renderNotif(false) })
+document.getElementById('ch').addEventListener('change', (e) => {
+  if (e.target.checked) {
+    // Hide searchbar
+    searchEl.style.display = "none"
+
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i]
+
+      if (!item.classList.contains('new-record')) item.style.display = "none";
+    }
+  } else {
+    searchEl.style.display = "block"
+
+    showAll(items)
+  }
+})
 
 
 /**

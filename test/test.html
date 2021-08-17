@@ -1,167 +1,162 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
-  <!-- This html template is for quick developing of new front-end features without a local server -->
-  <head>
-    <title>TM Records | Hivecom</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <link rel="stylesheet" type="text/css" href="../static/reset.css" />
-    <link rel="stylesheet" type="text/css" href="../static/style.css" />
-  </head>
-
-  <body id="home">
-    <main class="wrapper">
-      <div class="notification" id="notification" style="display:none;">
-        <div>
-          <h2>New records available!</h2>
-          <p>The site has been updated to include newly driven best times.</p>
-        </div>
-        <button id="clear-notif">
-          <img src="../static/icons/times-solid.svg" />
-        </button>
-      </div>
-
-      <div class="container">
-        <h1>TMNF Map list</h1>
-        <p>Collection of records grouped per map from the Hivecom community members.</p>
-
-        <form class="search" autocomplete="off">
-          <input type="search" autocomplete="pleasedontautocomplete" id="search" placeholder="Search maps/users" />
-          <button id="clear">
+   <!-- This html template is for quick developing of new front-end features without a local server -->
+   <head>
+      <title>TM Records | Hivecom</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+      <link rel="stylesheet" type="text/css" href="../static/reset.css" />
+      <link rel="stylesheet" type="text/css" href="../static/style.css" />
+   </head>
+   <body id="home">
+      <main class="wrapper">
+         <div class="notification" id="notification" style="display:none;">
+            <div>
+               <h2>New records available!</h2>
+               <p>The site has been updated to include newly driven best times.</p>
+            </div>
+            <button id="clear-notif">
             <img src="../static/icons/times-solid.svg" />
-          </button>
-        </form>
-        <p id="results" style="display: none"></p>
+            </button>
+         </div>
+         <div class="container">
+            <h1>TMNF Map list</h1>
+            <p>Collection of records grouped per map from the Hivecom community members.</p>
 
-        <div class="legend">
-          <span>Track</span>
-          <span>Best Time</span>
-        </div>
+            <input type="checkbox" name="ch" id="ch" />
+            <label for="ch">Show only new records</label>
 
-        <div class="track" id="2" data-keyword="A01 White;;dolanske">
-          <details>
-            <summary>
-              <div class="track-name">
-                <h2>A01 White</h2>
-                <span>Nadeo</span>
-              </div>
+            <form class="search" autocomplete="off">
+               <input type="search" autocomplete="pleasedontautocomplete" id="search" placeholder="Search maps/users" />
+               <button id="clear">
+               <img src="../static/icons/times-solid.svg" />
+               </button>
+            </form>
 
-              <div class="track-record">
-                <strong>1:23.12</strong>
-                <p>dolanske</p>
-              </div>
-            </summary>
+            <p id="results" style="display: none"></p>
 
-            <div class="track-content">
-              <div class="track-time">
-                <strong>1:23.73</strong>
-                <div class="track-player">
-                  <img src="../static/flags/cz.svg" alt="cz" />
-                  <p>dolanske</p>
-                </div>
-                <span>12.03.2021</span>
-              </div>
-              <div class="track-time">
-                <strong>1:26.16</strong>
-                <div class="track-player">
-                  <img src="../static/flags/no.svg" alt="cz" />
-                  <p>rellecon</p>
-                </div>
-                <span>12.03.2021</span>
-              </div>
-              <div class="track-time">
-                <strong>1:34.10</strong>
-                <div class="track-player">
-                  <img src="../static/flags/de.svg" alt="cz" />
-                  <p>jokler______</p>
-                </div>
-                <span>12.03.2021</span>
-              </div>
+            <div class="legend">
+               <span>Track</span>
+               <span>Best Time</span>
             </div>
-          </details>
-        </div>
-        <div class="track" data-keyword="A02 White;;rellecon">
-          <details>
-            <summary>
-              <div class="track-name">
-                <h2>A02 White</h2>
-                <span>Nadeo</span>
-              </div>
 
-              <div class="track-record">
-                <strong>23.12</strong>
-                <p>rellecon</p>
-              </div>
-            </summary>
-
-            <div class="track-content">
-              <div class="track-time">
-                <strong>23.12</strong>
-                <div class="track-player">
-                  <img src="../static/flags/no.svg" alt="cz" />
-                  <p>rellecon</p>
-                </div>
-                <span>12.03.2021</span>
-              </div>
-
-              <div class="track-time">
-                <strong>34.10</strong>
-                <div class="track-player">
-                  <img src="../static/flags/de.svg" alt="cz" />
-                  <p>jokler______</p>
-                </div>
-                <span>12.03.2021</span>
-              </div>
+            <div class="track new-record" id="2" data-keyword="A01 White;;dolanske">
+               <details>
+                  <summary>
+                     <div class="track-name">
+                        <h2>A01 White</h2>
+                        <span>Nadeo</span>
+                     </div>
+                     <div class="track-record">
+                        <strong>1:23.12</strong>
+                        <p>dolanske</p>
+                     </div>
+                  </summary>
+                  <div class="track-content">
+                     <div class="track-time">
+                        <strong>1:23.73</strong>
+                        <div class="track-player">
+                           <img src="../static/flags/cz.svg" alt="cz" />
+                           <p>dolanske</p>
+                        </div>
+                        <span>12.03.2021</span>
+                     </div>
+                     <div class="track-time">
+                        <strong>1:26.16</strong>
+                        <div class="track-player">
+                           <img src="../static/flags/no.svg" alt="cz" />
+                           <p>rellecon</p>
+                        </div>
+                        <span>12.03.2021</span>
+                     </div>
+                     <div class="track-time">
+                        <strong>1:34.10</strong>
+                        <div class="track-player">
+                           <img src="../static/flags/de.svg" alt="cz" />
+                           <p>jokler______</p>
+                        </div>
+                        <span>12.03.2021</span>
+                     </div>
+                  </div>
+               </details>
             </div>
-          </details>
-        </div>
-        <div class="track" data-keyword=" Slame S Spinner;;rellecon" style="display: block">
-          <details>
-            <summary>
-              <div class="track-name">
-                <h2>Slame S Spinner</h2>
-                <span>dolansky....._</span>
-              </div>
-
-              <div class="track-record">
-                <strong>00:40.27</strong>
-                <p>rellecon</p>
-              </div>
-            </summary>
-
-            <div class="track-content">
-              <div class="track-time">
-                <strong>00:40.27</strong>
-                <div class="track-player">
-                  <img src="static/flags/no.svg" alt="no" />
-                  <p>rellecon</p>
-                </div>
-                <span>15.08.2021 18:58</span>
-              </div>
-
-              <div class="track-time">
-                <strong>00:41.05</strong>
-                <div class="track-player">
-                  <img src="static/flags/no.svg" alt="no" />
-                  <p>also_vory</p>
-                </div>
-                <span>15.08.2021 18:56</span>
-              </div>
-
-              <div class="track-time">
-                <strong>00:42.72</strong>
-                <div class="track-player">
-                  <img src="static/flags/nl.svg" alt="nl" />
-                  <p>otonashiyuki</p>
-                </div>
-                <span>15.08.2021 18:59</span>
-              </div>
+            <div class="track" data-keyword="A02 White;;rellecon">
+               <details>
+                  <summary>
+                     <div class="track-name">
+                        <h2>A02 White</h2>
+                        <span>Nadeo</span>
+                     </div>
+                     <div class="track-record">
+                        <strong>23.12</strong>
+                        <p>rellecon</p>
+                     </div>
+                  </summary>
+                  <div class="track-content">
+                     <div class="track-time">
+                        <strong>23.12</strong>
+                        <div class="track-player">
+                           <img src="../static/flags/no.svg" alt="cz" />
+                           <p>rellecon</p>
+                        </div>
+                        <span>12.03.2021</span>
+                     </div>
+                     <div class="track-time">
+                        <strong>34.10</strong>
+                        <div class="track-player">
+                           <img src="../static/flags/de.svg" alt="cz" />
+                           <p>jokler______</p>
+                        </div>
+                        <span>12.03.2021</span>
+                     </div>
+                  </div>
+               </details>
             </div>
-          </details>
-        </div>
-      </div>
-    </main>
-  </body>
-
-  <script type="text/javascript" src="../static/index.js"></script>
+            <div class="track" data-keyword=" Slame S Spinner;;rellecon" style="display: block">
+               <details>
+                  <summary>
+                     <div class="track-name">
+                        <h2>Slame S Spinner</h2>
+                        <span>dolansky....._</span>
+                     </div>
+                     <div class="track-record">
+                        <strong>00:40.27</strong>
+                        <p>rellecon</p>
+                     </div>
+                  </summary>
+                  <div class="track-content">
+                     <div class="track-time">
+                        <strong>00:40.27</strong>
+                        <div class="track-player">
+                           <img src="static/flags/no.svg" alt="no" />
+                           <p>rellecon</p>
+                        </div>
+                        <span>15.08.2021 18:58</span>
+                     </div>
+                     <div class="track-time">
+                        <strong>00:41.05</strong>
+                        <div class="track-player">
+                           <img src="static/flags/no.svg" alt="no" />
+                           <p>also_vory</p>
+                        </div>
+                        <span>15.08.2021 18:56</span>
+                     </div>
+                     <div class="track-time">
+                        <strong>00:42.72</strong>
+                        <div class="track-player">
+                           <img src="static/flags/nl.svg" alt="nl" />
+                           <p>otonashiyuki</p>
+                        </div>
+                        <span>15.08.2021 18:59</span>
+                     </div>
+                  </div>
+               </details>
+            </div>
+         </div>
+      </main>
+   </body>
+   <script type="text/javascript" src="../static/index.js"></script>
 </html>
+
