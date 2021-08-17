@@ -115,7 +115,7 @@ app.component("app", {
     maps,
   },
   //TODO: Add description and tabs to this template
-  template: `<div>
+  template: `<div class="app-rendered">
 
 
     <maps></maps>
