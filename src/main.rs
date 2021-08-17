@@ -69,7 +69,7 @@ async fn main() {
 }
 
 #[derive(Template)]
-#[template(path = "index.htm")]
+#[template(path = "index.html")]
 struct IndexTemplate {
     maps: BTreeMap<Map, Vec<Record>>,
 }
