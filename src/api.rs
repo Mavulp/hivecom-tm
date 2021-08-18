@@ -265,7 +265,7 @@ pub async fn players_get(
         if let Some(player) = players.get_mut(&id) {
             player.records += 1;
             if let Some(latest) = &mut player.latest {
-                if latest.date > date {
+                if latest.date < date {
                     latest.time = DisplayDuration(Duration::milliseconds(time));
                     latest.date = date;
                 }
