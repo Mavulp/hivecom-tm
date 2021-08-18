@@ -8,9 +8,7 @@ use axum::{
     AddExtensionLayer,
 };
 use chrono::{Duration, NaiveDateTime};
-use lazy_static::lazy_static;
 use mysql_async::prelude::*;
-use regex::Regex;
 use tower_http::{services::ServeDir, trace::TraceLayer};
 use tracing::{debug, error};
 
@@ -18,10 +16,7 @@ use std::collections::BTreeMap;
 use std::net::SocketAddr;
 
 mod api;
-
-lazy_static! {
-    static ref RE: Regex = Regex::new("\\$([\\dabcdefABCDEF]{3}|.)").unwrap();
-}
+mod parse;
 
 #[tokio::main]
 async fn main() {
@@ -197,8 +192,9 @@ fn map_country(name: &str) -> &'static str {
 }
 
 fn sanitize_map_name(name: &str) -> String {
-    RE.replace_all(name, "").to_string()
+    parse::map_name_string(name)
 }
+
 
 #[derive(Debug, Clone, Copy)]
 pub struct DisplayDuration(Duration);

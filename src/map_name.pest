@@ -1,0 +1,22 @@
+italic = { "i" }
+shadowed = { "s" }
+wide = { "w" }
+narrow = { "n" }
+normal = { "m" }
+default_color = { "g" }
+bold = { "o" }
+reset = { "z" }
+capitals = { "t" }
+color = { (HEX_DIGIT){3} }
+
+tag = {
+    "$$" |
+    ("$" ~ (italic | shadowed | wide | narrow | normal |
+            default_color | bold | reset | capitals | color)) |
+    ("$" ~ (!"$" ~ ANY){1,3})
+}
+
+char = { !"$" ~ ANY }
+text = @{ char+ }
+
+name = { (tag | text)* }
