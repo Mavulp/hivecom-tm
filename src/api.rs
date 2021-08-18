@@ -63,7 +63,7 @@ pub async fn records_get(
             date,
         });
 
-        if *record.time > *time || (*record.time == *time && record.date < date) {
+        if *record.time > *time || (*record.time == *time && record.date > date) {
             *record = Record {
                 map_id,
                 player,
@@ -253,7 +253,7 @@ pub async fn players_get(
         let (record_id, record_map, record_time, record_date) = records
             .entry(map.clone())
             .or_insert((player_id, map.clone(), time, date));
-        if *record_time > time || (*record_time == time && *record_date < date) {
+        if *record_time > time || (*record_time == time && *record_date > date) {
             *record_id = player_id;
             *record_map = map;
             *record_time = time;
