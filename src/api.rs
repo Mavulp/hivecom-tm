@@ -109,7 +109,7 @@ pub async fn maps_get(
         .exec_iter(
             "SELECT
                 challenges.Id,
-                challenges.Name,
+                CONVERT(CAST(challenges.Name as BINARY) USING utf8),
                 challenges.Author,
                 challenges.Environment,
                 players.Login,
@@ -211,7 +211,7 @@ pub async fn players_get(
         .exec_iter(
             "SELECT
                 players.Id,
-                challenges.Name,
+                CONVERT(CAST(challenges.Name as BINARY) USING utf8),
                 players.Login,
                 records.Score,
                 records.Date

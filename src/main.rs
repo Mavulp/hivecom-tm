@@ -117,7 +117,7 @@ async fn root(
         .exec_iter(
             "SELECT
                 challenges.Id,
-                challenges.Name,
+                CONVERT(CAST(challenges.Name as BINARY) USING utf8),
                 challenges.Author,
                 challenges.Environment,
                 players.Login,
