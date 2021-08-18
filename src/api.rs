@@ -271,7 +271,7 @@ pub async fn players_get(
                 }
             } else {
                 player.latest = Some(LatestRecord {
-                    map_name: map,
+                    map_name: crate::sanitize_map_name(&map),
                     time: DisplayDuration(Duration::milliseconds(time)),
                     date,
                 });
