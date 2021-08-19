@@ -61,12 +61,12 @@
       transform: translateY(2px);
     }
   }
-}
 
-#results {
-  text-align: center;
-  margin: 0;
-  position: absolute;
-  left: 50%;
-  transform: translateY(-20px) translateX(-50%);
+  .results {
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateY(-20px) translateX(-50%);
+  }
 }

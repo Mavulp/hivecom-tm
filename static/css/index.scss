@@ -40,11 +40,11 @@ strong {
   font-family: "Roboto-Bold";
 }
 
-@import "./generic.scss";
-@import "./tracks.scss";
-@import "./players.scss";
-@import "./search.scss";
-@import "./alerts.scss";
+@import "./modules/generic.scss";
+@import "./modules/tracks.scss";
+@import "./modules/players.scss";
+@import "./modules/search.scss";
+@import "./modules/alerts.scss";
 
 .container {
   display: block;

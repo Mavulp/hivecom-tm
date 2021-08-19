@@ -1,5 +1,6 @@
-// Import app
+// Vue imports
 const app = Vue.createApp({});
+const { ref, watch } = Vue;
 
 // Components
 // COMPONENT: TRACK ITEM
@@ -8,7 +9,7 @@ const trackItem = {
     map: Object,
   },
   template: `
-    <div class="track">
+    <div class="track" :data-keywords="[this.map.name, this.map.records[0].player]">
       <details>
         <summary>
           <div class="track-name">
@@ -40,10 +41,54 @@ const trackItem = {
   `,
 };
 
+// COMPONENT: SEARCH
+const search = {
+  props: { item: String },
+  setup(props) {
+    const search = ref("");
+    const results = ref(0);
+
+    const elements = document.getElementsByClassName(props.item);
+
+    watch(search, (val) => {
+      results.value = 0;
+
+      if (val !== "") {
+        for (let i = 0; i < elements.length; i++) {
+          const attrs = elements[i].getAttribute("data-keywords") ?? "";
+          // prettier-ignore
+          if (attrs.toLowerCase().includes(search.value.toLowerCase())) {
+            elements[i].style.display = "block";
+            results.value++
+          }
+          else elements[i].style.display = "none";
+        }
+      } else {
+        // prettier-ignore
+        for (var i = 0; i < elements.length; i++) elements[i].style.display = "block";
+      }
+    });
+
+    return { search, results };
+  },
+  template: `
+    <div class="search">
+      <input type="search" v-model="search" placeholder="Search maps & players" /> 
+      <button @click="search = ''"><img src="../static/icons/times-solid.svg" /></button>
+
+      <div class="results" v-if="search !== ''">
+        <template v-if="results === 0">No results for '{{search}}'</template>
+        <template v-else>Found <strong>{{results}}</strong> record(s)</template>
+      </div>
+    </div>
+  `,
+};
+
 // COMPONNENT: TRACK WRAPPER
 const maps = {
   components: {
     "track-item": trackItem,
+    search,
   },
   data() {
     return {
@@ -64,7 +109,8 @@ const maps = {
   },
   methods: {
     async fetchMaps(init = true) {
-      this.loading = true;
+      if (init) this.loading = true;
+
       const now = new Date();
       const since = (now / 1000).toFixed(0) - 86400;
 
@@ -85,40 +131,52 @@ const maps = {
       await fetch("https://records.hivecom.net/api/maps")
         .then((response) => response.json())
         .then((data) => {
-          if (data.length > 0) this.maps = data;
+          if (data.length > 0) {
+            this.maps = data;
+          }
         })
         .catch((e) => {
           console.log(e);
         })
-        .finally(() => (this.loading = false));
+        .finally(() => {
+          if (init) this.loading = false;
+        });
     },
   },
   // TODO: Add legend, search, checkbox components
   template: `
-    <div class="track-list container">
-      <template v-if="!loading">
-        <template v-for="map in maps" :key="map.id">
-          <track-item :id="map.id" :class="{'new-record': records.includes(map.id)}" :map="map" />
+    <div>
+      <div class="track-list container">
+        <search item="track" />
+
+        <div class="legend">
+          <span>Track</span>
+          <span>Best Time</span>
+        </div>
+
+        <template v-if="!loading">
+          <template v-for="map in maps" :key="map.id">
+            <track-item :id="map.id" :class="{'new-record': records.includes(map.id)}" :map="map" />
+          </template>
         </template>
-      </template>
-      <template v-else>
-        Loading
-      </template>
+        <template v-else>
+          Loading
+        </template>
+      </div>
+
     </div>
   `,
 };
 
-// COMPONENT
-
+// COMPONENT: APP
 app.component("app", {
   components: {
     maps,
   },
   //TODO: Add description and tabs to this template
-  template: `<div class="app-rendered">
-
-
-    <maps></maps>
+  template: `
+  <div class="app-rendered">
+    <maps />
   </div>`,
 });
 
