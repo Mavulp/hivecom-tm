@@ -13,7 +13,8 @@ tag = {
     "$$" |
     ("$" ~ (italic | shadowed | wide | narrow | normal |
             default_color | bold | reset | capitals | color)) |
-    ("$" ~ (!"$" ~ ANY){1,3})
+    ("$" ~ !"$" ~ HEX_DIGIT ~ !"$" ~ ANY ~ !"$" ~ ANY) |
+    ("$" ~ ANY)
 }
 
 char = { !"$" ~ ANY }
