@@ -2,7 +2,10 @@
 const app = Vue.createApp({});
 const { ref, watch } = Vue;
 
-// Components
+/**
+ * Components
+ */
+
 // COMPONENT: TRACK ITEM
 const trackItem = {
   props: {
@@ -48,7 +51,6 @@ const search = {
     const search = ref("");
     const check = ref(false);
     const results = ref(0);
-
     const elements = document.getElementsByClassName(props.item);
 
     watch(search, (val) => {
@@ -73,8 +75,6 @@ const search = {
     watch(check, (val) => {
       for (var i = 0; i < elements.length; i++) {
         const el = elements[i];
-
-        console.log(el);
 
         if (val) {
           if (el.classList.contains("new-record")) el.style.display = "block";
@@ -138,8 +138,7 @@ const maps = {
         .then((data) => {
           if (data.length > 0) {
             if (data.length !== this.records.length && !init) {
-              // TODO:
-              // If there are new records, push notification
+              // TODO: If there are new records, push notification
               console.log("refreshed with changes");
             }
 
@@ -150,14 +149,7 @@ const maps = {
       await fetch("https://records.hivecom.net/api/maps")
         .then((response) => response.json())
         .then((data) => {
-          if (data.length > 0) {
-            this.maps = data;
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        })
-        .finally(() => {
+          if (data.length > 0) this.maps = data;
           if (init) this.loading = false;
         });
     },
