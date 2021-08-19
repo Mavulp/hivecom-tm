@@ -6,40 +6,6 @@
   --highlight: rgb(255, 213, 96);
 }
 
-@font-face {
-  font-family: "Roboto-Regular";
-  src: url("../fonts/Roboto-Regular.ttf");
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Roboto-Bold";
-  src: url("../fonts/Roboto-Bold.ttf");
-  font-weight: 700;
-  font-style: normal;
-}
-
-html {
-  font-size: 62.5%;
-}
-
-body {
-  font-family: "Roboto-Regular";
-  background-color: var(--bg);
-  color: var(--text);
-  padding-top: 5em;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-strong {
-  font-family: "Roboto-Bold";
-}
-
 .tabs {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -399,6 +365,16 @@ strong {
   z-index: 10;
 }
 
+.search:after {
+  content: "";
+  left: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 16px;
+  background-color: var(--bg);
+}
+
 .search input[type="search"] {
   -webkit-transition: 0.2s all ease-in-out;
   transition: 0.2s all ease-in-out;
@@ -449,7 +425,7 @@ strong {
   position: absolute;
   font-size: 1rem;
   right: 0;
-  top: 16px;
+  top: 56px;
   bottom: 0;
   cursor: pointer;
   background-color: transparent;
@@ -472,6 +448,59 @@ strong {
   left: 50%;
   -webkit-transform: translateY(-20px) translateX(-50%);
           transform: translateY(-20px) translateX(-50%);
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+input[type="checkbox"] + label {
+  display: block;
+  position: relative;
+  padding-left: 40px;
+  margin-bottom: 24px;
+  cursor: pointer;
+}
+
+input[type="checkbox"] + label:before {
+  -webkit-transition: 0.2s all ease-in-out;
+  transition: 0.2s all ease-in-out;
+  content: "";
+  display: block;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--red);
+  left: 0;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border-radius: 4px;
+}
+
+input[type="checkbox"] + label:after {
+  content: "";
+  -webkit-transition: 0.2s all ease-in-out;
+  transition: 0.2s all ease-in-out;
+  display: block;
+  position: absolute;
+  left: 4px;
+  top: 2px;
+  width: 14px;
+  height: 14px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url(../icons/check-solid.svg);
+  opacity: 0;
+}
+
+input[type="checkbox"]:checked + label:after {
+  opacity: 1;
+}
+
+input[type="checkbox"]:checked + label:before {
+  background-color: var(--red);
 }
 
 .notification {
@@ -516,57 +545,38 @@ strong {
   height: 14px;
 }
 
-input[type="checkbox"] {
-  display: none;
+@font-face {
+  font-family: "Roboto-Regular";
+  src: url("../fonts/Roboto-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
 }
 
-input[type="checkbox"] + label {
-  display: block;
-  position: relative;
-  padding-left: 40px;
-  margin-bottom: 8px;
-  cursor: pointer;
+@font-face {
+  font-family: "Roboto-Bold";
+  src: url("../fonts/Roboto-Bold.ttf");
+  font-weight: 700;
+  font-style: normal;
 }
 
-input[type="checkbox"] + label:before {
-  -webkit-transition: 0.2s all ease-in-out;
-  transition: 0.2s all ease-in-out;
-  content: "";
-  display: block;
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border: 1px solid var(--red);
-  left: 0;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  border-radius: 4px;
+html {
+  font-size: 62.5%;
 }
 
-input[type="checkbox"] + label:after {
-  content: "";
-  -webkit-transition: 0.2s all ease-in-out;
-  transition: 0.2s all ease-in-out;
-  display: block;
-  position: absolute;
-  left: 4px;
-  top: 2px;
-  width: 14px;
-  height: 14px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-image: url(./icons/check-solid.svg);
-  opacity: 0;
+body {
+  font-family: "Roboto-Regular";
+  background-color: var(--bg);
+  color: var(--text);
+  padding-top: 5em;
 }
 
-input[type="checkbox"]:checked + label:after {
-  opacity: 1;
-}
-
-input[type="checkbox"]:checked + label:before {
-  background-color: var(--red);
+h1,
+h2,
+h3,
+h4,
+h5,
+strong {
+  font-family: "Roboto-Bold";
 }
 
 .container {

@@ -6,6 +6,12 @@
   --highlight: rgb(255, 213, 96);
 }
 
+@import "./generic.scss";
+@import "./tracks.scss";
+@import "./players.scss";
+@import "./search.scss";
+@import "./alerts.scss";
+
 @font-face {
   font-family: "Roboto-Regular";
   src: url("../fonts/Roboto-Regular.ttf");
@@ -39,12 +45,6 @@ h5,
 strong {
   font-family: "Roboto-Bold";
 }
-
-@import "./modules/generic.scss";
-@import "./modules/tracks.scss";
-@import "./modules/players.scss";
-@import "./modules/search.scss";
-@import "./modules/alerts.scss";
 
 .container {
   display: block;

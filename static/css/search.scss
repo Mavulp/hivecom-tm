@@ -6,6 +6,16 @@
   background-color: var(--bg);
   z-index: 10;
 
+  &:after {
+    content: "";
+    left: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 16px;
+    background-color: var(--bg);
+  }
+
   input[type="search"] {
     transition: 0.2s all ease-in-out;
 
@@ -47,7 +57,7 @@
     position: absolute;
     font-size: 1rem;
     right: 0;
-    top: 16px;
+    top: 56px;
     bottom: 0;
     cursor: pointer;
     background-color: transparent;
@@ -68,5 +78,59 @@
     position: absolute;
     left: 50%;
     transform: translateY(-20px) translateX(-50%);
+  }
+}
+
+input[type="checkbox"] {
+  display: none;
+
+  & + label {
+    display: block;
+    position: relative;
+    padding-left: 40px;
+    margin-bottom: 24px;
+    cursor: pointer;
+
+    &:before {
+      transition: 0.2s all ease-in-out;
+
+      content: "";
+      display: block;
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--red);
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 4px;
+    }
+
+    &:after {
+      content: "";
+      transition: 0.2s all ease-in-out;
+      display: block;
+      position: absolute;
+      left: 4px;
+      top: 2px;
+
+      width: 14px;
+      height: 14px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-image: url(../icons/check-solid.svg);
+      opacity: 0;
+    }
+  }
+
+  &:checked + label {
+    &:after {
+      opacity: 1;
+    }
+
+    &:before {
+      background-color: var(--red);
+    }
   }
 }

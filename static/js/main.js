@@ -46,6 +46,7 @@ const search = {
   props: { item: String },
   setup(props) {
     const search = ref("");
+    const check = ref(false);
     const results = ref(0);
 
     const elements = document.getElementsByClassName(props.item);
@@ -69,11 +70,29 @@ const search = {
       }
     });
 
-    return { search, results };
+    watch(check, (val) => {
+      for (var i = 0; i < elements.length; i++) {
+        const el = elements[i];
+
+        console.log(el);
+
+        if (val) {
+          if (el.classList.contains("new-record")) el.style.display = "block";
+          else el.style.display = "none";
+        } else {
+          el.style.display = "block";
+        }
+      }
+    });
+
+    return { search, results, check };
   },
   template: `
     <div class="search">
-      <input type="search" v-model="search" placeholder="Search maps & players" /> 
+      <input type="checkbox" name="ch" id="ch" @change="(e) => check = e.target.checked" />
+      <label for="ch">Show only new records</label>
+
+      <input type="search" v-model="search" placeholder="Search maps & players" v-if="!check" /> 
       <button @click="search = ''"><img src="../static/icons/times-solid.svg" /></button>
 
       <div class="results" v-if="search !== ''">
@@ -143,7 +162,6 @@ const maps = {
         });
     },
   },
-  // TODO: Add legend, search, checkbox components
   template: `
     <div>
       <div class="track-list container">
@@ -163,7 +181,6 @@ const maps = {
           Loading
         </template>
       </div>
-
     </div>
   `,
 };
