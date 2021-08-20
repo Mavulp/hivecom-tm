@@ -189,6 +189,7 @@ pub async fn maps_get(
 #[derive(Debug, Clone, Serialize)]
 pub struct Player {
     pub name: String,
+    pub country: &'static str,
     pub maps: u64,
     pub records: u64,
     pub latest: Option<LatestRecord>,
@@ -213,6 +214,7 @@ pub async fn players_get(
             "SELECT
                 players.Id,
                 CONVERT(CAST(challenges.Name as BINARY) USING utf8),
+                players.Nation,
                 players.Login,
                 records.Score,
                 records.Date
@@ -227,6 +229,8 @@ pub async fn players_get(
             u64,
             // Name
             String,
+            // Country
+            String,
             // Player
             String,
             // Time
@@ -238,9 +242,10 @@ pub async fn players_get(
 
     let mut players = HashMap::new();
     let mut records = HashMap::new();
-    for (player_id, map, player, time, date) in loaded_players {
+    for (player_id, map, country, player, time, date) in loaded_players {
         let player = Player {
             name: player,
+            country: map_country(&country),
             maps: 0,
             records: 0,
             latest: None,
