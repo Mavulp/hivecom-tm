@@ -6,11 +6,11 @@
   --highlight: rgb(255, 213, 96);
 }
 
-@import "./generic.scss";
-@import "./tracks.scss";
-@import "./players.scss";
-@import "./search.scss";
-@import "./alerts.scss";
+@import "./_generic.scss";
+@import "./_tracks.scss";
+@import "./_players.scss";
+@import "./_search.scss";
+@import "./_alerts.scss";
 
 @font-face {
   font-family: "Roboto-Regular";

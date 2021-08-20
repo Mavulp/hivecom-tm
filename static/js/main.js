@@ -12,7 +12,7 @@ const trackItem = {
     map: Object,
   },
   template: `
-    <div class="track" :data-keywords="[this.map.name, this.map.records[0].player]">
+    <div class="track">
       <details>
         <summary>
           <div class="track-name">
@@ -47,60 +47,30 @@ const trackItem = {
 // COMPONENT: SEARCH
 const search = {
   props: { item: String },
-  setup(props) {
-    const search = ref("");
+  emits: ["search", "check"],
+  setup(_, { emit }) {
     const check = ref(false);
-    const results = ref(0);
-    const elements = document.getElementsByClassName(props.item);
+    const search = ref("");
 
-    watch(search, (val) => {
-      results.value = 0;
+    watch(search, (val) => emit("search", val));
+    watch(check, (val) => emit("check", val));
 
-      if (val !== "") {
-        for (let i = 0; i < elements.length; i++) {
-          const attrs = elements[i].getAttribute("data-keywords") ?? "";
-          // prettier-ignore
-          if (attrs.toLowerCase().includes(search.value.toLowerCase())) {
-            elements[i].style.display = "block";
-            results.value++
-          }
-          else elements[i].style.display = "none";
-        }
-      } else {
-        // prettier-ignore
-        for (var i = 0; i < elements.length; i++) elements[i].style.display = "block";
-      }
-    });
-
-    watch(check, (val) => {
-      for (var i = 0; i < elements.length; i++) {
-        const el = elements[i];
-
-        if (val) {
-          if (el.classList.contains("new-record")) el.style.display = "block";
-          else el.style.display = "none";
-        } else {
-          el.style.display = "block";
-        }
-      }
-    });
-
-    return { search, results, check };
+    return { search, check };
   },
   template: `
     <div class="search">
       <input type="checkbox" name="ch" id="ch" @change="(e) => check = e.target.checked" />
       <label for="ch">Show only new records</label>
 
-      <input type="search" v-model="search" placeholder="Search maps & players" v-if="!check" /> 
+      <input type="search" v-model="search" placeholder="Search maps & players" /> 
       <button @click="search = ''"><img src="../static/icons/times-solid.svg" /></button>
-
-      <div class="results" v-if="search !== ''">
-        <template v-if="results === 0">No results for '{{search}}'</template>
-        <template v-else>Found <strong>{{results}}</strong> record(s)</template>
-      </div>
     </div>
   `,
+
+  // <div class="results" v-if="search !== ''">
+  //       <template v-if="results === 0">No results for '{{search}}'</template>
+  //       <template v-else>Found <strong>{{results}}</strong> record(s)</template>
+  //     </div>
 };
 
 // COMPONNENT: TRACK WRAPPER
@@ -115,6 +85,9 @@ const maps = {
       maps: null,
       records: [],
       interval: null,
+
+      search: "",
+      onlyRecords: false,
     };
   },
   created() {
@@ -125,6 +98,33 @@ const maps = {
     this.interval = setInterval(() => {
       this.fetchMaps(false);
     }, FETCH_TIMEOUT);
+  },
+  computed: {
+    renderMaps() {
+      const s = this.search;
+      const r = this.onlyRecords;
+      if (r) {
+        const recordMaps = this.maps.filter((map) =>
+          this.records.includes(map.id)
+        );
+
+        if (s !== "") {
+          return recordMaps.filter(
+            (map) => map.name.includes(s) || map.records[0].player.includes(s)
+          );
+        }
+
+        return recordMaps;
+      }
+
+      if (s !== "" && !r) {
+        return this.maps.filter(
+          (map) => map.name.includes(s) || map.records[0].player.includes(s)
+        );
+      }
+
+      return this.maps;
+    },
   },
   methods: {
     async fetchMaps(init = true) {
@@ -153,19 +153,29 @@ const maps = {
           if (init) this.loading = false;
         });
     },
+    s(val) {
+      this.search = val;
+    },
+    n(val) {
+      this.onlyRecords = val;
+    },
   },
   template: `
     <div>
       <div class="track-list container">
-        <search item="track" />
+        <search @search="s" @check="n" />
 
         <div class="legend">
           <span>Track</span>
+          <span v-if="search">
+          <template v-if="this.renderMaps.length === 0">No results for '{{search}}'</template>
+          <template v-else>Found <strong>{{this.renderMaps.length}}</strong> record(s)</template>
+          </span>
           <span>Best Time</span>
         </div>
 
         <template v-if="!loading">
-          <template v-for="map in maps" :key="map.id">
+          <template v-for="map in renderMaps" :key="map.id">
             <track-item :id="map.id" :class="{'new-record': records.includes(map.id)}" :map="map" />
           </template>
         </template>
