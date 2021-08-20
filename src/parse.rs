@@ -1,5 +1,5 @@
+use pest::{error::Error, iterators::Pair, Parser};
 use pest_derive::Parser;
-use pest::Parser;
 
 #[cfg(debug_assertions)]
 const _GRAMMAR: &str = include_str!("map_name.pest");
@@ -8,21 +8,24 @@ const _GRAMMAR: &str = include_str!("map_name.pest");
 #[grammar = "map_name.pest"]
 pub struct MapNameParser;
 
-pub fn map_name(input: &str) -> Vec<Fragment> {
-    let parsed = MapNameParser::parse(Rule::name, input).unwrap().next().unwrap();
-    name_from_pest(parsed)
+pub fn map_name(input: &str) -> Result<Vec<Fragment>, Error<Rule>> {
+    let parsed = MapNameParser::parse(Rule::name, input)?
+        .next()
+        .expect("Pest grammar should always have a top level name");
+
+    Ok(name_from_pest(parsed))
 }
 
-pub fn map_name_string(input: &str) -> String {
+pub fn map_name_string(input: &str) -> Result<String, Error<Rule>> {
     let mut result = String::new();
-    for frag in map_name(input) {
+    for frag in map_name(input)? {
         match frag {
             Fragment::Text(txt) => result.push_str(txt),
             Fragment::Tag(_) => (),
         }
     }
 
-    result
+    Ok(result)
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -45,7 +48,6 @@ pub enum Tag {
     Color(u8, u8, u8),
 }
 
-use pest::iterators::Pair;
 pub fn name_from_pest(frags: Pair<Rule>) -> Vec<Fragment> {
     let mut result = Vec::new();
     for frag in frags.into_inner() {

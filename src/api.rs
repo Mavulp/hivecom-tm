@@ -1,15 +1,19 @@
 use axum::{
+    body::Body,
     extract::{Extension, Form},
-    http::StatusCode,
-    response::Json,
+    http::{header, HeaderValue, Response, StatusCode},
+    response::{IntoResponse, Json},
 };
+
 use chrono::{Duration, NaiveDateTime};
 use mysql_async::prelude::*;
 use serde::Deserialize;
 use serde::{Serialize, Serializer};
+use thiserror::Error;
+
 use std::collections::HashMap;
 
-use crate::{map_country, DisplayDuration};
+use crate::site::{map_country, DisplayDuration};
 
 #[derive(Deserialize, Debug)]
 pub struct Input {
@@ -31,8 +35,8 @@ pub struct Record {
 pub async fn records_get(
     Extension(pool): Extension<mysql_async::Pool>,
     Form(input): Form<Input>,
-) -> Result<Json<Vec<Record>>, (StatusCode, Json<String>)> {
-    let mut conn = pool.get_conn().await.unwrap();
+) -> Result<Json<Vec<Record>>, ApiError> {
+    let mut conn = pool.get_conn().await?;
 
     let loaded_records = conn
         .exec_iter(
@@ -46,11 +50,9 @@ pub async fn records_get(
             JOIN players ON records.PlayerId = players.Id",
             (),
         )
-        .await
-        .unwrap()
+        .await?
         .collect::<(u64, String, String, i64, NaiveDateTime)>()
-        .await
-        .unwrap();
+        .await?;
 
     let mut best_scores = HashMap::new();
     for (map_id, player, country, time, date) in loaded_records {
@@ -74,7 +76,8 @@ pub async fn records_get(
         }
     }
 
-    let since = NaiveDateTime::from_timestamp(input.since, 0);
+    let since =
+        NaiveDateTime::from_timestamp_opt(input.since, 0).ok_or(ApiError::InvalidTimestamp)?;
     let records = best_scores
         .into_values()
         .filter(|r| r.date >= since)
@@ -102,8 +105,8 @@ impl Eq for Map {}
 
 pub async fn maps_get(
     Extension(pool): Extension<mysql_async::Pool>,
-) -> Result<Json<Vec<Map>>, (StatusCode, Json<String>)> {
-    let mut conn = pool.get_conn().await.unwrap();
+) -> Result<Json<Vec<Map>>, ApiError> {
+    let mut conn = pool.get_conn().await?;
 
     let loaded_maps = conn
         .exec_iter(
@@ -121,8 +124,7 @@ pub async fn maps_get(
             JOIN players ON records.PlayerId = players.Id",
             (),
         )
-        .await
-        .unwrap()
+        .await?
         .collect::<(
             // Id
             u64,
@@ -141,8 +143,7 @@ pub async fn maps_get(
             // Date
             NaiveDateTime,
         )>()
-        .await
-        .unwrap();
+        .await?;
 
     let mut maps: HashMap<u64, Map> = HashMap::new();
     for (id, name, author, environment, player, country, time, date) in loaded_maps {
@@ -158,7 +159,7 @@ pub async fn maps_get(
         } else {
             let map = Map {
                 id,
-                name: crate::sanitize_map_name(&name),
+                name: crate::site::sanitize_map_name(&name),
                 author,
                 environment,
                 records: vec![Record {
@@ -204,8 +205,8 @@ pub struct LatestRecord {
 
 pub async fn players_get(
     Extension(pool): Extension<mysql_async::Pool>,
-) -> Result<Json<Vec<Player>>, (StatusCode, Json<String>)> {
-    let mut conn = pool.get_conn().await.unwrap();
+) -> Result<Json<Vec<Player>>, ApiError> {
+    let mut conn = pool.get_conn().await?;
 
     let loaded_players = conn
         .exec_iter(
@@ -220,8 +221,7 @@ pub async fn players_get(
             JOIN players ON records.PlayerId = players.Id",
             (),
         )
-        .await
-        .unwrap()
+        .await?
         .collect::<(
             // Id
             u64,
@@ -234,8 +234,7 @@ pub async fn players_get(
             // Date
             NaiveDateTime,
         )>()
-        .await
-        .unwrap();
+        .await?;
 
     let mut players = HashMap::new();
     let mut records = HashMap::new();
@@ -271,7 +270,7 @@ pub async fn players_get(
                 }
             } else {
                 player.latest = Some(LatestRecord {
-                    map_name: crate::sanitize_map_name(&map),
+                    map_name: crate::site::sanitize_map_name(&map),
                     time: DisplayDuration(Duration::milliseconds(time)),
                     date,
                 });
@@ -297,4 +296,28 @@ where
     S: Serializer,
 {
     s.serialize_str(&date.format("%d.%m.%Y %H:%M").to_string())
+}
+
+#[derive(Error, Debug)]
+pub enum ApiError {
+    #[error("can not connect to database")]
+    DatabaseConnection(#[from] mysql_async::Error),
+    #[error("the requested timestamp is not within allowed range")]
+    InvalidTimestamp,
+}
+
+impl IntoResponse for ApiError {
+    fn into_response(self) -> Response<Body> {
+        let mut res = Response::new(Body::from(self.to_string()));
+
+        *res.status_mut() = match self {
+            ApiError::DatabaseConnection(_) => StatusCode::SERVICE_UNAVAILABLE,
+            ApiError::InvalidTimestamp => StatusCode::BAD_REQUEST,
+        };
+
+        res.headers_mut()
+            .insert(header::CONTENT_TYPE, HeaderValue::from_static("text/html"));
+
+        res
+    }
 }
