@@ -275,8 +275,8 @@ app.component("app", {
   <div class="app-rendered">
     <tabs @set="(t) => {tab = t}" />
     
-    <maps v-if="tab === 0" />
-    <leaderboards v-if="tab === 1" />
+    <maps v-show="tab === 0" />
+    <leaderboards v-show="tab === 1" />
   </div>`,
 });
 
