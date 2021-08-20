@@ -257,6 +257,7 @@ pub async fn players_get(
         let (record_id, record_map, record_time, record_date) = records
             .entry(map.clone())
             .or_insert((player_id, map.clone(), time, date));
+
         if *record_time > time || (*record_time == time && *record_date > date) {
             *record_id = player_id;
             *record_map = map;
@@ -270,8 +271,11 @@ pub async fn players_get(
             player.records += 1;
             if let Some(latest) = &mut player.latest {
                 if latest.date < date {
-                    latest.time = DisplayDuration(Duration::milliseconds(time));
-                    latest.date = date;
+                    *latest = LatestRecord {
+                        map_name: crate::site::sanitize_map_name(&map),
+                        time: DisplayDuration(Duration::milliseconds(time)),
+                        date,
+                    };
                 }
             } else {
                 player.latest = Some(LatestRecord {
