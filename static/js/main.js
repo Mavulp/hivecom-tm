@@ -292,10 +292,23 @@ app.component("app", {
     tabs,
     leaderboards,
   },
-  data() {
-    return {
-      tab: 0,
-    };
+  setup() {
+    const tab = ref(0);
+    const scrollUp = ref(false);
+
+    window.addEventListener("scroll", () => {
+      const s = document.documentElement.scrollTop;
+
+      if (s > Math.round(window.innerHeight / 100)) scrollUp.value = true;
+      else scrollUp.value = false;
+    });
+
+    return { tab, scrollUp };
+  },
+  methods: {
+    scrollTop() {
+      window.scroll({ top: 0, behavior: "smooth" });
+    },
   },
   template: `
   <div class="app-rendered">
@@ -303,6 +316,10 @@ app.component("app", {
     
     <maps v-if="tab === 0" />
     <leaderboards v-if="tab === 1" />
+
+    <button class="btn-scroll" v-if="scrollUp" @click="scrollTop">
+      <img src="../static/icons/arrow-up-solid.svg" />
+    </button>
   </div>`,
 });
 

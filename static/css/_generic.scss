@@ -78,3 +78,31 @@
   border-radius: 8px;
   border: 1px solid var(--blue);
 }
+
+.btn-scroll {
+  all: unset;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  position: fixed;
+  right: 96px;
+  bottom: 86px;
+  background-color: var(--red);
+
+  &:hover {
+    img {
+      margin-top: -4px;
+    }
+  }
+
+  img {
+    transition: 0.2s all ease-in-out;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
