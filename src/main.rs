@@ -1,3 +1,4 @@
+use anyhow::Context;
 use axum::{
     http::StatusCode,
     prelude::*,
@@ -6,7 +7,6 @@ use axum::{
 };
 use tower_http::{services::ServeDir, trace::TraceLayer};
 use tracing::{debug, error};
-use anyhow::Context;
 
 use std::net::SocketAddr;
 
@@ -27,7 +27,8 @@ async fn main() {
     tracing_subscriber::fmt::init();
 
     if let Err(e) = run().await {
-        let err = e.chain()
+        let err = e
+            .chain()
             .skip(1)
             .fold(e.to_string(), |acc, cause| format!("{}: {}", acc, cause));
         error!("{}", err);
@@ -36,8 +37,7 @@ async fn main() {
 }
 
 async fn run() -> anyhow::Result<()> {
-    let database_url: String =
-        std::env::var("DATABASE_URL").context("DATABASE_URL not set")?;
+    let database_url: String = std::env::var("DATABASE_URL").context("DATABASE_URL not set")?;
     let bind_addr: SocketAddr = std::env::var("BIND_ADDRESS")
         .context("BIND_ADDRESS not set")?
         .parse()
