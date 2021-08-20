@@ -232,7 +232,7 @@
   font-size: 1.6rem;
 }
 
-.track details summary .track-name span {
+.track details summary .track-name > span {
   font-size: 1.2rem;
   opacity: 0.75;
 }
