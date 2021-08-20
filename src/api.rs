@@ -288,7 +288,7 @@ pub async fn players_get(
     }
 
     let mut players = players.into_values().collect::<Vec<_>>();
-    players.sort_by(|a, b| a.records.cmp(&b.records));
+    players.sort_by(|a, b| a.records.cmp(&b.records).then(a.maps.cmp(&b.maps)));
 
     Ok(Json(players))
 }
