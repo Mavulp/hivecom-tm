@@ -66,11 +66,6 @@ const search = {
       <button @click="search = ''"><img src="../static/icons/times-solid.svg" /></button>
     </div>
   `,
-
-  // <div class="results" v-if="search !== ''">
-  //       <template v-if="results === 0">No results for '{{search}}'</template>
-  //       <template v-else>Found <strong>{{results}}</strong> record(s)</template>
-  //     </div>
 };
 
 // COMPONNENT: TRACK WRAPPER
@@ -81,13 +76,13 @@ const maps = {
   },
   data() {
     return {
-      loading: false,
       maps: null,
-      records: [],
-      interval: null,
-
       search: "",
+      records: [],
+      loading: false,
+      interval: null,
       onlyRecords: false,
+      alert: false,
     };
   },
   created() {
@@ -137,10 +132,8 @@ const maps = {
         .then((response) => response.json())
         .then((data) => {
           if (data.length > 0) {
-            if (data.length !== this.records.length && !init) {
-              // TODO: If there are new records, push notification
-              console.log("refreshed with changes");
-            }
+            // Push notification that new records were added
+            if (data.length > this.records.length && !init) this.alert = true;
 
             this.records = data.map((item) => item.mapId);
           }
@@ -165,24 +158,103 @@ const maps = {
       <div class="track-list container">
         <search @search="s" @check="n" />
 
-        <div class="legend">
-          <span>Track</span>
-          <span v-if="search">
-          <template v-if="this.renderMaps.length === 0">No results for '{{search}}'</template>
-          <template v-else>Found <strong>{{this.renderMaps.length}}</strong> record(s)</template>
-          </span>
-          <span>Best Time</span>
-        </div>
-
         <template v-if="!loading">
+          <div class="legend">
+            <span>Tracks <strong>{{onlyRecords ? records.length : maps?.length}}</strong></span>
+            <span v-if="search">
+              <template v-if="renderMaps.length === 0">
+                No results for '{{search}}'
+              </template>
+              <template v-else>Found <strong>{{renderMaps.length}}</strong> record(s)</template>
+            </span>
+            <span>Best Time</span>
+          </div>
+        
           <template v-for="map in renderMaps" :key="map.id">
             <track-item :id="map.id" :class="{'new-record': records.includes(map.id)}" :map="map" />
           </template>
         </template>
-        <template v-else>
-          Loading
-        </template>
+        <div v-else class="loading">Loading</div>
       </div>
+
+      <div class="alert" v-if="alert">
+        <div>
+          <h2>Content update</h2>
+          <p>New records were added to the list.</p>
+        </div>
+        <button @click="alert = false"><img src="../static/icons/times-solid.svg" /></button>
+      </div>
+    </div>
+  `,
+};
+
+// COMPONENT: TABS
+const tabs = {
+  emits: ["set"],
+  setup(props, { emit }) {
+    const btns = ["Maps", "Players"];
+    const selected = ref(0);
+
+    watch(selected, (val) => emit("set", val));
+
+    return { btns, selected };
+  },
+  template: `
+    <div class="container">
+      <div class="tabs">
+        <button :class="{active: index === selected}" v-for="(b, index) in btns" :key="b" @click="selected = index">
+          {{b}}
+        </button>
+      </div>
+    </div>
+  `,
+};
+
+// COMPONENT: LEADERBOARD
+const leaderboards = {
+  data() {
+    return {
+      players: null,
+      loading: true,
+    };
+  },
+  async created() {
+    await fetch(`https://records.hivecom.net/api/players`)
+      .then((response) => response.json())
+      .then((data) => {
+        this.players = data.sort((a, b) => (a.records > b.records ? -1 : 1));
+      })
+      .finally(() => (this.loading = false));
+  },
+  template: `
+    <div class="container container-wide">
+      <div class="player-table" v-if="!loading">
+        <div class="player-row player-table-headers">
+          <span>Player</span>
+          <span>Newest Record</span>
+          <span>Maps Played</span>
+          <span><strong>Records</strong></span>
+        </div>
+
+        <div class="player-row" v-for="player in players" :key="player.name">
+          <div class="track-player">
+            <img
+              :src="'../static/flags/' + player.country + '.svg'"
+              :alt="player.country"
+            />
+            <p>{{player.name}}</p>
+          </div>
+          <div v-if="player.latest">
+            <strong>{{player.latest.time}}</strong>
+            <span>{{player.latest.map_name}}</span>
+          </div>
+          <span v-else>-</span>
+          <span>{{player.maps}}</span>
+          <span><strong>{{player.records}}</strong></span>
+        </div>
+
+      </div>
+      <div v-else class="loading">Loading</div>
     </div>
   `,
 };
@@ -191,11 +263,20 @@ const maps = {
 app.component("app", {
   components: {
     maps,
+    tabs,
+    leaderboards,
   },
-  //TODO: Add description and tabs to this template
+  data() {
+    return {
+      tab: 0,
+    };
+  },
   template: `
   <div class="app-rendered">
-    <maps />
+    <tabs @set="(t) => {tab = t}" />
+    
+    <maps v-if="tab === 0" />
+    <leaderboards v-if="tab === 1" />
   </div>`,
 });
 

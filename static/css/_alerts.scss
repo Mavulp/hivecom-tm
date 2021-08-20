@@ -1,9 +1,10 @@
-.notification {
+.alert {
   display: flex;
+
   position: fixed;
-  bottom: 64px;
+  top: 64px;
   right: 64px;
-  padding: 16px;
+  padding: 12px 16px;
   border-radius: 16px;
 
   background-color: var(--red);

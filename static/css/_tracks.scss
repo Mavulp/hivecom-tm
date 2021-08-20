@@ -1,5 +1,16 @@
 .track-list {
   display: block;
+
+  .legend {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 16px;
+    margin-bottom: 1em;
+
+    span {
+      font-size: 1.1rem;
+    }
+  }
 }
 
 .track {
@@ -65,23 +76,6 @@
           }
         }
       }
-    }
-  }
-
-  .track-player {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    p {
-      display: block;
-      font-size: 1.2rem;
-    }
-
-    img {
-      display: block;
-      max-height: 12px;
-      max-width: 18px;
     }
   }
 
@@ -174,5 +168,22 @@
         opacity: 0.75;
       }
     }
+  }
+}
+
+.track-player {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  p {
+    display: block;
+    font-size: 1.2rem;
+  }
+
+  img {
+    display: block;
+    max-height: 12px;
+    max-width: 18px;
   }
 }
