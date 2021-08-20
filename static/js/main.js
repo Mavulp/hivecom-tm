@@ -1,6 +1,6 @@
 // Vue imports
 const app = Vue.createApp({});
-const { ref, watch } = Vue;
+const { ref, watch, onMounted } = Vue;
 
 /**
  * Components
@@ -96,8 +96,9 @@ const maps = {
   },
   computed: {
     renderMaps() {
-      const s = this.search;
+      const s = this.search.toLowerCase();
       const r = this.onlyRecords;
+
       if (r) {
         const recordMaps = this.maps.filter((map) =>
           this.records.includes(map.id)
@@ -195,7 +196,19 @@ const tabs = {
     const btns = ["Maps", "Players"];
     const selected = ref(0);
 
-    watch(selected, (val) => emit("set", val));
+    watch(selected, (val) => {
+      window.location.hash = btns[selected.value];
+      emit("set", val);
+    });
+
+    onMounted(() => {
+      const hash = window.location.hash?.split("#")[1];
+
+      if (hash) {
+        emit("set", btns.indexOf(hash));
+        selected.value = btns.indexOf(hash);
+      }
+    });
 
     return { btns, selected };
   },
@@ -218,13 +231,26 @@ const leaderboards = {
       loading: true,
     };
   },
-  async created() {
-    await fetch(`https://records.hivecom.net/api/players`)
-      .then((response) => response.json())
-      .then((data) => {
-        this.players = data.sort((a, b) => (a.records > b.records ? -1 : 1));
-      })
-      .finally(() => (this.loading = false));
+  created() {
+    this.fetchPlayers();
+
+    const FETCH_TIMEOUT = 150000;
+
+    this.interval = setInterval(() => {
+      this.fetchPlayers(false);
+    }, FETCH_TIMEOUT);
+  },
+  methods: {
+    async fetchPlayers(init = true) {
+      if (init) this.loading = true;
+
+      await fetch(`https://records.hivecom.net/api/players`)
+        .then((response) => response.json())
+        .then((data) => {
+          this.players = data.sort((a, b) => (a.records > b.records ? -1 : 1));
+        })
+        .finally(() => (this.loading = false));
+    },
   },
   template: `
     <div class="container container-wide">
@@ -275,8 +301,8 @@ app.component("app", {
   <div class="app-rendered">
     <tabs @set="(t) => {tab = t}" />
     
-    <maps v-show="tab === 0" />
-    <leaderboards v-show="tab === 1" />
+    <maps v-if="tab === 0" />
+    <leaderboards v-if="tab === 1" />
   </div>`,
 });
 

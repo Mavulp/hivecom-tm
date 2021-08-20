@@ -22,6 +22,8 @@
     all: unset;
     transition: 0.2s all ease-in-out;
 
+    border-radius: 4px 4px 0 0;
+
     height: 48px;
     line-height: 48px;
     padding: 0 20px;
@@ -31,6 +33,7 @@
     opacity: 0.5;
 
     &:hover:not(.active) {
+      border-radius: 4px;
       opacity: 1;
 
       background-color: rgba(#fff, 0.01);

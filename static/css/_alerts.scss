@@ -27,14 +27,17 @@
     border-radius: 50%;
     text-align: center;
     line-height: 32px;
+    align-items: center;
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.25);
     }
 
     img {
+      display: inline-block;
       width: 14px;
       height: 14px;
+      transform: translateY(1px);
     }
   }
 }
