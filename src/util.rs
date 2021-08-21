@@ -1,3 +1,5 @@
+use askama_escape::Escaper;
+
 use std::collections::VecDeque;
 use crate::parse::{Fragment, Tag::*};
 
@@ -26,9 +28,9 @@ pub fn map_name_html(name: &str) -> String {
         match frag {
             Fragment::Text(t) => {
                 if capitals {
-                    name_html.push_str(&t.to_uppercase());
+                    askama_escape::Html.write_escaped(&mut name_html, &t.to_uppercase()).unwrap();
                 } else {
-                    name_html.push_str(t);
+                    askama_escape::Html.write_escaped(&mut name_html, &t).unwrap();
                 }
             }
             Fragment::Tag(tag) => {
