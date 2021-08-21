@@ -31,6 +31,7 @@ pub struct Record {
     pub time: DisplayDuration,
     #[serde(serialize_with = "serialize_date")]
     pub date: NaiveDateTime,
+    pub unix_date: i64,
 }
 
 pub async fn records_get(
@@ -64,6 +65,7 @@ pub async fn records_get(
             country: map_country(&country),
             time,
             date,
+            unix_date: date.timestamp(),
         });
 
         if *record.time > *time || (*record.time == *time && record.date > date) {
@@ -73,6 +75,7 @@ pub async fn records_get(
                 country: map_country(&country),
                 time,
                 date,
+                unix_date: date.timestamp(),
             };
         }
     }
@@ -156,6 +159,7 @@ pub async fn maps_get(
                 country: map_country(&country),
                 time: DisplayDuration(Duration::milliseconds(time)),
                 date,
+                unix_date: date.timestamp(),
             };
             map.records.push(record);
         } else {
@@ -171,6 +175,7 @@ pub async fn maps_get(
                     country: map_country(&country),
                     time: DisplayDuration(Duration::milliseconds(time)),
                     date,
+                    unix_date: date.timestamp(),
                 }],
             };
 
@@ -205,6 +210,7 @@ pub struct LatestRecord {
     pub time: DisplayDuration,
     #[serde(serialize_with = "serialize_date")]
     pub date: NaiveDateTime,
+    pub unix_date: i64,
 }
 
 pub async fn players_get(
@@ -257,19 +263,18 @@ pub async fn players_get(
         let player = players.entry(player_id).or_insert(player);
         player.maps += 1;
 
-        let (record_id, record_map, record_time, record_date) = records
+        let (record_id, record_time, record_date) = records
             .entry(map.clone())
-            .or_insert((player_id, map.clone(), time, date));
+            .or_insert((player_id, time, date));
 
         if *record_time > time || (*record_time == time && *record_date > date) {
             *record_id = player_id;
-            *record_map = map;
             *record_time = time;
             *record_date = date;
         }
     }
 
-    for (id, map, time, date) in records.into_values() {
+    for (map, (id, time, date)) in records.into_iter() {
         if let Some(player) = players.get_mut(&id) {
             player.records += 1;
             if let Some(latest) = &mut player.latest {
@@ -278,6 +283,7 @@ pub async fn players_get(
                         map_name: sanitize_map_name(&map),
                         time: DisplayDuration(Duration::milliseconds(time)),
                         date,
+                        unix_date: date.timestamp(),
                     };
                 }
             } else {
@@ -285,6 +291,7 @@ pub async fn players_get(
                     map_name: sanitize_map_name(&map),
                     time: DisplayDuration(Duration::milliseconds(time)),
                     date,
+                    unix_date: date.timestamp(),
                 });
             }
         }
