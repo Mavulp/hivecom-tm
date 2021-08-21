@@ -43,13 +43,13 @@
           {% let record=records.get(0).unwrap() %}
           <div
             class="track"
-            data-keyword="{{map.name}};;{{record.player}}"
+            data-keyword="{{map.name}}{{record.player}}"
             id="{{map.id}}"
           >
             <details>
               <summary>
                 <div class="track-name">
-                  <h2>{{map.name}}</h2>
+                  <h2>{{map.name|safe}}</h2>
                   <span>{{map.author}}</span>
                 </div>
 

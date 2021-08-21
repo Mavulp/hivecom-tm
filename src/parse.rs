@@ -1,6 +1,8 @@
 use pest::{error::Error, iterators::Pair, Parser};
 use pest_derive::Parser;
 
+use std::borrow::Cow;
+
 #[cfg(debug_assertions)]
 const _GRAMMAR: &str = include_str!("map_name.pest");
 
@@ -34,15 +36,15 @@ pub enum Fragment<'a> {
     Text(&'a str),
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Tag {
+    Bold,
     Italic,
     Shadowed,
     Wide,
     Narrow,
     Normal,
     DefaultColor,
-    Bold,
     ResetAll,
     Capitals,
     Color(u8, u8, u8),
@@ -70,13 +72,13 @@ pub fn name_from_pest(frags: Pair<Rule>) -> Vec<Fragment> {
 impl Tag {
     fn from_pest(parsed: Pair<Rule>) -> Self {
         match parsed.as_rule() {
+            Rule::bold => Tag::Bold,
             Rule::italic => Tag::Italic,
             Rule::shadowed => Tag::Shadowed,
             Rule::wide => Tag::Wide,
             Rule::narrow => Tag::Narrow,
             Rule::normal => Tag::Normal,
             Rule::default_color => Tag::DefaultColor,
-            Rule::bold => Tag::Bold,
             Rule::reset => Tag::ResetAll,
             Rule::capitals => Tag::Capitals,
             Rule::color => Self::color(parsed.as_str()),
@@ -93,6 +95,36 @@ impl Tag {
         // Copy lower half of the byte into upper half
         Self::Color(r | r << 4, g | g << 4, b | b << 4)
     }
+
+pub fn to_html_tag(&self) -> Cow<'static, str> {
+    use Tag::*;
+
+    match self {
+        Bold => {
+            Cow::Borrowed("<span class=\"bold\">")
+        }
+        Italic => {
+            Cow::Borrowed("<span class=\"italic\">")
+        }
+        Shadowed => {
+            Cow::Borrowed("<span class=\"shadow\">")
+        }
+        Wide => {
+            Cow::Borrowed("<span class=\"wide\">")
+        }
+        Narrow => {
+            Cow::Borrowed("<span class=\"narrow\">")
+        }
+        Color(r, g, b) => {
+            Cow::Owned(format!("<span style=\"color: rgb({}, {}, {});\">", r, g, b))
+        }
+        Normal |
+            DefaultColor |
+            ResetAll |
+            Capitals => Cow::Borrowed(""),
+    }
+}
+
 }
 
 #[cfg(test)]

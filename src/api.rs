@@ -14,6 +14,7 @@ use thiserror::Error;
 use std::collections::HashMap;
 
 use crate::site::{map_country, DisplayDuration};
+use crate::util::sanitize_map_name;
 
 #[derive(Deserialize, Debug)]
 pub struct Input {
@@ -90,6 +91,7 @@ pub async fn records_get(
 pub struct Map {
     id: u64,
     name: String,
+    name_styled: String,
     author: String,
     environment: String,
     records: Vec<Record>,
@@ -159,7 +161,8 @@ pub async fn maps_get(
         } else {
             let map = Map {
                 id,
-                name: crate::site::sanitize_map_name(&name),
+                name: crate::util::sanitize_map_name(&name),
+                name_styled: crate::util::map_name_html(&name),
                 author,
                 environment,
                 records: vec![Record {
@@ -272,14 +275,14 @@ pub async fn players_get(
             if let Some(latest) = &mut player.latest {
                 if latest.date < date {
                     *latest = LatestRecord {
-                        map_name: crate::site::sanitize_map_name(&map),
+                        map_name: sanitize_map_name(&map),
                         time: DisplayDuration(Duration::milliseconds(time)),
                         date,
                     };
                 }
             } else {
                 player.latest = Some(LatestRecord {
-                    map_name: crate::site::sanitize_map_name(&map),
+                    map_name: sanitize_map_name(&map),
                     time: DisplayDuration(Duration::milliseconds(time)),
                     date,
                 });

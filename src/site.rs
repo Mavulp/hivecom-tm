@@ -93,7 +93,7 @@ pub async fn root(
     for (id, name, author, environment, player, country, time, date) in loaded_scores {
         let map = Map {
             id,
-            name: sanitize_map_name(&name),
+            name: crate::util::map_name_html(&name),
             author,
             environment,
         };
@@ -131,10 +131,6 @@ pub fn map_country(name: &str) -> &'static str {
             "global"
         }
     }
-}
-
-pub fn sanitize_map_name(name: &str) -> String {
-    crate::parse::map_name_string(name).expect("Parser supports all valid map names")
 }
 
 #[derive(Debug, Clone, Copy)]
