@@ -1,0 +1,9 @@
+@mixin font-bold() {
+  font-family: "Roboto-Bold";
+  font-weight: 700;
+}
+
+@mixin font-regular() {
+  font-family: "Roboto-Regular";
+  font-weight: 400;
+}

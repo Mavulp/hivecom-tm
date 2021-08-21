@@ -1,3 +1,5 @@
+@import "./mixins";
+
 .track-list {
   display: block;
 
@@ -62,7 +64,7 @@
 
         .track-player {
           p {
-            font-family: "Roboto-Bold";
+            @include font-bold();
             font-size: 1.4rem;
           }
         }
@@ -71,7 +73,6 @@
             content: "NEW!";
             display: block;
             font-size: 1.4rem;
-            // margin-left: 8px;
             color: var(--highlight);
           }
         }
@@ -127,9 +128,9 @@
         text-align: right;
 
         strong {
+          @include font-bold();
           font-size: 2rem;
           color: var(--red);
-          font-weight: 900;
         }
 
         p {

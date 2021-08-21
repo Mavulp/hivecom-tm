@@ -1,3 +1,5 @@
+@import "./_mixins";
+
 .search {
   display: block;
   position: sticky;
@@ -17,9 +19,9 @@
   }
 
   input[type="search"] {
-    transition: 0.2s all ease-in-out;
+    @include font-regular();
 
-    font-family: "Roboto-Regular";
+    transition: 0.2s all ease-in-out;
     border: 1px solid var(--red);
     color: var(--red);
     display: block;

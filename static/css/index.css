@@ -111,6 +111,27 @@
           transform: translate(-50%, -50%);
 }
 
+span.bold {
+  font-family: "Roboto-Bold";
+  font-weight: 700;
+}
+
+span.italic {
+  font-style: italic;
+}
+
+span.shadow {
+  text-shadow: 1px 1px white;
+}
+
+span.wide {
+  letter-spacing: 0.25em;
+}
+
+span.narrow {
+  letter-spacing: 0.001em;
+}
+
 .track-list {
   display: block;
 }
@@ -178,6 +199,7 @@
 
 .track.new-record .track-content .track-time:first-of-type .track-player p {
   font-family: "Roboto-Bold";
+  font-weight: 700;
   font-size: 1.4rem;
 }
 
@@ -246,9 +268,10 @@
 }
 
 .track details summary .track-record strong {
+  font-family: "Roboto-Bold";
+  font-weight: 700;
   font-size: 2rem;
   color: var(--red);
-  font-weight: 900;
 }
 
 .track details summary .track-record p {
@@ -445,9 +468,10 @@
 }
 
 .search input[type="search"] {
+  font-family: "Roboto-Regular";
+  font-weight: 400;
   -webkit-transition: 0.2s all ease-in-out;
   transition: 0.2s all ease-in-out;
-  font-family: "Roboto-Regular";
   border: 1px solid var(--red);
   color: var(--red);
   display: block;
@@ -646,6 +670,7 @@ html ::-webkit-scrollbar {
 
 body {
   font-family: "Roboto-Regular";
+  font-weight: 400;
   background-color: var(--bg);
   color: var(--text);
   padding-top: 2em;
@@ -659,6 +684,7 @@ h4,
 h5,
 strong {
   font-family: "Roboto-Bold";
+  font-weight: 700;
 }
 
 .description {

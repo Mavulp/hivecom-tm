@@ -115,7 +115,9 @@ const maps = {
 
         if (s !== "") {
           return recordMaps.filter(
-            (map) => map.name.includes(s) || map.records[0].player.includes(s)
+            (map) =>
+              map.name.toLowerCase().includes(s) ||
+              map.records[0].player.includes(s)
           );
         }
 
@@ -124,7 +126,9 @@ const maps = {
 
       if (s !== "" && !r) {
         return this.maps.filter(
-          (map) => map.name.includes(s) || map.records[0].player.includes(s)
+          (map) =>
+            map.name.toLowerCase().includes(s) ||
+            map.records[0].player.includes(s)
         );
       }
 
@@ -211,8 +215,9 @@ const maps = {
 // COMPONENT: TABS
 const tabs = {
   emits: ["set"],
+  props: { buttons: Array },
   setup(props, { emit }) {
-    const btns = ["Maps", "Players"];
+    const btns = props.buttons;
     const selected = ref(0);
 
     watch(selected, (val) => {
@@ -327,7 +332,7 @@ app.component("app", {
   },
   template: `
   <div class="app-rendered">
-    <tabs @set="(t) => {tab = t}" />
+    <tabs @set="(t) => {tab = t}" :buttons="['Maps', 'Players']" />
     
     <maps v-if="tab === 0" />
     <leaderboards v-if="tab === 1" />

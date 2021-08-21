@@ -11,6 +11,7 @@
 @import "./_players.scss";
 @import "./_search.scss";
 @import "./_alerts.scss";
+@import "./_mixins.scss";
 
 @font-face {
   font-family: "Roboto-Regular";
@@ -38,7 +39,7 @@ html {
 }
 
 body {
-  font-family: "Roboto-Regular";
+  @include font-regular();
   background-color: var(--bg);
   color: var(--text);
   padding-top: 2em;
@@ -51,7 +52,7 @@ h3,
 h4,
 h5,
 strong {
-  font-family: "Roboto-Bold";
+  @include font-bold();
 }
 
 .description {

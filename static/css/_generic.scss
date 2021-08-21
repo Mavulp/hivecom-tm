@@ -1,3 +1,5 @@
+@import "./_mixins";
+
 .tabs {
   display: flex;
   position: relative;
@@ -104,5 +106,23 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+  }
+}
+
+span {
+  &.bold {
+    @include font-bold();
+  }
+  &.italic {
+    font-style: italic;
+  }
+  &.shadow {
+    text-shadow: 1px 1px rgba(255, 255, 255, 1);
+  }
+  &.wide {
+    letter-spacing: 0.25em;
+  }
+  &.narrow {
+    letter-spacing: 0.001em;
   }
 }
