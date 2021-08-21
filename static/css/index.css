@@ -65,11 +65,12 @@
   display: block;
   margin: 0 auto;
   width: 100%;
-  max-width: 532px;
+  max-width: 564px;
+  padding: 0 16px;
 }
 
 .container.container-wide {
-  max-width: 856px;
+  max-width: 872px;
 }
 
 .loading {
@@ -648,6 +649,7 @@ body {
   background-color: var(--bg);
   color: var(--text);
   padding-top: 2em;
+  padding-bottom: 2em;
 }
 
 h1,

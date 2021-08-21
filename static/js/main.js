@@ -10,13 +10,14 @@ const { ref, watch, onMounted } = Vue;
 const trackItem = {
   props: {
     map: Object,
+    format: Boolean,
   },
   template: `
     <div class="track">
       <details>
         <summary>
           <div class="track-name">
-            <h2>{{this.map.name}}</h2>
+            <h2 v-html="format ? this.map.name_styled : this.map.name"></h2>
             <span>{{this.map.author}}</span>
           </div>
 
@@ -83,10 +84,15 @@ const maps = {
       interval: null,
       onlyRecords: false,
       alert: false,
+      showFormat: false,
     };
   },
   created() {
     this.fetchMaps();
+
+    const showFormatStorage = localStorage.getItem("show-format");
+    if (showFormatStorage)
+      this.showFormat = showFormatStorage === "true" ? true : false;
 
     const FETCH_TIMEOUT = 150000;
 
@@ -100,9 +106,12 @@ const maps = {
       const r = this.onlyRecords;
 
       if (r) {
-        const recordMaps = this.maps.filter((map) =>
-          this.records.includes(map.id)
-        );
+        const recordMaps = this.maps
+          .filter((map) => this.records.includes(map.id))
+          .sort((a, b) => {
+            if (a.records[0].date > b.records[0].date) return -1;
+            return 1;
+          });
 
         if (s !== "") {
           return recordMaps.filter(
@@ -154,12 +163,22 @@ const maps = {
       this.onlyRecords = val;
     },
   },
+  watch: {
+    showFormat(val) {
+      localStorage.setItem("show-format", val);
+    },
+  },
   template: `
     <div>
       <div class="track-list container">
-        <search @search="s" @check="n" />
-
+      
         <template v-if="!loading">
+
+          <input type="checkbox" id="format" name="format" v-model="showFormat" />
+          <label style="margin-bottom:8px;" for="format">Show formatted map names</label>
+          
+          <search @search="s" @check="n" />
+
           <div class="legend">
             <span>Tracks <strong>{{onlyRecords ? records.length : maps?.length}}</strong></span>
             <span v-if="search">
@@ -172,7 +191,7 @@ const maps = {
           </div>
         
           <template v-for="map in renderMaps" :key="map.id">
-            <track-item :id="map.id" :class="{'new-record': records.includes(map.id)}" :map="map" />
+            <track-item :id="map.id" :class="{'new-record': records.includes(map.id)}" :map="map" :format="showFormat" />
           </template>
         </template>
         <div v-else class="loading">Loading</div>
@@ -203,11 +222,7 @@ const tabs = {
 
     onMounted(() => {
       const hash = window.location.hash?.split("#")[1];
-
-      if (hash) {
-        emit("set", btns.indexOf(hash));
-        selected.value = btns.indexOf(hash);
-      }
+      if (hash) selected.value = btns.indexOf(hash);
     });
 
     return { btns, selected };
