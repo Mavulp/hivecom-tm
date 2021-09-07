@@ -127,6 +127,8 @@ pub fn map_country(name: &str) -> &'static str {
         "CAN" => "ca",
         "SUI" => "ch",
         "GBR" => "gb",
+        "POL" => "pl",
+        "IND" => "in",
         _ => {
             error!("Unknown Country Code: {}", name);
             "global"
