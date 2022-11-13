@@ -161,7 +161,7 @@ pub struct DisplayDateTime(pub OffsetDateTime);
 impl std::fmt::Display for DisplayDateTime {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let format =
-            time::format_description::parse("[day]-[month]-[year] [hour]:[minute]").unwrap();
+            time::format_description::parse("[day].[month].[year] [hour]:[minute]").unwrap();
         write!(f, "{}", self.0.format(&format).unwrap())
     }
 }
