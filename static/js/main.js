@@ -140,7 +140,7 @@ const maps = {
       if (init) this.loading = true;
 
       const now = new Date();
-      const since = (now / 1000).toFixed(0) - 86400;
+      const since = (now / 1000).toFixed(0) - 24 * 3600;
 
       await fetch(`https://records.hivecom.net/api/records?since=${since}`)
         .then((response) => response.json())

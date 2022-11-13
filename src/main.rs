@@ -1,9 +1,8 @@
 use anyhow::Context;
 use axum::{
     http::StatusCode,
-    prelude::*,
-    service::{self, ServiceExt},
-    AddExtensionLayer,
+    routing::{get, get_service},
+    Extension, Router,
 };
 use tower_http::{services::ServeDir, trace::TraceLayer};
 use tracing::{debug, error};
@@ -46,18 +45,19 @@ async fn run() -> anyhow::Result<()> {
 
     let pool = mysql_async::Pool::new(&database_url[..]);
 
-    let app = route("/", get(site::root))
+    let app = Router::new()
+        .route("/", get(site::root))
         .route("/api/players", get(api::players_get))
         .route("/api/records", get(api::records_get))
         .route("/api/maps", get(api::maps_get))
-        .layer(AddExtensionLayer::new(pool))
+        .layer(Extension(pool))
         .nest(
             "/static",
-            service::get(ServeDir::new("./static")).handle_error(|error| {
-                Ok::<_, std::convert::Infallible>((
+            get_service(ServeDir::new("./static")).handle_error(|error| async move {
+                (
                     StatusCode::INTERNAL_SERVER_ERROR,
                     format!("Unhandled internal error: {}", error),
-                ))
+                )
             }),
         )
         .layer(TraceLayer::new_for_http());

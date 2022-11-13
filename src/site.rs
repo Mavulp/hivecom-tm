@@ -1,7 +1,7 @@
 use askama::Template;
 use axum::{extract::Extension, response::Html};
-use chrono::{Duration, NaiveDateTime};
 use mysql_async::prelude::*;
+use time::{Duration, OffsetDateTime, PrimitiveDateTime};
 use tracing::error;
 
 use std::collections::BTreeMap;
@@ -43,7 +43,7 @@ struct Record {
     player: String,
     country: &'static str,
     time: DisplayDuration,
-    date: NaiveDateTime,
+    date: DisplayDateTime,
 }
 
 pub async fn root(
@@ -85,7 +85,7 @@ pub async fn root(
             // Time
             i64,
             // Date
-            NaiveDateTime,
+            PrimitiveDateTime,
         )>()
         .await?;
 
@@ -104,7 +104,7 @@ pub async fn root(
             player,
             country: map_country(&country),
             time: DisplayDuration(Duration::milliseconds(time)),
-            date,
+            date: DisplayDateTime(date.assume_utc()),
         };
         records.push(record);
     }
@@ -141,14 +141,33 @@ pub struct DisplayDuration(pub Duration);
 
 impl std::fmt::Display for DisplayDuration {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let minutes = self.num_minutes();
-        let seconds = (self.num_milliseconds() - minutes * 60000) as f64 / 1000.0;
+        let minutes = self.whole_minutes() as i128;
+        let seconds = (self.whole_milliseconds() - minutes * 60000) as f64 / 1000.0;
         write!(f, "{:02}:{:05.2}", minutes, seconds,)
     }
 }
 
 impl std::ops::Deref for DisplayDuration {
     type Target = Duration;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct DisplayDateTime(pub OffsetDateTime);
+
+impl std::fmt::Display for DisplayDateTime {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let format =
+            time::format_description::parse("[day]-[month]-[year] [hour]:[minute]").unwrap();
+        write!(f, "{}", self.0.format(&format).unwrap())
+    }
+}
+
+impl std::ops::Deref for DisplayDateTime {
+    type Target = OffsetDateTime;
 
     fn deref(&self) -> &Self::Target {
         &self.0

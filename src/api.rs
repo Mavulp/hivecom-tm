@@ -1,15 +1,14 @@
 use axum::{
-    body::Body,
     extract::{Extension, Form},
-    http::{header, HeaderValue, Response, StatusCode},
-    response::{IntoResponse, Json},
+    http::StatusCode,
+    response::{IntoResponse, Json, Response},
 };
 
-use chrono::{Duration, NaiveDateTime};
 use mysql_async::prelude::*;
 use serde::Deserialize;
 use serde::{Serialize, Serializer};
 use thiserror::Error;
+use time::{format_description, Duration, OffsetDateTime, PrimitiveDateTime};
 
 use std::collections::HashMap;
 
@@ -30,7 +29,7 @@ pub struct Record {
     #[serde(serialize_with = "serialize_duration")]
     pub time: DisplayDuration,
     #[serde(serialize_with = "serialize_date")]
-    pub date: NaiveDateTime,
+    pub date: OffsetDateTime,
     pub unix_date: i64,
 }
 
@@ -53,11 +52,12 @@ pub async fn records_get(
             (),
         )
         .await?
-        .collect::<(u64, String, String, i64, NaiveDateTime)>()
+        .collect::<(u64, String, String, i64, PrimitiveDateTime)>()
         .await?;
 
     let mut best_scores = HashMap::new();
     for (map_id, player, country, time, date) in loaded_records {
+        let date = date.assume_utc();
         let time = DisplayDuration(Duration::milliseconds(time));
         let record = best_scores.entry(map_id).or_insert_with(|| Record {
             map_id,
@@ -65,7 +65,7 @@ pub async fn records_get(
             country: map_country(&country),
             time,
             date,
-            unix_date: date.timestamp(),
+            unix_date: date.unix_timestamp(),
         });
 
         if *record.time > *time || (*record.time == *time && record.date > date) {
@@ -75,13 +75,13 @@ pub async fn records_get(
                 country: map_country(&country),
                 time,
                 date,
-                unix_date: date.timestamp(),
+                unix_date: date.unix_timestamp(),
             };
         }
     }
 
     let since =
-        NaiveDateTime::from_timestamp_opt(input.since, 0).ok_or(ApiError::InvalidTimestamp)?;
+        OffsetDateTime::from_unix_timestamp(input.since).map_err(|_| ApiError::InvalidTimestamp)?;
     let records = best_scores
         .into_values()
         .filter(|r| r.date >= since)
@@ -146,12 +146,13 @@ pub async fn maps_get(
             // Time
             i64,
             // Date
-            NaiveDateTime,
+            PrimitiveDateTime,
         )>()
         .await?;
 
     let mut maps: HashMap<u64, Map> = HashMap::new();
     for (id, name, author, environment, player, country, time, date) in loaded_maps {
+        let date = date.assume_utc();
         if let Some(map) = maps.get_mut(&id) {
             let record = Record {
                 map_id: id,
@@ -159,7 +160,7 @@ pub async fn maps_get(
                 country: map_country(&country),
                 time: DisplayDuration(Duration::milliseconds(time)),
                 date,
-                unix_date: date.timestamp(),
+                unix_date: date.unix_timestamp(),
             };
             map.records.push(record);
         } else {
@@ -175,7 +176,7 @@ pub async fn maps_get(
                     country: map_country(&country),
                     time: DisplayDuration(Duration::milliseconds(time)),
                     date,
-                    unix_date: date.timestamp(),
+                    unix_date: date.unix_timestamp(),
                 }],
             };
 
@@ -186,7 +187,8 @@ pub async fn maps_get(
     let mut maps = maps.into_values().collect::<Vec<_>>();
     maps.sort_by(|a, b| a.name.cmp(&b.name));
     for map in &mut maps {
-        map.records.sort_by(|a, b| a.time.cmp(&b.time));
+        map.records
+            .sort_by(|a, b| a.time.cmp(&b.time).then(a.date.cmp(&b.date)));
     }
 
     let maps = maps.into_iter().collect::<Vec<_>>();
@@ -209,7 +211,7 @@ pub struct LatestRecord {
     #[serde(serialize_with = "serialize_duration")]
     pub time: DisplayDuration,
     #[serde(serialize_with = "serialize_date")]
-    pub date: NaiveDateTime,
+    pub date: OffsetDateTime,
     pub unix_date: i64,
 }
 
@@ -245,7 +247,7 @@ pub async fn players_get(
             // Time
             i64,
             // Date
-            NaiveDateTime,
+            PrimitiveDateTime,
         )>()
         .await?;
 
@@ -277,13 +279,14 @@ pub async fn players_get(
     for (map, (id, time, date)) in records.into_iter() {
         if let Some(player) = players.get_mut(&id) {
             player.records += 1;
+            let date = date.assume_utc();
             if let Some(latest) = &mut player.latest {
                 if latest.date < date {
                     *latest = LatestRecord {
                         map_name: sanitize_map_name(&map),
                         time: DisplayDuration(Duration::milliseconds(time)),
                         date,
-                        unix_date: date.timestamp(),
+                        unix_date: date.unix_timestamp(),
                     };
                 }
             } else {
@@ -291,7 +294,7 @@ pub async fn players_get(
                     map_name: sanitize_map_name(&map),
                     time: DisplayDuration(Duration::milliseconds(time)),
                     date,
-                    unix_date: date.timestamp(),
+                    unix_date: date.unix_timestamp(),
                 });
             }
         }
@@ -310,11 +313,12 @@ where
     s.serialize_str(&dur.to_string())
 }
 
-pub fn serialize_date<S>(date: &NaiveDateTime, s: S) -> Result<S::Ok, S::Error>
+pub fn serialize_date<S>(date: &OffsetDateTime, s: S) -> Result<S::Ok, S::Error>
 where
     S: Serializer,
 {
-    s.serialize_str(&date.format("%d.%m.%Y %H:%M").to_string())
+    let format = format_description::parse("[day].[month].[year] [hour]:[minute]").unwrap();
+    s.serialize_str(&date.format(&format).map_err(serde::ser::Error::custom)?)
 }
 
 #[derive(Error, Debug)]
@@ -326,17 +330,12 @@ pub enum ApiError {
 }
 
 impl IntoResponse for ApiError {
-    fn into_response(self) -> Response<Body> {
-        let mut res = Response::new(Body::from(self.to_string()));
-
-        *res.status_mut() = match self {
+    fn into_response(self) -> Response {
+        let status = match &self {
             ApiError::DatabaseConnection(_) => StatusCode::SERVICE_UNAVAILABLE,
             ApiError::InvalidTimestamp => StatusCode::BAD_REQUEST,
         };
 
-        res.headers_mut()
-            .insert(header::CONTENT_TYPE, HeaderValue::from_static("text/html"));
-
-        res
+        (status, self.to_string()).into_response()
     }
 }
