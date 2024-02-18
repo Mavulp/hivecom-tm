@@ -6,7 +6,7 @@ export default $.div().setup((ctx, props: Props<TrackmaniaMap[]>) => {
   ctx.nest(
     $.ul(
       $.li().for(props.$data, (ctx, { value }) => {
-        ctx.nest(Mapitem.props({ map: value }))
+        ctx.nest(Mapitem.prop('map', value))
       }),
     ),
   )
