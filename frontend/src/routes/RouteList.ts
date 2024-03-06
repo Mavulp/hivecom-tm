@@ -1,13 +1,11 @@
 import { $ } from '@dolanske/pantry'
-import type { Props, TrackmaniaMap } from '../types'
-import { Mapitem } from '../components/MapItem'
+import type { RouteProps, TrackmaniaMap } from '../types'
+import MapItem from '../components/MapItem'
 
-export default $.div().setup((ctx, props: Props<TrackmaniaMap[]>) => {
+export default $.div().setup((ctx, props: RouteProps<TrackmaniaMap[]>) => {
   ctx.nest(
-    $.ul(
-      $.li().for(props.$data, (ctx, { value }) => {
-        ctx.nest(Mapitem.prop('map', value))
-      }),
-    ),
+    $.ul().for(props.$data, (map) => {
+      return MapItem().props({ map })
+    })
   )
 })

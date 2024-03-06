@@ -15,7 +15,7 @@ export interface TrackmaniaRecord {
   unixDate: number
 }
 
-export interface Props<T> {
+export interface RouteProps<T> {
   [key: string]: unknown
   $data: T
   $params: Record<string, string>
