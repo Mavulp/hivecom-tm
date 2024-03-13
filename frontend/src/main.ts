@@ -6,6 +6,10 @@ import Navigation from './components/Navigation'
 import { span } from "@dolanske/cascade"
 import { maps, players } from './api'
 
+// TODO: Refresh records every 30 seconds
+// TODO: Scroll up icon
+// TODO: Turn map item into a card which folds (animates) open on click showing records
+
 export const app = createApp({
   '/records': {
     default: true,

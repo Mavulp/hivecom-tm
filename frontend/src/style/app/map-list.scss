@@ -23,6 +23,7 @@
   .map-list {
     border: 1px solid var(--color-border);
     border-radius: 12px;
+    overflow: hidden;
 
     .map-item {
       @include flex(32px, flex-start);
@@ -31,6 +32,10 @@
 
       &:last-child {
         border-bottom: 0;
+      }
+
+      &:hover {
+        background-color: var(--color-bg-light);
       }
 
       .map-name {

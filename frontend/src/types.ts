@@ -21,7 +21,7 @@ export interface TrackmaniaPlayer {
   country: string,
   maps: number,
   records: number,
-  // TODO
+  // TODO Add interface
   latest: {},
 }
 
