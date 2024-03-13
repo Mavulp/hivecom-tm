@@ -11,12 +11,14 @@
   "devDependencies": {
     "@antfu/eslint-config": "^2.8.0",
     "eslint": "^8.57.0",
-    "typescript": "^5.3.3",
+    "typescript": "^5.4.2",
     "vite": "^5.1.5"
   },
   "dependencies": {
     "@dolanske/eru": "github:dolanske/eru",
     "@dolanske/pantry": "github:dolanske/pantry",
-    "@vue/reactivity": "^3.4.21"
+    "@vue-reactivity/watch": "^0.2.0",
+    "@vue/reactivity": "^3.4.21",
+    "sass": "^1.71.1"
   }
 }

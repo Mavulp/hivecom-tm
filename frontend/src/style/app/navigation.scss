@@ -1,0 +1,53 @@
+.navigation {
+  @include flex(16px);
+  position: relative;
+  width: 100%;
+  padding: 40px;
+
+  --links-height: 42px;
+
+  .nav-links {
+    @include grid(0, 3);
+    border-radius: calc(var(--links-height) / 2);
+    height: var(--links-height);
+    background-color: var(--color-bg-light);
+
+    a {
+      @include t();
+      @include font(700);
+      width: 144px;
+      text-align: center;
+      font-size: 1.6rem;
+      height: var(--links-height);
+      line-height: var(--links-height);
+      text-decoration: none;
+      color: var(--color-text);
+      border-radius: calc(var(--links-height) / 2);
+      text-transform: capitalize;
+      color: var(--color-text);
+
+      &.active,
+      &:hover {
+        background-color: var(--color-bg-light-hover);
+      }
+    }
+  }
+
+  .nav-theme {
+    @include flex(0, center, center);
+    width: var(--links-height);
+    height: var(--links-height);
+    border-radius: 100%;
+    background-color: var(--color-bg-light);
+
+    svg {
+      width: 24px;
+      height: 24px;
+      color: var(--color-text);
+    }
+
+    &:hover {
+      background-color: var(--color-bg-light-hover);
+    }
+  }
+}

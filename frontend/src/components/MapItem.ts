@@ -1,6 +1,5 @@
-import { $, reusable } from '@dolanske/pantry'
+import { $, reusable } from '@dolanske/cascade'
 import type { TrackmaniaMap } from '../types'
-import { Component } from '@dolanske/cascade'
 
 interface Props {
   map: TrackmaniaMap
