@@ -1,36 +1,31 @@
 .form-checkbox {
-  display: block;
-  margin-bottom: 10px;
-
   input[type="checkbox"] {
     display: none;
 
     &+label {
-      @include flex(15px);
+      @include flex(15px, center, center);
       cursor: pointer;
+      width: var(--form-item-height);
+      height: var(--form-item-height);
+      border-radius: 100%;
+      border: 1px solid var(--color-border);
+      background-color: var(--color-bg-light);
 
-      p {
-        font-size: 1.4rem;
-      }
-
-      .icon {
+      svg {
         @include t();
         color: var(--color-text-light);
-
-        svg {
-          font-size: 2rem;
-        }
+        font-size: 2rem;
+        width: 24px;
       }
 
       &:hover {
-        .icon {
-          color: var(--color-text);
-        }
+        color: var(--color-text);
       }
     }
 
-    &:checked+label .icon {
-      color: var(--color-accent);
+    &:checked+label {
+      background-color: var(--color-bg-light-active);
+
     }
   }
 }

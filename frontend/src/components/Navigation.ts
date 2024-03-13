@@ -1,4 +1,4 @@
-import { $ } from "@dolanske/cascade";
+import { nav, div, img, button } from "@dolanske/cascade";
 import { onRouteResolve } from "@dolanske/crumbs"
 import { computed, ref } from "@vue/reactivity";
 import { RouterLink } from "@dolanske/pantry";
@@ -22,15 +22,15 @@ export default function () {
     activeButton.value = route.path.replaceAll('/', '')
   })
 
-  return $.nav().class('navigation').nest(
-    $.div().class('logo-wrap').nest(
-      $.img().attrs({
+  return nav().class('navigation').nest(
+    div().class('logo-wrap').nest(
+      img().attrs({
         src: '/logo.svg',
         alt: 'Hivecom Records Logo'
       })
     ),
-    $.div().class('flex-1'),
-    $.button().setup((ctx) => {
+    div().class('flex-1'),
+    button().setup((ctx) => {
       const isDark = ref(isDefaultDark())
 
       watchEffect(() => {
@@ -49,7 +49,7 @@ export default function () {
       ctx.html(buttonIcon)
       ctx.attr('data-title-left', "Switch Theme")
     }),
-    $.div().class('nav-links').for(buttons, (link) => {
+    div().class('nav-links').for(buttons, (link) => {
       const isActive = computed(() => link === activeButton.value)
       return RouterLink(`/${link}`, link).class('active', isActive)
     })

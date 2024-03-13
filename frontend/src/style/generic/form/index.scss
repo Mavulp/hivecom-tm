@@ -2,31 +2,18 @@
 @import "./checkbox";
 @import "./select";
 
-.form-error {
-  display: block;
-  font-size: 1.2rem;
-  color: var(--color-red);
-  margin-top: 10px;
+:root {
+  --form-item-height: 42px;
 }
 
 .form-item {
-  display: block;
-  position: relative;
-  margin-bottom: 15px;
+  height: var(--form-item-height);
+  border-radius: calc(var(--form-item-height) / 2);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-light);
 
-  &:last-child {
-    margin-bottom: 0;
+  svg {
+    width: 24px;
+    color: var(--color-text);
   }
-
-  label {
-    @include font(400);
-    display: block;
-    margin-bottom: 5px;
-    font-size: 1.1rem;
-    color: var(--color-text-light);
-  }
-}
-
-form {
-  width: 100%;
 }

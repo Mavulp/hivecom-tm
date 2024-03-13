@@ -1,3 +1,6 @@
 import { eru } from "@dolanske/eru";
 
-export const maps = eru('https://records.hivecom.net/api/maps').route('/')
+const api = eru('https://records.hivecom.net/api')
+
+export const maps = api.route('/maps')
+export const players = api.route('/players')

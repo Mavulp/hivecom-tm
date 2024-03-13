@@ -2,22 +2,21 @@
 @import "./button-sizes";
 
 .button {
-  @include font(500);
+  @include font(400);
   @include t();
-  @include flex(5px, center);
+  @include flex(5px, flex-start);
   border-radius: var(--radius-tn);
-  height: 36px;
-  line-height: 36px;
-  padding: 0 15px;
-  font-size: 1.2rem;
-  color: var(--color-text-light);
+  height: 32px;
+  line-height: 32px;
+  padding: 0 16px;
+  font-size: 1.6rem;
+  color: var(--color-text);
   text-decoration: none;
-  text-transform: uppercase;
 
   svg {
     @include t();
     font-size: 1.4rem;
-    color: var(--color-text-light);
+    color: var(--color-text);
   }
 
   &:disabled {
@@ -26,6 +25,6 @@
 
   &:hover {
     color: var(--color-text);
-    background-color: var(--color-bg-light);
+    background-color: var(--color-bg-light-hover);
   }
 }

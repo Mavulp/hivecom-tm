@@ -1,9 +1,10 @@
 export interface TrackmaniaMap {
   id: number
   name: string
-  named_styled: string
+  name_styled: string
   author: string
   records: TrackmaniaRecord[]
+  environment: string
 }
 
 export interface TrackmaniaRecord {
@@ -13,6 +14,15 @@ export interface TrackmaniaRecord {
   time: string
   date: string
   unixDate: number
+}
+
+export interface TrackmaniaPlayer {
+  name: string,
+  country: string,
+  maps: number,
+  records: number,
+  // TODO
+  latest: {},
 }
 
 export interface RouteProps<T> {
