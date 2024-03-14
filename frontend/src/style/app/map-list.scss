@@ -66,11 +66,19 @@
 
       .map-content {
         @include grid(0, 2);
-        padding: 24px;
+        padding: 24px 16px;
 
         .map-details {
           table {
             width: 100%;
+
+            tr:last-child {
+
+              th,
+              td {
+                padding-bottom: 0;
+              }
+            }
 
             th,
             td {
@@ -78,16 +86,15 @@
               font-size: 1.4rem;
               padding-bottom: 16px;
               vertical-align: middle;
+              text-align: left;
             }
 
             th {
-              text-align: left;
               color: var(--color-text-lighter);
             }
 
             td {
-              text-align: left;
-              font-size: 1.4rem;
+              color: var(--color-text);
             }
           }
         }

@@ -28,9 +28,9 @@ export default reusable('div', (ctx, props: Props) => {
               tr([th('Environment'), td(props.map.environment)]),
               tr([th('Author'), td(props.map.author)]),
               tr([th('Records'), td(props.map.records.length)]),
-              tr([th('Newest time'), td().setup((ctx) => {
+              tr([th('Latest time'), td().setup((ctx) => {
                 const latest = props.map.records.sort((a, b) => a.unixDate > b.unixDate ? -1 : 1)[0]
-                ctx.text(`${timeAgo(Number(`${latest.unixDate}000`))} by ${latest.player}`)
+                ctx.text(`${latest.player}, ${timeAgo(Number(`${latest.unixDate}000`))}`)
               })])
             ])
           ),
