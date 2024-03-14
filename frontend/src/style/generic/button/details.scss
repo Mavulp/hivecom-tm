@@ -1,0 +1,10 @@
+.details {
+  display: block;
+  width: 100%;
+
+  .details-content {
+    @include t(0.15s);
+    max-height: 0;
+    overflow: hidden;
+  }
+}

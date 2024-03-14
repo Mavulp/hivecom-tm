@@ -26,32 +26,71 @@
     overflow: hidden;
 
     .map-item {
-      @include flex(32px, flex-start);
-      padding: 24px 16px;
       border-bottom: 1px solid var(--color-border);
+      width: 100%;
 
       &:last-child {
         border-bottom: 0;
       }
 
-      &:hover {
-        background-color: var(--color-bg-light);
+      .details-button {
+        @include flex(32px, flex-start);
+        padding: 24px 16px;
+        width: 100%;
+        text-align: left;
+
+        &.active {
+          background-color: var(--color-bg-light-active) !important;
+        }
+
+        &:hover {
+          background-color: var(--color-bg-light);
+        }
+
+        .map-name {
+          font-size: 1.6rem;
+          flex: 1;
+        }
+
+        .map-player,
+        .map-time {
+          font-size: 1.6rem;
+          color: var(--color-text);
+        }
+
+        .map-time {
+          @include font(700);
+          min-width: 80px;
+        }
       }
 
-      .map-name {
-        font-size: 1.6rem;
-        flex: 1;
-      }
+      .map-content {
+        @include grid(0, 2);
+        padding: 24px;
 
-      .map-player,
-      .map-time {
-        font-size: 1.6rem;
-        color: var(--color-text);
-      }
+        .map-details {
+          table {
+            width: 100%;
 
-      .map-time {
-        @include font(700);
-        min-width: 80px;
+            th,
+            td {
+              @include font(400);
+              font-size: 1.4rem;
+              padding-bottom: 16px;
+              vertical-align: middle;
+            }
+
+            th {
+              text-align: left;
+              color: var(--color-text-lighter);
+            }
+
+            td {
+              text-align: left;
+              font-size: 1.4rem;
+            }
+          }
+        }
       }
     }
   }

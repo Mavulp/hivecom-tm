@@ -1,6 +1,7 @@
 import { reusable, button, span, div } from "@dolanske/cascade"
 import { MaybeRef, Ref, computed, ref, unref } from "@vue/reactivity"
 import { Icon } from "../Icon"
+import { onClickOutside } from "../../hooks/onClickOutside"
 
 interface Props {
   modelValue: Ref<string[]>,
@@ -8,11 +9,13 @@ interface Props {
   label: MaybeRef<string>
 }
 
-// TODO: Selected items should be rendered at the top
-// TODO: Close on click outside
-
 export default reusable('div', (ctx, props: Props) => {
   const open = ref(false)
+
+  // Check for clicking outside and close dropdown
+  onClickOutside(ctx, () => {
+    open.value = false
+  })
 
   // Options
   const labelToShow = computed(() => {
@@ -31,8 +34,9 @@ export default reusable('div', (ctx, props: Props) => {
     return unref(props.label)
   })
 
-
-  ctx.class('form-item').class('form-select')
+  ctx.class('form-item').class('form-select').class({
+    'has-input': computed(() => props.modelValue.value.length > 0)
+  })
   ctx.nest(
     button()
       .class('select-button')

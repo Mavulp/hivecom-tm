@@ -1,6 +1,8 @@
-import { span, reusable, strong } from '@dolanske/cascade'
+import { span, reusable, strong, fragment, div, table, tr, th, td } from '@dolanske/cascade'
 import type { TrackmaniaMap } from '../types'
 import { Ref, computed } from '@vue/reactivity'
+import Detail from './Detail'
+import { timeAgo } from '../util/time'
 
 interface Props {
   map: TrackmaniaMap
@@ -13,8 +15,27 @@ export default reusable('div', (ctx, props: Props) => {
 
   ctx.class('map-item')
   ctx.nest(
-    span().class('map-name').html(name),
-    strong(wr.player).class('map-player'),
-    strong(wr.time).class('map-time')
+    Detail().props({
+      button: fragment([
+        span().class('map-name').html(name),
+        strong(wr.player).class('map-player'),
+        strong(wr.time).class('map-time')
+      ]),
+      content: div().class('map-content')
+        .nest(
+          div().class('map-details').nest(
+            table([
+              tr([th('Environment'), td(props.map.environment)]),
+              tr([th('Author'), td(props.map.author)]),
+              tr([th('Records'), td(props.map.records.length)]),
+              tr([th('Newest time'), td().setup((ctx) => {
+                const latest = props.map.records.sort((a, b) => a.unixDate > b.unixDate ? -1 : 1)[0]
+                ctx.text(`${timeAgo(Number(`${latest.unixDate}000`))} by ${latest.player}`)
+              })])
+            ])
+          ),
+          div().class('map-players')
+        )
+    })
   )
 })

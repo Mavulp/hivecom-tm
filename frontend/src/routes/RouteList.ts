@@ -9,19 +9,19 @@ import InputCheckbox from '../components/form/InputCheckbox'
 import { Icon } from '../components/Icon'
 
 function extractKey(data: TrackmaniaMap[], key: keyof TrackmaniaMap) {
-  return data.reduce((group, item) => {
-    if (!group.includes(item[key] as string))
-      group.push(item[key] as string)
-    return group
-  }, [] as string[])
+  return data
+    .reduce((group, item) => {
+      if (!group.includes(item[key] as string))
+        group.push(item[key] as string)
+      return group
+    }, [] as string[])
+    .sort()
 }
 
 export default div().setup((ctx, props: RouteProps<[TrackmaniaMap[], TrackmaniaPlayer[]]>) => {
   const $maps = props.$data[0]
   const $players = props.$data[1]
-
   const search = ref('')
-
 
   // Environments
   const envFilters = ref<string[]>([])
@@ -29,10 +29,12 @@ export default div().setup((ctx, props: RouteProps<[TrackmaniaMap[], TrackmaniaP
 
   // Players
   const plaFilters = ref<string[]>([])
-  const plaOptions = $players.reduce((group, item) => {
-    group.push(item.name)
-    return group
-  }, [] as string[])
+  const plaOptions = $players
+    .reduce((group, item) => {
+      group.push(item.name)
+      return group
+    }, [] as string[])
+    .sort()
 
   // Authors
   const autFilters = ref<string[]>([])
@@ -41,7 +43,6 @@ export default div().setup((ctx, props: RouteProps<[TrackmaniaMap[], TrackmaniaP
   // Checkboxes
   const showFormattedNames = ref(false)
   const showOnlyRecords = ref(false)
-
 
   // Apply filters
   const toRender = computed(() => $maps

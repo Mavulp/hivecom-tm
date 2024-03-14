@@ -20,6 +20,10 @@ input[type=text] {
 .form-search {
   position: relative;
 
+  &.has-input {
+    background-color: var(--color-bg-light-hover);
+  }
+
   .form-clear-icon,
   .form-search-icon {
     position: absolute;

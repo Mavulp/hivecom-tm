@@ -10,7 +10,7 @@ interface Props {
 
 export default reusable('div', (ctx, props: Props) => {
   const hasInput = computed(() => props.modelValue.value.length > 0)
-  ctx.class('form-item').class('form-search')
+  ctx.class('form-item').class('form-search').class({ 'has-input': hasInput })
   ctx.nest(
     span().class('form-search-icon').html(Icon.search),
     input('text')

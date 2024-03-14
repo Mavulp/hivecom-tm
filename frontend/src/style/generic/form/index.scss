@@ -7,6 +7,7 @@
 }
 
 .form-item {
+  @include t();
   height: var(--form-item-height);
   border-radius: calc(var(--form-item-height) / 2);
   border: 1px solid var(--color-border);

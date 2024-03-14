@@ -1,6 +1,10 @@
 .form-select {
   position: relative;
 
+  &.has-input {
+    background-color: var(--color-bg-light-hover);
+  }
+
   .select-button {
     @include flex(4px, space-between, center);
     @include font(400);
