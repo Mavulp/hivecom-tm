@@ -4,11 +4,7 @@ import RouteList from './routes/RouteList'
 import type { TrackmaniaMap, TrackmaniaPlayer } from './types'
 import Navigation from './components/Navigation'
 import { span } from "@dolanske/cascade"
-import { maps, players } from './api'
-
-// TODO: Refresh records every 30 seconds
-// TODO: Scroll up icon
-// TODO: Turn map item into a card which folds (animates) open on click showing records
+import { getRecords, maps, players, } from './api'
 
 export const app = createApp({
   '/records': {
@@ -16,8 +12,9 @@ export const app = createApp({
     component: RouteList,
     loader: () => {
       return Promise.all([
+        getRecords(),
         maps.get<TrackmaniaMap[]>(),
-        players.get<TrackmaniaPlayer[]>()
+        players.get<TrackmaniaPlayer[]>(),
       ])
     },
   },

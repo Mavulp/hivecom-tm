@@ -36,9 +36,9 @@ export default function () {
       watchEffect(() => {
         localStorage.setItem('dark-theme', String(isDark.value))
         if (isDark.value)
-          document.body.classList.add('dark-theme')
+          document.documentElement.classList.add('dark-theme')
         else
-          document.body.classList.remove('dark-theme')
+          document.documentElement.classList.remove('dark-theme')
       })
 
       const buttonIcon = computed(() => isDark.value ? Icon.sun : Icon.moon)

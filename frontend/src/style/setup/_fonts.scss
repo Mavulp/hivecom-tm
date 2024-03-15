@@ -10,10 +10,17 @@
   font-display: swap;
   font-family: "BDLifelessGrotestk";
   font-style: normal;
-  font-weight: 700;
+  font-weight: 500;
   src: url("/fonts/BDLifelessGrotesk_Variable.ttf") format("truetype");
 }
 
+@font-face {
+  font-display: swap;
+  font-family: "BDLifelessGrotestk";
+  font-style: normal;
+  font-weight: 700;
+  src: url("/fonts/BDLifelessGrotesk_Variable.ttf") format("truetype");
+}
 
 @mixin font($weight: 400) {
   font-family: "BDLifelessGrotestk", sans-serif;

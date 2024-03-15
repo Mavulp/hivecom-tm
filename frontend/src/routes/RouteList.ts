@@ -1,5 +1,5 @@
-import { div, ul } from '@dolanske/cascade'
-import type { RouteProps, TrackmaniaMap, TrackmaniaPlayer } from '../types'
+import { div, ul, button } from '@dolanske/cascade'
+import type { RouteProps, TrackmaniaMap, TrackmaniaPlayer, TrackmaniaRecord } from '../types'
 import MapItem from '../components/MapItem'
 import InputSearch from '../components/form/InputSearch'
 import { computed, ref } from '@vue/reactivity'
@@ -7,6 +7,8 @@ import { searchInStr } from '../util/search-in'
 import InputSelect from '../components/form/InputSelect'
 import InputCheckbox from '../components/form/InputCheckbox'
 import { Icon } from '../components/Icon'
+import { debounce } from '../util/debounce'
+import { FETCH_INTERVAL, getRecords } from '../api'
 
 function extractKey(data: TrackmaniaMap[], key: keyof TrackmaniaMap) {
   return data
@@ -18,9 +20,14 @@ function extractKey(data: TrackmaniaMap[], key: keyof TrackmaniaMap) {
     .sort()
 }
 
-export default div().setup((ctx, props: RouteProps<[TrackmaniaMap[], TrackmaniaPlayer[]]>) => {
-  const $maps = props.$data[0]
-  const $players = props.$data[1]
+export default div().setup((ctx, props: RouteProps<[TrackmaniaRecord[], TrackmaniaMap[], TrackmaniaPlayer[]]>) => {
+  // TODO
+  // Assign props.$data into a ref on first load. And then fetch new records every 30 seconds
+  // Refactor into using ref() and computed()
+
+  const $records = ref(props.$data[0])
+  const $maps = props.$data[1]
+  const $players = props.$data[2]
   const search = ref('')
 
   // Environments
@@ -54,6 +61,22 @@ export default div().setup((ctx, props: RouteProps<[TrackmaniaMap[], TrackmaniaP
     ))
     .filter(item => searchInStr(item.name, search.value))
   )
+
+  // Scrolling check
+  const showScrollUp = ref(false)
+  function handleScroll() {
+    showScrollUp.value = window.scrollY > window.innerHeight
+  }
+  window.addEventListener('scroll', debounce(handleScroll, 100))
+  ctx.onDestroy(() => window.removeEventListener('scroll', handleScroll))
+
+  // Fetch new records
+
+  const interval = setInterval(async () => {
+    $records.value = await getRecords()
+  }, FETCH_INTERVAL)
+  ctx.onDestroy(() => clearInterval(interval))
+
 
   ctx.class('container').class('c-mid').class('route-map-list')
   ctx.nest(
@@ -92,9 +115,22 @@ export default div().setup((ctx, props: RouteProps<[TrackmaniaMap[], TrackmaniaP
         return MapItem().props({
           map,
           showFormattedNames,
+          // @ts-expect-error idk
+          isNewRecord: computed(() => $records.value.find(r => r.mapId === map.id))
         })
       })
-    )
+    ),
+    button()
+      .class('scroll-up')
+      .class({ active: showScrollUp })
+      .html(Icon.arrowUp)
+      .attr('data-title-top', "Scroll up")
+      .click(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        })
+      })
   )
 })
 

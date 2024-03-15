@@ -3,14 +3,16 @@ import type { TrackmaniaMap } from '../types'
 import { Ref, computed } from '@vue/reactivity'
 import Detail from './Detail'
 import { timeAgo } from '../util/time'
+import RecordList from './RecordList'
 
 interface Props {
   map: TrackmaniaMap
   showFormattedNames: Ref<boolean>
+  hasNewRecord: Ref<boolean>
 }
 
 export default reusable('div', (ctx, props: Props) => {
-  const wr = props.map.records[0]
+  const wr = props.map.records.toSorted((a, b) => a.time > b.time ? 1 : -1)[0]
   const name = computed(() => props.showFormattedNames.value ? props.map.name_styled : props.map.name)
 
   ctx.class('map-item')
@@ -34,7 +36,9 @@ export default reusable('div', (ctx, props: Props) => {
               })])
             ])
           ),
-          div().class('map-players')
+          div().class('map-players').nest(RecordList().props({
+            records: props.map.records
+          }))
         )
     })
   )

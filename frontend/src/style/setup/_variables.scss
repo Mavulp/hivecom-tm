@@ -21,3 +21,21 @@
 
   --color-highlight-bg: #FFDE89;
 }
+
+:root.dark-theme {
+  --color-bg: #100f13;
+
+  --color-bg-light: #18181f;
+  --color-bg-light-hover: #292536;
+  --color-bg-light-active: #292536;
+
+  --color-white: #0a0a0a;
+  --color-black: #e0e0e0;
+
+  --color-border: #282931;
+
+  --color-text: #dedbe7;
+  --color-text-light: #b1adc4;
+  --color-text-lighter: #8b8899;
+  --color-text-white: #fff;
+}
