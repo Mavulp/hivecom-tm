@@ -16,7 +16,7 @@ function isDefaultDark() {
 
 export default function () {
   const activeButton = ref('records')
-  const buttons = ['records', "stats", 'players']
+  const buttons = ['records', /*"stats",*/ 'players']
 
   onRouteResolve((route) => {
     activeButton.value = route.path.replaceAll('/', '')

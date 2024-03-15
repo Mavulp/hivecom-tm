@@ -108,9 +108,9 @@
         position: relative;
         border-top: 1px solid var(--color-border);
 
-        --triangle-size: 6px;
+        --triangle-size: 8px;
 
-        &::before {
+        &:before {
           content: "";
           width: 0;
           height: 0;

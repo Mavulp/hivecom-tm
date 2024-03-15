@@ -20,7 +20,7 @@ function extractKey(data: TrackmaniaMap[], key: keyof TrackmaniaMap) {
     .sort()
 }
 
-export default div().setup((ctx, props: RouteProps<[TrackmaniaRecord[], TrackmaniaMap[], TrackmaniaPlayer[]]>) => {
+export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>) => {
   // TODO
   // Assign props.$data into a ref on first load. And then fetch new records every 30 seconds
   // Refactor into using ref() and computed()
@@ -60,6 +60,12 @@ export default div().setup((ctx, props: RouteProps<[TrackmaniaRecord[], Trackman
           && autFilters.value.length > 0 ? autFilters.value.some(a => a === item.author) : true
     ))
     .filter(item => searchInStr(item.name, search.value))
+    .filter((item) => {
+      if (!showOnlyRecords.value)
+        return true
+
+      return $records.value.includes(item.id)
+    })
   )
 
   // Scrolling check
@@ -71,12 +77,10 @@ export default div().setup((ctx, props: RouteProps<[TrackmaniaRecord[], Trackman
   ctx.onDestroy(() => window.removeEventListener('scroll', handleScroll))
 
   // Fetch new records
-
   const interval = setInterval(async () => {
     $records.value = await getRecords()
   }, FETCH_INTERVAL)
   ctx.onDestroy(() => clearInterval(interval))
-
 
   ctx.class('container').class('c-mid').class('route-map-list')
   ctx.nest(

@@ -3,8 +3,8 @@ import { createApp } from '@dolanske/pantry'
 import RouteList from './routes/RouteList'
 import type { TrackmaniaMap, TrackmaniaPlayer } from './types'
 import Navigation from './components/Navigation'
-import { span } from "@dolanske/cascade"
 import { getRecords, maps, players, } from './api'
+import RoutePlayers from './routes/RoutePlayers'
 
 export const app = createApp({
   '/records': {
@@ -18,8 +18,16 @@ export const app = createApp({
       ])
     },
   },
-  '/stats': span('Statistics'),
-  '/players': span('Players')
+  // '/stats': span('Statistics'),
+  '/players': {
+    component: RoutePlayers,
+    loader: () => {
+      return Promise.all([
+        getRecords(),
+        players.get<TrackmaniaPlayer[]>(),
+      ])
+    }
+  }
 })
 
 app.run('#router')

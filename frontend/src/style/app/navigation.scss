@@ -7,7 +7,8 @@
   --links-height: 42px;
 
   .nav-links {
-    @include grid(0, 3);
+    // TODO: grid(0,3) once we have stats
+    @include grid(0, 2);
     border-radius: calc(var(--links-height) / 2);
     height: var(--links-height);
     background-color: var(--color-bg-light);

@@ -8,7 +8,12 @@ export const players = api.route('/players')
 
 export const getRecords = () => {
   const since = Math.floor(Date.now() / 1000) - 86400;
-  return api.route(`/records?since=${since}`).get<TrackmaniaRecord[]>()
+  return api
+    .route(`/records?since=${since}`)
+    .get<TrackmaniaRecord[]>()
+    .then((r) => {
+      return r.map(a => a.mapId)
+    })
 }
 
 export const FETCH_INTERVAL = 150000
