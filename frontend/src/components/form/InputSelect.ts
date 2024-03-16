@@ -3,10 +3,19 @@ import { MaybeRef, Ref, computed, ref, unref } from "@vue/reactivity"
 import { Icon } from "../Icon"
 import { onClickOutside } from "../../hooks/onClickOutside"
 
+// TODO
+// single: boolean (default=false)
+// showSelected: string | null (default=null)
+
+// TODO
+// showSelected=true when single=false
+
 interface Props {
   modelValue: Ref<string[]>,
   options: MaybeRef<string[]>
   label: MaybeRef<string>
+  single?: boolean
+  showSelected?: boolean
 }
 
 export default reusable('div', (ctx, props: Props) => {
@@ -21,6 +30,12 @@ export default reusable('div', (ctx, props: Props) => {
   const labelToShow = computed(() => {
     const _options = unref(props.options)
     const _values = unref(props.modelValue)
+
+    if (props.showSelected) {
+      if (props.single) {
+        return _values as any as string
+      }
+    }
 
     if (_options.some((option) => _values.includes(option))) {
       const count = _options.reduce((group, item) => {
@@ -51,10 +66,16 @@ export default reusable('div', (ctx, props: Props) => {
         .class('button')
         .class('active', isActive)
         .click(() => {
-          if (props.modelValue.value.includes(option))
-            props.modelValue.value = props.modelValue.value.filter(a => a !== option)
-          else
-            props.modelValue.value.push(option)
+          if (props.single) {
+            // @ts-expect-error We are working in a single context
+            props.modelValue.value = option
+            open.value = false
+          } else {
+            if (props.modelValue.value.includes(option))
+              props.modelValue.value = props.modelValue.value.filter(a => a !== option)
+            else
+              props.modelValue.value.push(option)
+          }
         })
     })
   )

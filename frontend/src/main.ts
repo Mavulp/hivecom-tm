@@ -5,6 +5,7 @@ import type { TrackmaniaMap, TrackmaniaPlayer } from './types'
 import Navigation from './components/Navigation'
 import { getRecords, maps, players, } from './api'
 import RoutePlayers from './routes/RoutePlayers'
+import RouteStats from './routes/RouteStats'
 
 export const app = createApp({
   '/records': {
@@ -18,7 +19,15 @@ export const app = createApp({
       ])
     },
   },
-  // '/stats': span('Statistics'),
+  '/stats': {
+    component: RouteStats,
+    loader: () => {
+      return Promise.all([
+        maps.get<TrackmaniaMap[]>(),
+        players.get<TrackmaniaPlayer[]>(),
+      ])
+    }
+  },
   '/players': {
     component: RoutePlayers,
     loader: () => {

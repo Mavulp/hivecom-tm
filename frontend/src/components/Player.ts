@@ -1,4 +1,5 @@
 import { reusable } from '@dolanske/cascade'
+import { getFlagHTML } from './Icon'
 
 interface Props {
   player: string,
@@ -7,5 +8,5 @@ interface Props {
 
 export default reusable('span', (ctx, props: Props) => {
   ctx.class('player-item')
-  ctx.html(`<img src="https://flagsapi.com/${props.country.toUpperCase()}/flat/24.png"> ${props.player}`)
+  ctx.html(`${getFlagHTML(props.country)} ${props.player}`)
 })

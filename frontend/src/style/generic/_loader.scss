@@ -1,0 +1,39 @@
+.loading-bar {
+  --loader-height: 2px;
+
+  display: block;
+  height: var(--loader-height);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  overflow: hidden;
+  z-index: 100;
+
+
+
+  .bar {
+    display: block;
+    top: 0;
+    left: 0;
+    height: var(--loader-height);
+    position: relative;
+    background-color: var(--color-accent);
+    opacity: 0;
+
+    @keyframes loadingbar {
+      from {
+        width: 0;
+      }
+
+      to {
+        width: 100%;
+      }
+    }
+
+    &.animate {
+      opacity: 1;
+      animation: loadingbar 5s linear forwards;
+    }
+  }
+}

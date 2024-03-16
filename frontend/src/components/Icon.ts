@@ -8,3 +8,7 @@ export const Icon = {
   medal: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256"><path fill="currentColor" d="M207 28H49a21 21 0 0 0-21 21v49.21a21 21 0 0 0 12.31 19.11l56 25.47a52 52 0 1 0 63.32 0l56-25.47A21 21 0 0 0 228 98.21V49a21 21 0 0 0-21-21m-79 102.82l-28-12.73V52h56v66.09ZM52 52h24v55.18L52 96.27Zm76 160a28 28 0 1 1 28-28a28 28 0 0 1-28 28m76-115.73l-24 10.91V52h24Z"/></svg>',
   arrowUp: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256"><path fill="currentcolor" d="M205.66 117.66a8 8 0 0 1-11.32 0L136 59.31V216a8 8 0 0 1-16 0V59.31l-58.34 58.35a8 8 0 0 1-11.32-11.32l72-72a8 8 0 0 1 11.32 0l72 72a8 8 0 0 1 0 11.32"/></svg>'
 }
+
+export function getFlagHTML(code: string, size: 16 | 24 | 32 | 48 | 64 = 24) {
+  return `<img src="https://flagsapi.com/${code.toUpperCase()}/flat/${size}.png">`
+}

@@ -7,7 +7,6 @@ import { searchInStr } from '../util/search-in'
 import InputSelect from '../components/form/InputSelect'
 import InputCheckbox from '../components/form/InputCheckbox'
 import { Icon } from '../components/Icon'
-import { debounce } from '../util/debounce'
 import { FETCH_INTERVAL, getRecords } from '../api'
 
 function extractKey(data: TrackmaniaMap[], key: keyof TrackmaniaMap) {
@@ -68,14 +67,13 @@ export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], T
     })
   )
 
-
   // Fetch new records TODO
   const interval = setInterval(async () => {
     $records.value = await getRecords()
   }, FETCH_INTERVAL)
   ctx.onDestroy(() => clearInterval(interval))
 
-  ctx.class('container').class('c-mid').class('route-map-list')
+  ctx.class('container').class('route-map-list')
   ctx.nest(
     div().class('filter-wrap').nest(
       InputSearch().props({
@@ -112,12 +110,11 @@ export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], T
         return MapItem().props({
           map,
           showFormattedNames,
-          // @ts-expect-error idk
+          // @ts-expect-error will be fixed when cascade is fixed
           isNewRecord: computed(() => $records.value.includes(map.id))
         })
       })
     ),
-
   )
 })
 

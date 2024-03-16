@@ -1,0 +1,74 @@
+.route-stats {
+  padding-bottom: 10vh;
+
+  .split-wrapper {
+    @include grid(0, 1fr 1.5fr);
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    position: relative;
+
+    .form-item {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+    }
+
+    .chart-wrap {
+      position: relative;
+      padding: 32px;
+
+      canvas {
+        position: sticky;
+        top: 16px;
+      }
+    }
+
+    .player-stats {
+
+      li {
+        padding: 16px;
+        border-bottom: 1px solid var(--color-border);
+
+        &:last-of-type {
+          border-bottom: 0
+        }
+
+        .title {
+          @include flex(16px);
+          margin-bottom: 8px;
+
+          span {
+            @include font(500);
+            font-size: 1.8rem;
+            color: var(--color-text-light);
+          }
+        }
+
+        .numbers {
+          @include flex(24px);
+          padding-left: 48px;
+
+          span,
+          strong {
+            display: block;
+          }
+
+          span {
+            @include font(400);
+            font-size: 1rem;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            color: var(--color-text-lighter);
+          }
+
+          strong {
+            @include font(500);
+            font-size: 1.6rem;
+          }
+        }
+
+      }
+    }
+  }
+}

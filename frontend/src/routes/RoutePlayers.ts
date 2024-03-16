@@ -11,12 +11,13 @@ export default div('div').setup((ctx, props: RouteProps<[TrackmaniaRecord[], Tra
   // const $records = props.$data[0]
   const $players = props.$data[1]
   const search = ref('')
-  const sorted = $players.sort((a, b) => a.records > b.records ? -1 : 1);
   const toRender = computed(() => {
-    return $players.filter(item => searchInStr([item.name], search.value))
+    return $players
+      .filter(item => searchInStr([item.name], search.value))
+      .sort((a, b) => a.records > b.records ? -1 : 1);
   })
 
-  ctx.class('container').class('c-mid').class('route-players')
+  ctx.class('container').class('route-players')
   ctx.nest(
     div().class('filter-wrap').class('players').nest(
       InputSearch().props({

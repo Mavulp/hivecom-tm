@@ -1,5 +1,5 @@
 .filter-wrap {
-  @include flex(8px);
+  @include flex(8px, space-between);
   margin-bottom: 16px;
   z-index: 1000;
   position: sticky;

@@ -2,9 +2,9 @@
 @import "./navigation";
 @import "./map-list";
 @import "./player-list";
+@import "./statistics";
 
 // Globally available styles
-
 .player-item {
   @include font(500);
   @include flex(8px, flex-start);
@@ -14,8 +14,8 @@
 .scroll-up {
   @include t();
   position: fixed;
-  bottom: 64px;
-  right: 64px;
+  bottom: 40px;
+  right: 40px;
   opacity: 0;
   width: 40px;
   height: 40px;
@@ -28,7 +28,7 @@
 
   svg {
     color: var(--color-text);
-    width: 24px;
+    width: 20px;
   }
 
   &.active {

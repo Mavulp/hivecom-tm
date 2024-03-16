@@ -60,7 +60,9 @@
         }
 
         .player-position {
-          padding-right: 16px;
+          display: inline-block;
+          padding-right: 8px;
+          width: 40px;
           font-size: 1.2rem;
           color: var(--color-text-lighter);
         }
@@ -92,7 +94,6 @@
       &:last-child {
         border-bottom: 0;
       }
-
     }
   }
 }

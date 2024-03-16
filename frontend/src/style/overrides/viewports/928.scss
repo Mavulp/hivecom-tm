@@ -54,4 +54,18 @@
       }
     }
   }
+
+  // Disable tooltips for touch screen devices
+  [data-title-left],
+  [data-title-right],
+  [data-title-bottom],
+  [data-title-bottom-left],
+  [data-title-bottom-right],
+  [data-title-top],
+  [data-title-top-left],
+  [data-title-top-right] {
+    &:before {
+      display: none !important;
+    }
+  }
 }

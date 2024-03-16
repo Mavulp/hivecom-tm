@@ -27,16 +27,8 @@ Utility layout classes
 }
 
 .container {
-  max-width: 1148px;
+  max-width: 888px;
   width: 100%;
   margin: 0 auto;
   padding: 0 2em;
-
-  &.c-mid {
-    max-width: 844px;
-  }
-
-  &.c-small {
-    max-width: 680px;
-  }
 }
