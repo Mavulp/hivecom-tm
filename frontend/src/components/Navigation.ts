@@ -4,6 +4,7 @@ import { computed, ref } from "@vue/reactivity";
 import { RouterLink } from "@dolanske/pantry";
 import { watchEffect } from "@vue-reactivity/watch";
 import { Icon } from "./Icon";
+import { debounce } from "../util/debounce";
 
 function isDefaultDark() {
   const defaultState = localStorage.getItem('dark-theme')
@@ -21,7 +22,6 @@ export default function () {
   onRouteResolve((route) => {
     activeButton.value = route.path.replaceAll('/', '')
   })
-
   return nav().class('navigation').nest(
     div().class('logo-wrap').nest(
       img().attrs({
@@ -52,6 +52,27 @@ export default function () {
     div().class('nav-links').for(buttons, (link) => {
       const isActive = computed(() => link === activeButton.value)
       return RouterLink(`/${link}`, link).class('active', isActive)
-    })
+    }),
+    button()
+      .setup((ctx) => {
+        // Scrolling check
+        const showScrollUp = ref(false)
+        function handleScroll() {
+          showScrollUp.value = window.scrollY > window.innerHeight
+        }
+        window.addEventListener('scroll', debounce(handleScroll, 100))
+        ctx.onDestroy(() => window.removeEventListener('scroll', handleScroll))
+        ctx.class({ active: showScrollUp })
+
+      })
+      .class('scroll-up')
+      .html(Icon.arrowUp)
+      .attr('data-title-top', "Scroll up")
+      .click(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        })
+      })
   )
 }

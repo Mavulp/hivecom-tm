@@ -1,42 +1,54 @@
 .route-map-list {
   padding-bottom: 10vh;
 
-  .scroll-up {
-    @include t();
-    position: fixed;
-    bottom: 64px;
-    right: 64px;
-    opacity: 0;
-    width: 40px;
-    height: 40px;
-    background-color: var(--color-bg-light);
-    border-radius: 50%;
 
-    &:hover {
-      background-color: var(--color-bg-light-hover);
-    }
-
-    svg {
-      color: var(--color-text);
-      width: 24px;
-    }
-
-    &.active {
-      opacity: 1
-    }
-  }
 
   .map-list {
     border: 1px solid var(--color-border);
     border-radius: 12px;
-    overflow: hidden;
+    // overflow: hidden;
 
     .map-item {
       border-bottom: 1px solid var(--color-border);
       width: 100%;
+      position: relative;
+
+      &:first-child {
+
+        &,
+        .details-button {
+          border-top-left-radius: 12px;
+          border-top-right-radius: 12px;
+        }
+      }
 
       &:last-child {
         border-bottom: 0;
+
+        &,
+        .details-button {
+          border-bottom-left-radius: 12px;
+          border-bottom-right-radius: 12px;
+        }
+      }
+
+      &.new-record {
+        &:after {
+          content: "New WR";
+          @include font(500);
+          @include flex(0, center, center);
+          font-size: 1.2rem;
+          position: absolute;
+          left: calc(100% + 16px);
+          top: 16px;
+          white-space: nowrap;
+          height: 32px;
+          padding-inline: 12px;
+          border-radius: 16px;
+          background-color: var(--color-highlight);
+          color: var(--color-text-static);
+          box-shadow: 0 4px 16px rgba(#1b1b1b, 0.2);
+        }
       }
 
       .details-button {
@@ -78,6 +90,7 @@
           @include font(700);
           min-width: 80px;
           text-align: left;
+          color: var(--color-accent);
         }
       }
 

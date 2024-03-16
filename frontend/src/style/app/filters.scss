@@ -18,9 +18,8 @@
     z-index: -1;
     top: -8px;
     height: calc(var(--form-item-height) + 16px);
-    left: -80px;
-    right: -80px;
-    // background-color: var(--color-bg);
+    left: -128px;
+    right: -128px;
     background-color: rgba(#fff, 0.35);
     backdrop-filter: blur(20px);
   }

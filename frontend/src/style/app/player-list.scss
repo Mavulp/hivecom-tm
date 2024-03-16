@@ -10,13 +10,13 @@
     width: 100%;
     position: relative;
 
-    thead {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
     tr {
+
+      &:last-child {
+        td {
+          border-bottom: 0;
+        }
+      }
 
       th,
       td {
@@ -47,7 +47,7 @@
         font-size: 1.6rem;
 
         &:last-child {
-          @include font(500);
+          @include font(700);
           color: var(--color-accent);
         }
 

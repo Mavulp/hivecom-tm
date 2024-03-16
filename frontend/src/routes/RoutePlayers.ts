@@ -37,7 +37,7 @@ export default div('div').setup((ctx, props: RouteProps<[TrackmaniaRecord[], Tra
         ),
         // TODO (cascade) unref item
         tbody().for(toRender, (item, index) => {
-          const { name, country, records, maps, latest } = item as unknown as TrackmaniaPlayer
+          const { name, country, records, maps, latest } = item as unknown as TrackmaniaPlayer // FIXME: remove when cascade is fixed
           return tr().nest([
             td().nest([
               span(`#${index + 1}`).class('player-position'),

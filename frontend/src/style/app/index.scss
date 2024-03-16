@@ -3,8 +3,35 @@
 @import "./map-list";
 @import "./player-list";
 
+// Globally available styles
+
 .player-item {
   @include font(500);
   @include flex(8px, flex-start);
   font-size: 1.6rem;
+}
+
+.scroll-up {
+  @include t();
+  position: fixed;
+  bottom: 64px;
+  right: 64px;
+  opacity: 0;
+  width: 40px;
+  height: 40px;
+  background-color: var(--color-bg-light);
+  border-radius: 50%;
+
+  &:hover {
+    background-color: var(--color-bg-light-hover);
+  }
+
+  svg {
+    color: var(--color-text);
+    width: 24px;
+  }
+
+  &.active {
+    opacity: 1
+  }
 }

@@ -68,15 +68,8 @@ export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], T
     })
   )
 
-  // Scrolling check
-  const showScrollUp = ref(false)
-  function handleScroll() {
-    showScrollUp.value = window.scrollY > window.innerHeight
-  }
-  window.addEventListener('scroll', debounce(handleScroll, 100))
-  ctx.onDestroy(() => window.removeEventListener('scroll', handleScroll))
 
-  // Fetch new records
+  // Fetch new records TODO
   const interval = setInterval(async () => {
     $records.value = await getRecords()
   }, FETCH_INTERVAL)
@@ -94,17 +87,17 @@ export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], T
         label: 'Environment',
         options: envOptions,
         modelValue: envFilters
-      }).style({ width: '156px' }),
+      }).style({ 'min-width': '156px' }),
       InputSelect().props({
         label: 'Player',
         options: plaOptions,
         modelValue: plaFilters,
-      }).style({ width: '136px' }),
+      }).style({ 'min-width': '136px' }),
       InputSelect().props({
         label: 'Author',
         options: autOptions,
         modelValue: autFilters
-      }).style({ width: '136px' }),
+      }).style({ 'min-width': '136px' }),
       InputCheckbox().props({
         modelValue: showFormattedNames,
         icon: Icon.palette
@@ -120,21 +113,11 @@ export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], T
           map,
           showFormattedNames,
           // @ts-expect-error idk
-          isNewRecord: computed(() => $records.value.find(r => r.mapId === map.id))
+          isNewRecord: computed(() => $records.value.includes(map.id))
         })
       })
     ),
-    button()
-      .class('scroll-up')
-      .class({ active: showScrollUp })
-      .html(Icon.arrowUp)
-      .attr('data-title-top', "Scroll up")
-      .click(() => {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        })
-      })
+
   )
 })
 

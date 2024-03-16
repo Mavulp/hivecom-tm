@@ -19,6 +19,7 @@ input[type=text] {
 
 .form-search {
   position: relative;
+  min-width: 208px;
 
   &.has-input {
     background-color: var(--color-bg-light-hover);

@@ -8,14 +8,14 @@ import RecordList from './RecordList'
 interface Props {
   map: TrackmaniaMap
   showFormattedNames: Ref<boolean>
-  hasNewRecord: Ref<boolean>
+  isNewRecord: Ref<boolean>
 }
 
 export default reusable('div', (ctx, props: Props) => {
   const wr = props.map.records.toSorted((a, b) => a.time > b.time ? 1 : -1)[0]
   const name = computed(() => props.showFormattedNames.value ? props.map.name_styled : props.map.name)
 
-  ctx.class('map-item')
+  ctx.class('map-item').class({ 'new-record': props.isNewRecord.value })
   ctx.nest(
     Detail().props({
       button: fragment([

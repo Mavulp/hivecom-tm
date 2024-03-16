@@ -12,4 +12,8 @@
       border-top-color: var(--color-bg-light-active);
     }
   }
+
+  .route-map-list .map-list .map-item.new-record:after {
+    box-shadow: 0 4px 16px rgba(#eec978, 0.2);
+  }
 }

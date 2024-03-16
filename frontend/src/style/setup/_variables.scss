@@ -11,11 +11,14 @@
   --color-border: #494D6F;
 
   --color-text: #27223D;
+  --color-text-static: #27223D;
   --color-text-light: #393350;
   --color-text-lighter: #706891;
   --color-text-white: #fff;
 
   --color-accent: #5665EA;
+  --color-highlight: #eec978;
+  --color-highlight-hover: #ddb55e;
 }
 
 :root.dark-theme {
@@ -35,6 +38,6 @@
   --color-text-lighter: #8b8899;
   --color-text-white: #fff;
 
-  --color-accent: #7784f1;
+  --color-accent: #949df5;
 
 }

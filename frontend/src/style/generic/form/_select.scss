@@ -1,5 +1,6 @@
 .form-select {
   position: relative;
+  z-index: 100;
 
   &.has-input {
     background-color: var(--color-bg-light-hover);

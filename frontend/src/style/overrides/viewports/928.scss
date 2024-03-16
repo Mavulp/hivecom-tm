@@ -1,0 +1,57 @@
+@media screen and (max-width: 928px) {
+  .navigation {
+    padding-inline: 24px;
+
+    .logo-wrap {
+      max-width: 128px;
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+
+  .scroll-up {
+    display: none;
+  }
+
+  .container {
+    padding-inline: 24px;
+    max-width: 100% !important;
+  }
+
+  .filter-wrap {
+    flex-wrap: wrap;
+    justify-content: center;
+
+    &:after {
+      display: none;
+    }
+  }
+
+  .route-players table tr {
+    td {
+      padding: 16px 8px;
+      font-size: 1.2rem;
+
+      &:not(:first-child) {
+        white-space: normal;
+      }
+
+      .player-item,
+      &.latest-record {
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  .route-players {
+    .route-players-container {
+      overflow-x: auto;
+
+      table {
+        min-width: 680px;
+      }
+    }
+  }
+}
