@@ -26,28 +26,6 @@
     }
   }
 
-  .filter-wrap {
-    @include flex(8px);
-    margin-bottom: 16px;
-    z-index: 1000;
-    position: sticky;
-    top: 8px;
-
-    &:after {
-      content: "";
-      display: block;
-      position: absolute;
-      z-index: -1;
-      top: -8px;
-      height: calc(var(--form-item-height) + 16px);
-      left: - 80px;
-      right: -80px;
-      background-color: var(--color-bg);
-      opacity: 0.5;
-      backdrop-filter: blur(20px);
-    }
-  }
-
   .map-list {
     border: 1px solid var(--color-border);
     border-radius: 12px;

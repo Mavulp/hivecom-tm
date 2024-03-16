@@ -1,6 +1,9 @@
 :root.dark-theme {
-  // Dark theme styling
 
+  // Dark theme styling
+  .filter-wrap::after {
+    background-color: rgba(16, 15, 19, 0.5);
+  }
 
   .route-map-list .map-list .map-item .map-content {
     border-top-color: var(--color-bg-light-active);

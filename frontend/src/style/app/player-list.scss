@@ -1,26 +1,98 @@
 .route-players {
   padding-bottom: 10vh;
 
-  .route-players-container {}
-
-  ul {
+  .route-players-container {
     border: 1px solid var(--color-border);
     border-radius: 12px;
+  }
+
+  table {
+    width: 100%;
+    position: relative;
+
+    thead {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    tr {
+
+      th,
+      td {
+        text-align: left;
+        vertical-align: middle;
+        white-space: nowrap;
+        padding: 16px;
+      }
+
+      th {
+        text-transform: uppercase;
+        font-size: 1rem;
+        color: var(--color-text-lighter);
+        background-color: var(--color-bg);
+
+        &:first-child {
+          border-top-left-radius: 12px;
+        }
+
+        &:last-child {
+          border-top-right-radius: 12px;
+        }
+      }
+
+      td {
+        @include font(400);
+        border-bottom: 1px solid var(--color-border);
+        font-size: 1.6rem;
+
+        &:last-child {
+          @include font(500);
+          color: var(--color-accent);
+        }
+
+        span {
+          vertical-align: middle;
+        }
+
+        .player-item {
+          display: inline-flex;
+        }
+
+        .player-position {
+          padding-right: 16px;
+          font-size: 1.2rem;
+          color: var(--color-text-lighter);
+        }
+
+        .latest-record {
+          @include flex(4px);
+          font-size: 1.6rem;
+
+          strong {
+            color: var(--color-accent);
+          }
+
+          &+span {
+            font-size: 1rem;
+            color: var(--color-text-lighter);
+          }
+        }
+
+      }
+    }
+  }
+
+  ul {
     overflow: hidden;
 
     li {
       @include flex(16px);
-      padding: 24px 16px;
-      border-bottom: 1px solid var(--color-border);
 
       &:last-child {
         border-bottom: 0;
       }
 
-      .player-position {
-        font-size: 1.2rem;
-        color: var(--color-text-lighter);
-      }
     }
   }
 }

@@ -21,8 +21,12 @@ export interface TrackmaniaPlayer {
   country: string,
   maps: number,
   records: number,
-  // TODO Add interface
-  latest: {},
+  latest: {
+    date: string
+    map_name: string
+    time: string
+    unix_date: number
+  },
 }
 
 export interface RouteProps<T> {
