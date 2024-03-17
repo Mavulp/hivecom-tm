@@ -1,11 +1,12 @@
 import { Country, getCountry } from "../../countries";
 import { TrackmaniaPlayer } from "../../types";
-import { ul, li, div, span, strong, canvas } from "@dolanske/cascade"
+import { ul, li, div, span, strong, canvas, i } from "@dolanske/cascade"
 import { getFlagHTML } from "../Icon";
 import Chart from 'chart.js/auto'
 import { partialPercentage } from "../../util/common";
 import InputSelect from "../form/InputSelect";
-import { ref } from "@vue/reactivity";
+import { computed, ref } from "@vue/reactivity";
+import { watch, watchEffect } from "@vue-reactivity/watch";
 
 type CountryStats = Record<string, {
   country: Country,
@@ -17,8 +18,8 @@ type CountryStats = Record<string, {
 
 export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
   // Sorting and rendering
-  const sortingOptions = ['Players', 'Records']
-  const sortingOn = ref(sortingOptions[0])
+  const sortingOptions = ['Players', 'Records'] as const
+  const sortingOn = ref<'Players' | 'Records'>(sortingOptions[0])
   //
 
   const countriesRaw = data.reduce<CountryStats>((group, item) => {
@@ -36,22 +37,29 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
   }, {})
 
   // Sort dataset and remove invalid countries
-  const countriesSorted = Object
+  const countriesSorted = computed(() => Object
     .values(countriesRaw)
     .filter((item) => item.country)
-    .sort((a, b) => a.players.length > b.players.length ? -1 : 1)
-
+    .sort((a, b) => {
+      if (sortingOn.value === 'Players') {
+        return a.players.length > b.players.length ? -1 : 1
+      }
+      return a.records > b.records ? -1 : 1
+    })
+  )
   // Summed up totals from the dataset
-  const total = countriesSorted.reduce((group, item) => {
-    group.players += item.players.length
-    group.records += item.records
-    return group
-  }, { records: 0, players: 0 })
+  const total = computed(() => {
+    return countriesSorted.value.reduce((group, item) => {
+      group.players += item.players.length
+      group.records += item.records
+      return group
+    }, { records: 0, players: 0 })
+  })
 
   return div().class('split-wrapper').nest(
     div(
       canvas().id('player-chart').setup((ctx) => {
-        let chart;
+        let chart: Chart<'pie'> | undefined;
         ctx.onMount(() => {
           chart = new Chart(
             ctx.el as HTMLCanvasElement,
@@ -65,31 +73,59 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
                 }
               },
               data: {
-                labels: countriesSorted.map(item => item.country.name),
+                labels: countriesSorted.value.map(item => item.country.name),
                 datasets: [{
                   label: 'Players',
-                  data: countriesSorted.map(item => item.players.length)
+                  data: countriesSorted.value.map(item => item.players.length)
                 }]
               }
             }
           )
         })
+
+        // Update chart when datasets change
+        watch(sortingOn, (on) => {
+          if (chart) {
+            if (on === 'Players') {
+              chart.data = {
+                labels: countriesSorted.value.map(item => item.country.name),
+                datasets: [{
+                  label: 'Players',
+                  data: countriesSorted.value.map(item => item.players.length)
+                }]
+              }
+            } else {
+              chart.data = {
+                labels: countriesSorted.value.map(item => item.country.name),
+                datasets: [{
+                  label: 'Records',
+                  data: countriesSorted.value.map(item => item.records)
+                }]
+              }
+            }
+
+            console.log(chart.data)
+            chart.update()
+          }
+        })
       })
     ).class('chart-wrap'),
-    ul().class('player-stats').for(countriesSorted, (country) => {
+    // @ts-expect-error will be fixed with Cascade unref
+    ul().class('player-stats').for(countriesSorted, (country: CountryStats[string], index) => {
       return li().nest(
         div().class('title').nest(
+          i(`#${index + 1}`),
           span().html(getFlagHTML(country.country.code, 32)),
           span(country.country.name)
         ),
         div().class('numbers').nest(
           div().nest(
             span('Players'),
-            strong(`${country.players.length} (${partialPercentage(country.players.length, total.players)}%)`)
+            strong(`${country.players.length} (${partialPercentage(country.players.length, total.value.players)}%)`)
           ),
           div().nest(
             span('Records'),
-            strong(`${country.records} (${partialPercentage(country.records, total.records)}%)`)
+            strong(`${country.records} (${partialPercentage(country.records, total.value.records)}%)`)
           )
         )
       )
