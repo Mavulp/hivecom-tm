@@ -14,8 +14,6 @@ type CountryStats = Record<string, {
   players: TrackmaniaPlayer[]
 }>
 
-// TODO implement switching of what you're sorting on (players, records)
-
 export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
   // Sorting and rendering
   const sortingOptions = ['Players', 'Records'] as const

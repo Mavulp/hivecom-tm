@@ -1,17 +1,18 @@
 .route-stats {
   padding-bottom: 10vh;
 
-  .split-wrapper {
-    @include grid(0, 1fr 1.5fr);
+  .split-wrapper,
+  .maps-wrapper {
     width: 100%;
     border-radius: 12px;
     border: 1px solid var(--color-border);
     position: relative;
-    margin-bottom: 64px;
+  }
 
-    &:last-of-type {
-      margin-bottom: 0;
-    }
+  .split-wrapper {
+    @include grid(0, 1fr 1.5fr);
+    width: 100%;
+    margin-bottom: 64px;
 
     .form-item {
       position: absolute;
@@ -82,4 +83,6 @@
       }
     }
   }
+
+  .maps-wrapper {}
 }

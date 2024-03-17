@@ -1,7 +1,7 @@
 import { div, h2 } from "@dolanske/cascade"
 import { RouteProps, TrackmaniaMap, TrackmaniaPlayer } from "../types"
-import ProcessMaps from "../components/stats/MapStats"
-import ProcessPlayers from "../components/stats/PlayerStats"
+import MapStatistics from "../components/stats/MapStats"
+import CountryStatistics from "../components/stats/CountryStats"
 
 type Props = RouteProps<[
   TrackmaniaMap[],
@@ -14,8 +14,8 @@ export default div().setup((ctx, props: Props) => {
   ctx.class('container').class('route-stats')
   ctx.nest(
     h2('Countries'),
-    ProcessPlayers($players),
+    CountryStatistics($players),
     h2('Maps'),
-    ProcessMaps($maps)
+    MapStatistics($maps)
   )
 })
