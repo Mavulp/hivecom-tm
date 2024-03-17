@@ -999,6 +999,5 @@ export type Country = {
 }
 
 export function getCountry(code: keyof typeof countryCode): Country {
-  console.log(code)
   return countryCode[code]
 }

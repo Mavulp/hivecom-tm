@@ -4,10 +4,6 @@ import { Icon } from "../Icon"
 import { onClickOutside } from "../../hooks/onClickOutside"
 
 // TODO
-// single: boolean (default=false)
-// showSelected: string | null (default=null)
-
-// TODO
 // showSelected=true when single=false
 
 interface Props {

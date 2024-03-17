@@ -76,8 +76,8 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
                 labels: countriesSorted.value.map(item => item.country.name),
                 datasets: [{
                   label: 'Players',
-                  data: countriesSorted.value.map(item => item.players.length)
-                }]
+                  data: countriesSorted.value.map(item => item.players.length),
+                }],
               }
             }
           )
@@ -104,7 +104,6 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
               }
             }
 
-            console.log(chart.data)
             chart.update()
           }
         })
@@ -114,7 +113,6 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
     ul().class('player-stats').for(countriesSorted, (country: CountryStats[string], index) => {
       return li().nest(
         div().class('title').nest(
-          i(`#${index + 1}`),
           span().html(getFlagHTML(country.country.code, 32)),
           span(country.country.name)
         ),
