@@ -16,6 +16,7 @@ export default reusable('div', (ctx, props: Props) => {
   const name = computed(() => props.showFormattedNames.value ? props.map.name_styled : props.map.name)
 
   ctx.class('map-item').class({ 'new-record': props.isNewRecord.value })
+  ctx.id(props.map.id)
   ctx.nest(
     Detail().props({
       button: fragment([

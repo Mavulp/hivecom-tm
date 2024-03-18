@@ -1,12 +1,12 @@
 import { Country, getCountry } from "../../countries";
 import { TrackmaniaPlayer } from "../../types";
-import { ul, li, div, span, strong, canvas, i } from "@dolanske/cascade"
+import { ul, li, div, span, strong, canvas, p } from "@dolanske/cascade"
 import { getFlagHTML } from "../Icon";
 import Chart from 'chart.js/auto'
-import { partialPercentage } from "../../util/common";
+import { partialPercentage, PieOptions } from "../../util/common";
 import InputSelect from "../form/InputSelect";
 import { computed, ref } from "@vue/reactivity";
-import { watch, watchEffect } from "@vue-reactivity/watch";
+import { watch } from "@vue-reactivity/watch";
 
 type CountryStats = Record<string, {
   country: Country,
@@ -56,57 +56,53 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
 
   return div().class('split-wrapper').nest(
     div(
-      canvas().id('player-chart').setup((ctx) => {
-        let chart: Chart<'pie'> | undefined;
-        ctx.onMount(() => {
-          chart = new Chart(
-            ctx.el as HTMLCanvasElement,
-            {
-              type: 'pie',
-              options: {
-                plugins: {
-                  legend: {
-                    display: false
-                  }
+      div().class('chart-wrap').nest(
+        canvas().id('player-chart').setup((ctx) => {
+          let chart: Chart<'pie'> | undefined;
+          ctx.onMount(() => {
+            chart = new Chart(
+              ctx.el as HTMLCanvasElement,
+              {
+                ...PieOptions,
+                data: {
+                  labels: countriesSorted.value.map(item => item.country.name),
+                  datasets: [{
+                    label: 'Players',
+                    data: countriesSorted.value.map(item => item.players.length),
+                  }],
                 }
-              },
-              data: {
-                labels: countriesSorted.value.map(item => item.country.name),
-                datasets: [{
-                  label: 'Players',
-                  data: countriesSorted.value.map(item => item.players.length),
-                }],
               }
-            }
-          )
-        })
+            )
+          })
 
-        // Update chart when datasets change
-        watch(sortingOn, (on) => {
-          if (chart) {
-            if (on === 'Players') {
-              chart.data = {
-                labels: countriesSorted.value.map(item => item.country.name),
-                datasets: [{
-                  label: 'Players',
-                  data: countriesSorted.value.map(item => item.players.length)
-                }]
+          // Update chart when datasets change
+          watch(sortingOn, (on) => {
+            if (chart) {
+              if (on === 'Players') {
+                chart.data = {
+                  labels: countriesSorted.value.map(item => item.country.name),
+                  datasets: [{
+                    label: 'Players',
+                    data: countriesSorted.value.map(item => item.players.length)
+                  }]
+                }
+              } else {
+                chart.data = {
+                  labels: countriesSorted.value.map(item => item.country.name),
+                  datasets: [{
+                    label: 'Records',
+                    data: countriesSorted.value.map(item => item.records)
+                  }]
+                }
               }
-            } else {
-              chart.data = {
-                labels: countriesSorted.value.map(item => item.country.name),
-                datasets: [{
-                  label: 'Records',
-                  data: countriesSorted.value.map(item => item.records)
-                }]
-              }
-            }
 
-            chart.update()
-          }
-        })
-      })
-    ).class('chart-wrap'),
+              chart.update()
+            }
+          })
+        }),
+        p().html(`<b>${data.length}</b> players from <b>${countriesSorted.value.length}</b> countries`)
+      )
+    ),
     // @ts-expect-error will be fixed with Cascade unref
     ul().class('player-stats').for(countriesSorted, (country: CountryStats[string], index) => {
       return li().nest(

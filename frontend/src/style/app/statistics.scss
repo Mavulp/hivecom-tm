@@ -21,12 +21,23 @@
     }
 
     .chart-wrap {
-      position: relative;
-      padding: 32px;
+      padding: 48px;
+      position: sticky;
+      top: 16px;
 
       canvas {
-        position: sticky;
-        top: 16px;
+        margin-bottom: 32px;
+      }
+
+      p {
+        text-align: center;
+        color: var(--color-text-light);
+
+        b {
+          @include font(700);
+          color: var(--color-text-light);
+          font-size: inherit;
+        }
       }
     }
 
@@ -84,5 +95,97 @@
     }
   }
 
-  .maps-wrapper {}
+  .maps-wrapper {
+    overflow: hidden;
+
+    .split-wrapper {
+      border: unset;
+      border-radius: unset;
+      margin-bottom: 0;
+
+      .chart-wrap {
+        margin-bottom: 0;
+
+        canvas {
+          margin-bottom: 0;
+        }
+      }
+
+      .player-stats {
+        padding-block: 16px;
+
+        li {
+          @include grid(0, 128px 1fr);
+
+          .title {
+            gap: 8px;
+          }
+
+          .numbers {
+            padding-left: 0;
+          }
+        }
+      }
+    }
+
+    .top-level-stats {
+      ul {
+        @include grid(0, 3);
+
+        li {
+          @include flex(4px, center, center, column);
+          // padding: 24px 16px;
+          height: 108px;
+          border-bottom: 1px solid var(--color-border);
+
+          &:nth-of-type(3n+1),
+          &:nth-of-type(3n+2) {
+            border-right: 1px solid var(--color-border);
+          }
+
+          &:last-of-type {
+            grid-column: 2 / 4;
+            border-right: 0;
+          }
+
+          &.clickable {
+            @include t();
+            cursor: pointer;
+
+            &:hover {
+              background-color: var(--color-bg-light);
+            }
+
+            strong {
+              color: var(--color-accent);
+
+            }
+          }
+
+          span,
+          strong {
+            display: block;
+          }
+
+          span {
+            color: var(--color-text-lighter);
+            font-size: 1.2rem;
+          }
+
+          strong {
+            @include font(500);
+            display: block;
+            font-size: 1.7rem;
+            color: var(--color-text);
+
+            span {
+              display: inline;
+              font-size: inherit;
+
+            }
+          }
+        }
+      }
+    }
+  }
 }
