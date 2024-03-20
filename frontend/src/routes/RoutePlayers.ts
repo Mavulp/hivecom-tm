@@ -1,15 +1,14 @@
 import { div, p, span, table, tr, th, td, thead, tbody, strong } from "@dolanske/cascade"
-import { RouteProps, TrackmaniaPlayer, TrackmaniaRecord } from "../types"
-import RecordList from "../components/RecordList"
+import { RouteProps, TrackmaniaPlayer } from "../types"
 import Player from "../components/Player"
 import { timeAgo } from "../util/time"
 import { computed, ref } from "@vue/reactivity"
 import { searchInStr } from "../util/search-in"
 import InputSearch from "../components/form/InputSearch"
+import { Link } from "@dolanske/pantry"
 
-export default div('div').setup((ctx, props: RouteProps<[TrackmaniaRecord[], TrackmaniaPlayer[]]>) => {
-  // const $records = props.$data[0]
-  const $players = props.$data[1]
+export default div('div').setup((ctx, props: RouteProps<TrackmaniaPlayer[]>) => {
+  const $players = props.$data
   const search = ref('')
   const toRender = computed(() => {
     return $players
@@ -45,11 +44,14 @@ export default div('div').setup((ctx, props: RouteProps<[TrackmaniaRecord[], Tra
               Player().props({ player: name, country })
             ]),
             latest ? td().nest(
-              p().class('latest-record').nest(
-                strong(latest.time),
-                span(latest.map_name)
-              ),
-              span(timeAgo(Number(`${latest.unix_date}000`)))
+              Link('/records',
+                [
+                  p().class('latest-record').nest(
+                    strong(latest.time),
+                    span(latest.map_name)
+                  ),
+                  span(timeAgo(Number(`${latest.unix_date}000`)))
+                ], { hash: latest.id })
             ) : td(),
             td(maps),
             td(records),

@@ -30,12 +30,7 @@ export const app = createApp({
   },
   '/players': {
     component: RoutePlayers,
-    loader: () => {
-      return Promise.all([
-        getRecords(),
-        players.get<TrackmaniaPlayer[]>(),
-      ])
-    }
+    loader: () => players.get<TrackmaniaPlayer[]>()
   }
 })
 
