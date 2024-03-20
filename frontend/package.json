@@ -9,10 +9,10 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.8.0",
+    "@antfu/eslint-config": "^2.8.3",
     "eslint": "^8.57.0",
     "typescript": "^5.4.2",
-    "vite": "^5.1.5"
+    "vite": "^5.2.2"
   },
   "dependencies": {
     "@dolanske/eru": "github:dolanske/eru",
@@ -22,6 +22,6 @@
     "0g": "^0.0.9",
     "chart.js": "^4.4.2",
     "npm": "^10.5.0",
-    "sass": "^1.71.1"
+    "sass": "^1.72.0"
   }
 }

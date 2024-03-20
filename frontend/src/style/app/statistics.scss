@@ -115,7 +115,7 @@
         padding-block: 16px;
 
         li {
-          @include grid(0, 128px 1fr);
+          @include grid(0, 156px 1fr);
 
           .title {
             gap: 8px;

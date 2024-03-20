@@ -1,9 +1,10 @@
 import { span, reusable, strong, fragment, div, table, tr, th, td } from '@dolanske/cascade'
 import type { TrackmaniaMap } from '../types'
-import { Ref, computed } from '@vue/reactivity'
+import { Ref, computed, ref } from '@vue/reactivity'
 import Detail from './Detail'
 import { timeAgo } from '../util/time'
 import RecordList from './RecordList'
+import { getRoute } from "@dolanske/crumbs"
 
 interface Props {
   map: TrackmaniaMap
@@ -14,8 +15,19 @@ interface Props {
 export default reusable('div', (ctx, props: Props) => {
   const wr = props.map.records.toSorted((a, b) => a.time > b.time ? 1 : -1)[0]
   const name = computed(() => props.showFormattedNames.value ? props.map.name_styled : props.map.name)
+  const active = ref(false)
 
-  ctx.class('map-item').class({ 'new-record': props.isNewRecord.value })
+  ctx.onMount(() => {
+    const route = getRoute()
+    if (route && Number(route.hash) === props.map.id) {
+      active.value = true
+    }
+  })
+
+  ctx.class('map-item').class({
+    'new-record': props.isNewRecord.value,
+    'is-highlight': active
+  })
   ctx.id(props.map.id)
   ctx.nest(
     Detail().props({

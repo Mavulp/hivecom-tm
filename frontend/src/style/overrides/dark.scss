@@ -15,5 +15,10 @@
 
   .route-map-list .map-list .map-item.new-record:after {
     box-shadow: 0 4px 16px rgba(#eec978, 0.2);
+
+  }
+
+  .route-map-list .map-list .map-item.is-highlight .details-button .map-name {
+    color: var(--color-highlight);
   }
 }

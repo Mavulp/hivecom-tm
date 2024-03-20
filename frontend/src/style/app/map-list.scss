@@ -1,8 +1,6 @@
 .route-map-list {
   padding-bottom: 10vh;
 
-
-
   .map-list {
     border: 1px solid var(--color-border);
     border-radius: 12px;
@@ -32,6 +30,26 @@
         }
       }
 
+      &.is-highlight {
+
+        &:after,
+        &:before {
+          content: "";
+          position: absolute;
+          left: -24px;
+          top: 16px;
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background-color: var(--color-highlight);
+        }
+
+        &:after {
+          left: unset;
+          right: -24px;
+        }
+      }
+
       &.new-record {
         &:after {
           content: "New WR";
@@ -53,7 +71,7 @@
 
       .details-button {
         @include flex(32px, flex-start, center);
-        padding: 24px 16px;
+        padding: 13px 16px;
         width: 100%;
         text-align: left;
 

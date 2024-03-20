@@ -1,7 +1,7 @@
 import { nav, fragment, div, img, button } from "@dolanske/cascade";
 import { onRouteResolve, onNavigation } from "@dolanske/crumbs"
 import { computed, ref } from "@vue/reactivity";
-import { RouterLink } from "@dolanske/pantry";
+import { Link } from "@dolanske/pantry";
 import { watchEffect } from "@vue-reactivity/watch";
 import { Icon } from "./Icon";
 import { throttle } from "../util/timing";
@@ -64,7 +64,7 @@ export default function () {
         .style('grid-template-columns', `repeat(${buttons.length}, 1fr)`)
         .for(buttons, (link) => {
           const isActive = computed(() => link === activeButton.value)
-          return RouterLink(`/${link}`, link).class('active', isActive)
+          return Link(`/${link}`, link).class('active', isActive)
         }),
       button()
         .setup((ctx) => {

@@ -1,5 +1,5 @@
 import { TrackmaniaMap } from "../../types";
-import { div, ul, li, strong, span, canvas, h6 } from "@dolanske/cascade"
+import { div, ul, li, strong, span, canvas } from "@dolanske/cascade"
 import { convertTimeToMs } from "../../util/format";
 import { navigate } from "@dolanske/crumbs";
 import { Chart } from "chart.js";
@@ -11,7 +11,9 @@ function Cell(title: string, value: string | number, mapId?: number) {
       ctx.attr('aria-role', 'button')
       ctx.class('clickable')
       ctx.click(() => {
-        navigate(`/maps?id=${mapId}`)
+        navigate('/records', {
+          hash: mapId
+        })
       })
     }
 
