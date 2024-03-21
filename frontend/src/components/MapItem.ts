@@ -5,6 +5,7 @@ import Detail from './Detail'
 import { timeAgo } from '../util/time'
 import RecordList from './RecordList'
 import { getRoute } from "@dolanske/crumbs"
+import Player from './Player'
 
 interface Props {
   map: TrackmaniaMap

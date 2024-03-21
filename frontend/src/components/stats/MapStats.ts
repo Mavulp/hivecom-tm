@@ -1,7 +1,9 @@
 import { TrackmaniaMap } from "../../types";
-import { div, ul, li, strong, span } from "@dolanske/cascade"
+import { div, ul, li, strong, span, canvas, h5 } from "@dolanske/cascade"
 import { convertTimeToMs } from "../../util/format";
 import { navigate } from "@dolanske/crumbs";
+import { Chart } from "chart.js";
+import { PieOptions } from "../../util/common";
 
 function Cell(title: string, value: string | number, mapId?: number) {
   return li().setup((ctx) => {
@@ -22,9 +24,6 @@ function Cell(title: string, value: string | number, mapId?: number) {
   })
 }
 
-// TODO
-// top 5 / 10 most played maps (based on records)
-
 export default function ProcessMaps(data: TrackmaniaMap[]) {
   // Datasets
   const totalMaps = data.length
@@ -36,6 +35,8 @@ export default function ProcessMaps(data: TrackmaniaMap[]) {
   }, [])
   // @ts-expect-error This will run in stable node 21
   const environments: Record<string, TrackmaniaMap[]> = Object.groupBy(data, ({ environment }) => environment)
+  const sortedEnvironments = Object.values(environments).sort((a, b) => a.length > b.length ? -1 : 1)
+
   const sortedByRecords = data.toSorted((a, b) => a.records.length > b.records.length ? -1 : 1)
 
   const sortedByTime = data.toSorted((a, b) => {
@@ -66,37 +67,71 @@ export default function ProcessMaps(data: TrackmaniaMap[]) {
         Cell("Longest name", longestName.name, longestName.id),
       )
     ),
-    div().class('split-wrapper').nest(
-      ul().style({ paddingBlock: '16px' }).class('player-stats').for(
-        Object.keys(environments),
-        (key, index) => {
-          const env = environments[key]
-          const uniquePlayers = env.reduce((group, item) => {
-            for (const record of item.records) {
-              if (!group.includes(record.player))
-                group.push(record.player)
-            }
-            return group
-          }, [] as string[])
-
-          return li().nest(
-            div().class('title').nest(
-              span(`#${index + 1}`).style({ color: 'var(--color-text-lighter)' }),
-              span(key)
-            ),
-            div().class('numbers').nest(
-              div().nest(
-                span('Maps'),
-                strong(env.length)
-              ),
-              div().nest(
-                span('Players'),
-                strong(uniquePlayers.length)
-              ),
-            )
-          )
-        }
+    div().class('split-wrapper').class('normal').nest([
+      div(),
+      div().nest(
+        h5('Top 10 maps'),
+        ul().class('map-stats').for(
+          sortedByRecords.slice(0, 10),
+          (map, index) => {
+            return li(JSON.stringify(map, null, 2))
+          }
+        )
       )
+    ]),
+    div().class('split-wrapper').nest(
+      div(
+        div().class('chart-wrap').nest(
+          canvas().id('environment-chart').setup((ctx) => {
+            ctx.onMount(() =>
+              new Chart(
+                ctx.el as HTMLCanvasElement,
+                {
+                  ...PieOptions,
+                  data: {
+                    labels: Object.keys(environments),
+                    datasets: [{
+                      data: Object.values(environments).map(item => item.length)
+                    }]
+                  }
+                }
+              )
+            )
+          })
+        )
+      ),
+      div([
+        h5('Environments'),
+        ul().class('player-stats').for(
+          sortedEnvironments,
+          (env, index) => {
+            const uniquePlayers = env.reduce((group, item) => {
+              for (const record of item.records) {
+                if (!group.includes(record.player))
+                  group.push(record.player)
+              }
+              return group
+            }, [] as string[])
+
+            return li().nest(
+              div().class('title').nest(
+                span(`#${index + 1}`).style({ color: 'var(--color-text-lighter)' }),
+                span(env[0].environment)
+              ),
+              div().class('numbers').nest(
+                div().nest(
+                  span('Maps'),
+                  strong(env.length)
+                ),
+                div().nest(
+                  span('Players'),
+                  strong(uniquePlayers.length)
+                ),
+              )
+            )
+          }
+        )
+      ])
     )
   )
 }

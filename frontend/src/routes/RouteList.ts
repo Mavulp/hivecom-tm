@@ -110,7 +110,6 @@ export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], T
         return MapItem().props({
           map,
           showFormattedNames,
-          // @ts-expect-error will be fixed when cascade is fixed
           isNewRecord: computed(() => $records.value.includes(map.id))
         })
       })

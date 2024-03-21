@@ -103,8 +103,7 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
         p().html(`<b>${data.length}</b> players from <b>${countriesSorted.value.length}</b> countries`)
       )
     ),
-    // @ts-expect-error will be fixed with Cascade unref
-    ul().class('player-stats').for(countriesSorted, (country: CountryStats[string], index) => {
+    ul().class('player-stats').for(countriesSorted, (country) => {
       return li().nest(
         div().class('title').nest(
           span().html(getFlagHTML(country.country.code, 32)),
@@ -113,11 +112,11 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
         div().class('numbers').nest(
           div().nest(
             span('Players'),
-            strong(`${country.players.length} (${partialPercentage(country.players.length, total.value.players)}%)`)
+            strong().html(`${country.players.length} <i>(${partialPercentage(country.players.length, total.value.players)}%)</i>`)
           ),
           div().nest(
             span('Records'),
-            strong(`${country.records} (${partialPercentage(country.records, total.value.records)}%)`)
+            strong().html(`${country.records} <i>(${partialPercentage(country.records, total.value.records)}%)</i>`)
           )
         )
       )

@@ -21,7 +21,11 @@
     }
 
     .chart-wrap {
-      padding: 48px;
+      padding: 24px 48px;
+      width: 324px;
+      height: 324px;
+      margin-bottom: 64px;
+
       position: sticky;
       top: 16px;
 
@@ -51,7 +55,7 @@
         }
 
         .title {
-          @include flex(24px);
+          @include flex(16px);
           margin-bottom: 8px;
 
           i {
@@ -71,7 +75,7 @@
 
         .numbers {
           @include flex(32px);
-          padding-left: 56px;
+          padding-left: 48px;
 
           span,
           strong {
@@ -89,6 +93,11 @@
           strong {
             @include font(500);
             font-size: 1.6rem;
+
+            i {
+              opacity: 0.5;
+              font-size: 1.2rem;
+            }
           }
         }
       }
@@ -98,10 +107,22 @@
   .maps-wrapper {
     overflow: hidden;
 
+    h5 {
+      padding-top: 24px;
+      padding-left: 16px;
+      margin-bottom: 8px;
+    }
+
     .split-wrapper {
       border: unset;
       border-radius: unset;
       margin-bottom: 0;
+
+      &.normal {
+        border-bottom: 1px solid var(--color-border);
+        display: block;
+
+      }
 
       .chart-wrap {
         margin-bottom: 0;
@@ -112,7 +133,8 @@
       }
 
       .player-stats {
-        padding-block: 16px;
+        // padding-block: 16px;
+        padding-bottom: 16px;
 
         li {
           @include grid(0, 156px 1fr);
@@ -134,7 +156,6 @@
 
         li {
           @include flex(4px, center, center, column);
-          // padding: 24px 16px;
           height: 108px;
           border-bottom: 1px solid var(--color-border);
 
