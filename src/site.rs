@@ -17,7 +17,7 @@ struct Map {
     id: u64,
     name: String,
     author: String,
-    environment: String,
+    //environment: String,
 }
 
 impl Ord for Map {
@@ -90,12 +90,12 @@ pub async fn root(
         .await?;
 
     let mut maps = BTreeMap::new();
-    for (id, name, author, environment, player, country, time, date) in loaded_scores {
+    for (id, name, author, _environment, player, country, time, date) in loaded_scores {
         let map = Map {
             id,
             name: crate::util::map_name_html(&name),
             author,
-            environment,
+            //environment,
         };
 
         let records = maps.entry(map).or_insert_with(Vec::new);

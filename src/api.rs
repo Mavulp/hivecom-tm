@@ -207,6 +207,7 @@ pub struct Player {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct LatestRecord {
+    pub id: u64,
     pub map_name: String,
     #[serde(serialize_with = "serialize_duration")]
     pub time: DisplayDuration,
@@ -223,7 +224,8 @@ pub async fn players_get(
     let loaded_players = conn
         .exec_iter(
             "SELECT
-                players.Id,
+                players.Id as player_id,
+                challenges.Id as map_id,
                 CONVERT(CAST(challenges.Name as BINARY) USING utf8),
                 players.Nation,
                 players.Login,
@@ -238,11 +240,13 @@ pub async fn players_get(
         .collect::<(
             // Id
             u64,
-            // Name
+            // Map Id
+            u64,
+            // Map Name
             String,
             // Country
             String,
-            // Player
+            // Player Name
             String,
             // Time
             i64,
@@ -253,7 +257,7 @@ pub async fn players_get(
 
     let mut players = HashMap::new();
     let mut records = HashMap::new();
-    for (player_id, map, country, player, time, date) in loaded_players {
+    for (player_id, map_id, map_name, country, player, time, date) in loaded_players {
         let player = Player {
             name: player,
             country: map_country(&country),
@@ -266,7 +270,7 @@ pub async fn players_get(
         player.maps += 1;
 
         let (record_id, record_time, record_date) = records
-            .entry(map.clone())
+            .entry((map_id, map_name.clone()))
             .or_insert((player_id, time, date));
 
         if *record_time > time || (*record_time == time && *record_date > date) {
@@ -276,14 +280,15 @@ pub async fn players_get(
         }
     }
 
-    for (map, (id, time, date)) in records.into_iter() {
+    for ((map_id, map_name), (id, time, date)) in records.into_iter() {
         if let Some(player) = players.get_mut(&id) {
             player.records += 1;
             let date = date.assume_utc();
             if let Some(latest) = &mut player.latest {
                 if latest.date < date {
                     *latest = LatestRecord {
-                        map_name: sanitize_map_name(&map),
+                        id: map_id,
+                        map_name: sanitize_map_name(&map_name),
                         time: DisplayDuration(Duration::milliseconds(time)),
                         date,
                         unix_date: date.unix_timestamp(),
@@ -291,7 +296,8 @@ pub async fn players_get(
                 }
             } else {
                 player.latest = Some(LatestRecord {
-                    map_name: sanitize_map_name(&map),
+                    id: map_id,
+                    map_name: sanitize_map_name(&map_name),
                     time: DisplayDuration(Duration::milliseconds(time)),
                     date,
                     unix_date: date.unix_timestamp(),

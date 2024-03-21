@@ -4,7 +4,10 @@ use axum::{
     routing::{get, get_service},
     Extension, Router,
 };
-use tower_http::{services::ServeDir, trace::TraceLayer};
+use tower_http::{
+    services::{ServeDir, ServeFile},
+    trace::TraceLayer,
+};
 use tracing::{debug, error};
 
 use std::net::SocketAddr;
@@ -46,19 +49,19 @@ async fn run() -> anyhow::Result<()> {
     let pool = mysql_async::Pool::new(&database_url[..]);
 
     let app = Router::new()
-        .route("/", get(site::root))
+        .route("/nojs", get(site::root))
         .route("/api/players", get(api::players_get))
         .route("/api/records", get(api::records_get))
         .route("/api/maps", get(api::maps_get))
         .layer(Extension(pool))
-        .nest(
-            "/static",
-            get_service(ServeDir::new("./static")).handle_error(|error| async move {
-                (
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    format!("Unhandled internal error: {}", error),
-                )
-            }),
+        .fallback(
+            get_service(ServeDir::new("./static").fallback(ServeFile::new("./static/index.html")))
+                .handle_error(|error| async move {
+                    (
+                        StatusCode::INTERNAL_SERVER_ERROR,
+                        format!("Unhandled internal error: {}", error),
+                    )
+                }),
         )
         .layer(TraceLayer::new_for_http());
 
