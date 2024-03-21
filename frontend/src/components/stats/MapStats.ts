@@ -1,9 +1,7 @@
 import { TrackmaniaMap } from "../../types";
-import { div, ul, li, strong, span, canvas } from "@dolanske/cascade"
+import { div, ul, li, strong, span } from "@dolanske/cascade"
 import { convertTimeToMs } from "../../util/format";
 import { navigate } from "@dolanske/crumbs";
-import { Chart } from "chart.js";
-import { PieOptions } from "../../util/common";
 
 function Cell(title: string, value: string | number, mapId?: number) {
   return li().setup((ctx) => {
@@ -69,27 +67,6 @@ export default function ProcessMaps(data: TrackmaniaMap[]) {
       )
     ),
     div().class('split-wrapper').nest(
-      div(
-        div().class('chart-wrap').nest(
-          canvas().id('environment-chart').setup((ctx) => {
-            let chart: Chart<'pie'> | undefined;
-            ctx.onMount(() => {
-              chart = new Chart(
-                ctx.el as HTMLCanvasElement,
-                {
-                  ...PieOptions,
-                  data: {
-                    labels: Object.keys(environments),
-                    datasets: [{
-                      data: Object.values(environments).map(item => item.length)
-                    }]
-                  }
-                }
-              )
-            })
-          })
-        )
-      ),
       ul().style({ paddingBlock: '16px' }).class('player-stats').for(
         Object.keys(environments),
         (key, index) => {

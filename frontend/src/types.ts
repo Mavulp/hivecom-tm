@@ -22,6 +22,7 @@ export interface TrackmaniaPlayer {
   maps: number,
   records: number,
   latest: {
+    id: number
     date: string
     map_name: string
     time: string

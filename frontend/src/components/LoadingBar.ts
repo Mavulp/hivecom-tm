@@ -1,5 +1,5 @@
 import { reusable, div } from "@dolanske/cascade"
-import { Ref, computed, ref } from "@vue/reactivity"
+import { Ref, ref } from "@vue/reactivity"
 import { watchEffect } from "@vue-reactivity/watch"
 
 interface Props {

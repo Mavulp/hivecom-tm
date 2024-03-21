@@ -1,5 +1,5 @@
-import { div, ul, button } from '@dolanske/cascade'
-import type { RouteProps, TrackmaniaMap, TrackmaniaPlayer, TrackmaniaRecord } from '../types'
+import { div, ul } from '@dolanske/cascade'
+import type { RouteProps, TrackmaniaMap, TrackmaniaPlayer } from '../types'
 import MapItem from '../components/MapItem'
 import InputSearch from '../components/form/InputSearch'
 import { computed, ref } from '@vue/reactivity'
