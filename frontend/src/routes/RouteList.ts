@@ -69,7 +69,7 @@ export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], T
   // Fetch new records
   const interval = setInterval(async () => {
     $records.value = await getRecords()
-  }, 4000)
+  }, FETCH_INTERVAL)
   ctx.onDestroy(() => clearInterval(interval))
 
   watch($records, (newVal, oldVal) => {
