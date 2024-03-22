@@ -1,5 +1,5 @@
 import { TrackmaniaMap } from "../../types";
-import { div, ul, li, strong, span, canvas, h5, fragment } from "@dolanske/cascade"
+import { div, ul, li, strong, span, canvas, h5 } from "@dolanske/cascade"
 import { convertTimeToMs } from "../../util/format";
 import { navigate } from "@dolanske/crumbs";
 import { Chart } from "chart.js";

@@ -33,9 +33,7 @@ export default reusable('div', (ctx, props: Props) => {
           ctx.el.style.maxHeight = String(0)
         }
       }, { immediate: true })
-      // Clean up watcher
       ctx.onDestroy(release)
-
       ctx.nest(props.content)
     })
   )

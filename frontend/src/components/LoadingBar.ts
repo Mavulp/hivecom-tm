@@ -20,9 +20,6 @@ export default reusable('div', (ctx, props: Props) => {
     }
   })
 
-
-
-
   ctx.nest(
     div()
       .class('bar')
