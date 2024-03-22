@@ -13,6 +13,7 @@
     @include grid(0, 1fr 1.5fr);
     width: 100%;
     margin-bottom: 64px;
+    background-color: var(--color-bg-base);
 
     .form-item {
       position: absolute;
@@ -158,6 +159,7 @@
           @include flex(4px, center, center, column);
           height: 108px;
           border-bottom: 1px solid var(--color-border);
+          background-color: var(--color-bg-base);
 
           &:nth-of-type(3n+1),
           &:nth-of-type(3n+2) {

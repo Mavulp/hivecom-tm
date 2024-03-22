@@ -1,4 +1,4 @@
-import { div, ul } from '@dolanske/cascade'
+import { div, ul, span } from '@dolanske/cascade'
 import type { RouteProps, TrackmaniaMap, TrackmaniaPlayer } from '../types'
 import MapItem from '../components/MapItem'
 import InputSearch from '../components/form/InputSearch'
@@ -8,6 +8,7 @@ import InputSelect from '../components/form/InputSelect'
 import InputCheckbox from '../components/form/InputCheckbox'
 import { Icon } from '../components/Icon'
 import { FETCH_INTERVAL, getRecords } from '../api'
+import { getRoute } from "@dolanske/crumbs"
 
 function extractKey(data: TrackmaniaMap[], key: keyof TrackmaniaMap) {
   return data
@@ -23,7 +24,6 @@ export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], T
   // TODO
   // Assign props.$data into a ref on first load. And then fetch new records every 30 seconds
   // Refactor into using ref() and computed()
-
   const $records = ref(props.$data[0])
   const $maps = props.$data[1]
   const $players = props.$data[2]
@@ -73,6 +73,21 @@ export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], T
   }, FETCH_INTERVAL)
   ctx.onDestroy(() => clearInterval(interval))
 
+  // Scroll maps into view
+  ctx.onMount(() => {
+    const route = getRoute()
+    if (route && route.hash) {
+      const el = document.getElementById(route.hash)
+      if (!el)
+        return
+      el?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      })
+    }
+  })
+
+
   ctx.class('container').class('route-map-list')
   ctx.nest(
     div().class('filter-wrap').nest(
@@ -112,7 +127,10 @@ export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], T
           showFormattedNames,
           isNewRecord: computed(() => $records.value.includes(map.id))
         })
-      })
+      }),
+      div(span('Looks like there are no maps here :/'))
+        .if(computed(() => toRender.value.length === 0))
+        .class('empty-state')
     ),
   )
 })

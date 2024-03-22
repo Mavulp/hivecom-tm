@@ -4,7 +4,17 @@
   .map-list {
     border: 1px solid var(--color-border);
     border-radius: 12px;
-    // overflow: hidden;
+    background-color: var(--color-bg-base);
+
+    .empty-state {
+      @include flex(0, center, center);
+      padding: 64px;
+
+      span {
+        @include font(400);
+        color: var(--color-text-light);
+      }
+    }
 
     .map-item {
       border-bottom: 1px solid var(--color-border);
@@ -74,6 +84,7 @@
         padding: 13px 16px;
         width: 100%;
         text-align: left;
+        // background-color: var(--color-bg-base);
 
         &.active {
           background-color: var(--color-bg-light-active) !important;
@@ -116,6 +127,7 @@
         @include grid(0, 2);
         position: relative;
         border-top: 1px solid var(--color-border);
+        // background-color: var(--color-bg-base);
 
         --triangle-size: 8px;
 

@@ -4,6 +4,7 @@
   --color-black: #0a0a0a;
 
   --color-bg: #ffffff;
+  --color-bg-base: #fcfdff;
   --color-bg-light: #f3f4fd;
   --color-bg-light-hover: #C0C6F6;
   --color-bg-light-active: #C0C6F6;
@@ -23,6 +24,7 @@
 
 :root.dark-theme {
   --color-bg: #100f13;
+  --color-bg-base: #141318;
 
   --color-bg-light: #18181f;
   --color-bg-light-hover: #292536;

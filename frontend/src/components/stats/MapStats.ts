@@ -1,5 +1,5 @@
 import { TrackmaniaMap } from "../../types";
-import { div, ul, li, strong, span, canvas, h5 } from "@dolanske/cascade"
+import { div, ul, li, strong, span, canvas, h5, fragment } from "@dolanske/cascade"
 import { convertTimeToMs } from "../../util/format";
 import { navigate } from "@dolanske/crumbs";
 import { Chart } from "chart.js";
@@ -67,18 +67,20 @@ export default function ProcessMaps(data: TrackmaniaMap[]) {
         Cell("Longest name", longestName.name, longestName.id),
       )
     ),
-    div().class('split-wrapper').class('normal').nest([
-      div(),
-      div().nest(
-        h5('Top 10 maps'),
-        ul().class('map-stats').for(
-          sortedByRecords.slice(0, 10),
-          (map, index) => {
-            return li(JSON.stringify(map, null, 2))
-          }
-        )
-      )
-    ]),
+    // div().class('split-wrapper').class('normal').nest([
+    //   div(),
+    //   div().nest(
+    //     h5('Top 10 maps'),
+    //     ul().class('map-stats').for(
+    //       sortedByRecords.slice(0, 10),
+    //       (map, index) => {
+    //         return li(
+    //           map.name
+    //         )
+    //       }
+    //     )
+    //   )
+    // ]),
     div().class('split-wrapper').nest(
       div(
         div().class('chart-wrap').nest(
