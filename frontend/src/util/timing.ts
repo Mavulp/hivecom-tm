@@ -10,14 +10,3 @@ export function throttle(mainFunction: Function, delay: number) {
     }
   };
 }
-
-// Pause repeated execution until after delay is passes 
-export function debounce(callback: Function, delay: number) {
-  let timer: any
-  return function () {
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      callback();
-    }, delay)
-  }
-}

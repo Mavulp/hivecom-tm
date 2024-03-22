@@ -34,7 +34,7 @@
         border-bottom: 0;
 
         &,
-        .details-button {
+        .details-button:not(.active) {
           border-bottom-left-radius: 12px;
           border-bottom-right-radius: 12px;
         }
@@ -61,21 +61,32 @@
       }
 
       &.new-record {
-        &:after {
-          content: "New WR";
-          @include font(500);
-          @include flex(0, center, center);
-          font-size: 1.2rem;
-          position: absolute;
-          left: calc(100% + 16px);
-          top: 16px;
-          white-space: nowrap;
-          height: 32px;
-          padding-inline: 12px;
-          border-radius: 16px;
-          background-color: var(--color-highlight);
-          color: var(--color-text-static);
-          box-shadow: 0 4px 16px rgba(#1b1b1b, 0.2);
+        .details-button {
+          .map-time {
+            color: var(--color-text);
+          }
+
+          &.active:after {
+            top: 68px;
+          }
+
+          &:after {
+            content: "NEW WR";
+            @include t(0.15s);
+            @include font(700);
+            @include flex(0, center, center);
+            font-size: 1.2rem;
+            position: absolute;
+            left: calc(100% + 16px);
+            top: 7px;
+            white-space: nowrap;
+            height: 32px;
+            padding-inline: 12px;
+            border-radius: 16px;
+            background-color: var(--color-highlight);
+            color: var(--color-text-static);
+            box-shadow: 0 2px 12px rgba(#eec978, 0.3);
+          }
         }
       }
 
@@ -84,7 +95,6 @@
         padding: 13px 16px;
         width: 100%;
         text-align: left;
-        // background-color: var(--color-bg-base);
 
         &.active {
           background-color: var(--color-bg-light-active) !important;
@@ -127,23 +137,7 @@
         @include grid(0, 2);
         position: relative;
         border-top: 1px solid var(--color-border);
-        // background-color: var(--color-bg-base);
-
-        --triangle-size: 8px;
-
-        &:before {
-          content: "";
-          width: 0;
-          height: 0;
-          border-left: var(--triangle-size) solid transparent;
-          border-right: var(--triangle-size) solid transparent;
-          border-top: var(--triangle-size) solid var(--color-border);
-          position: absolute;
-          left: 50%;
-          transform: translateX(-50%);
-          top: 0;
-          z-index: 10;
-        }
+        background-color: var(--color-bg-light);
 
         .map-details,
         .map-players {

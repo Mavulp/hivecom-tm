@@ -29,6 +29,7 @@ html {
   color: var(--color-text);
   min-height: 100vh;
   overflow-x: hidden;
+  z-index: 5;
 
   * {
     -webkit-box-sizing: border-box;

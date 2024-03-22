@@ -1,4 +1,22 @@
 .form-checkbox {
+  &.highlight input[type="checkbox"]+label {
+    position: relative;
+    z-index: 5;
+
+    &:after {
+      content: "";
+      position: absolute;
+      right: 1px;
+      top: 1px;
+      width: 10px;
+      height: 10px;
+      border-radius: 100%;
+      background-color: var(--color-highlight);
+      z-index: 5;
+      box-shadow: 0 0px 6px rgba(#eec978, 0.3);
+    }
+  }
+
   input[type="checkbox"] {
     display: none;
 

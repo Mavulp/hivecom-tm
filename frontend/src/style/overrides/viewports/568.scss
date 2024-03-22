@@ -32,17 +32,23 @@
   }
 
   .route-map-list .map-list .map-item .details-button {
-    padding: 16px;
-  }
+    padding: 10px 16px;
 
-  .route-map-list .map-list .map-item .map-content {
-    // display: block;
-    display: flex;
-    flex-direction: column-reverse;
+    gap: 8px;
 
-    &:before {
-      display: none;
+    .map-time,
+    .map-player {
+      width: auto;
+      min-width: auto;
     }
   }
 
+  .route-map-list .map-list .map-item .map-content {
+    display: flex;
+    flex-direction: column-reverse;
+
+    .map-details {
+      border-right: 0;
+    }
+  }
 }

@@ -9,6 +9,7 @@ import InputCheckbox from '../components/form/InputCheckbox'
 import { Icon } from '../components/Icon'
 import { FETCH_INTERVAL, getRecords } from '../api'
 import { getRoute } from "@dolanske/crumbs"
+import { watch } from '@vue-reactivity/watch'
 
 function extractKey(data: TrackmaniaMap[], key: keyof TrackmaniaMap) {
   return data
@@ -21,9 +22,6 @@ function extractKey(data: TrackmaniaMap[], key: keyof TrackmaniaMap) {
 }
 
 export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>) => {
-  // TODO
-  // Assign props.$data into a ref on first load. And then fetch new records every 30 seconds
-  // Refactor into using ref() and computed()
   const $records = ref(props.$data[0])
   const $maps = props.$data[1]
   const $players = props.$data[2]
@@ -62,16 +60,23 @@ export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], T
     .filter((item) => {
       if (!showOnlyRecords.value)
         return true
-
       return $records.value.includes(item.id)
     })
   )
 
-  // Fetch new records TODO
+  // Is set to true, if new records have been added since user loaded this page
+  const hasNewRecords = ref(false)
+  // Fetch new records
   const interval = setInterval(async () => {
     $records.value = await getRecords()
-  }, FETCH_INTERVAL)
+  }, 4000)
   ctx.onDestroy(() => clearInterval(interval))
+
+  watch($records, (newVal, oldVal) => {
+    if (!hasNewRecords.value && oldVal.length < newVal.length) {
+      hasNewRecords.value = true
+    }
+  })
 
   // Scroll maps into view
   ctx.onMount(() => {
@@ -115,10 +120,13 @@ export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], T
         modelValue: showFormattedNames,
         icon: Icon.palette
       }).attr('data-title-bottom', 'Show formatted map names'),
-      InputCheckbox().props({
-        modelValue: showOnlyRecords,
-        icon: Icon.medal
-      }).attr('data-title-bottom', "Show new records only")
+      InputCheckbox()
+        .props({
+          modelValue: showOnlyRecords,
+          icon: Icon.medal
+        })
+        .attr('data-title-bottom', "Show new records only")
+        .class('highlight', hasNewRecords)
     ),
     div().class('map-list').nest(
       ul().for(toRender, (map) => {

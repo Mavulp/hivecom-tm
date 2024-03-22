@@ -5,7 +5,6 @@ import Detail from './Detail'
 import { timeAgo } from '../util/time'
 import RecordList from './RecordList'
 import { getRoute } from "@dolanske/crumbs"
-import Player from './Player'
 
 interface Props {
   map: TrackmaniaMap
@@ -13,7 +12,7 @@ interface Props {
   isNewRecord: Ref<boolean>
 }
 
-export default reusable('div', (ctx, props: Props) => {
+export default reusable('li', (ctx, props: Props) => {
   const wr = props.map.records.toSorted((a, b) => a.time > b.time ? 1 : -1)[0]
   const name = computed(() => props.showFormattedNames.value ? props.map.name_styled : props.map.name)
   const active = ref(false)
@@ -25,10 +24,9 @@ export default reusable('div', (ctx, props: Props) => {
     }
   })
 
-  ctx.class('map-item').class({
-    'new-record': props.isNewRecord.value,
-    'is-highlight': active
-  })
+  ctx.class('new-record', props.isNewRecord)
+  ctx.class('map-item').class('is-highlight', active)
+
   ctx.id(props.map.id)
   ctx.nest(
     Detail().props({

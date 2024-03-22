@@ -3,8 +3,8 @@ import { MaybeRef, Ref, computed, ref, unref } from "@vue/reactivity"
 import { Icon } from "../Icon"
 import { onClickOutside } from "../../hooks/onClickOutside"
 
-// TODO
-// showSelected=true when single=false
+// Maybe in the future:
+// showSelected=true when single=false (not used in the app, not needed)
 
 interface Props {
   modelValue: Ref<string[]>,

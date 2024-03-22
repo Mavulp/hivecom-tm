@@ -7,7 +7,8 @@ export const maps = api.route('/maps')
 export const players = api.route('/players')
 
 export const getRecords = async () => {
-  const since = Math.floor(Date.now() / 1000) - 86400;
+  const DAYS = 1.5
+  const since = Math.floor(Date.now() / 1000) - (86400 * DAYS);
   const r = await api
     .route(`/records?since=${since}`)
     .get<TrackmaniaRecord[]>();
