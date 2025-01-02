@@ -1,12 +1,13 @@
 // Execute frequent calls with a delay
+// eslint-disable-next-line ts/no-unsafe-function-type
 export function throttle(mainFunction: Function, delay: number) {
-  let timerFlag: number | null = null;
+  let timerFlag: number | null = null
   return (...args: any[]) => {
     if (timerFlag === null) {
-      mainFunction(...args);
+      mainFunction(...args)
       timerFlag = setTimeout(() => {
-        timerFlag = null;
-      }, delay);
+        timerFlag = null
+      }, delay)
     }
-  };
+  }
 }

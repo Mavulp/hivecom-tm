@@ -1,6 +1,6 @@
 export function timeAgo(input: number | Date | string) {
-  const date = (input instanceof Date) ? input : new Date(input);
-  const formatter = new Intl.RelativeTimeFormat('en');
+  const date = (input instanceof Date) ? input : new Date(input)
+  const formatter = new Intl.RelativeTimeFormat('en')
   const ranges = [
     ['years', 3600 * 24 * 365],
     ['months', 3600 * 24 * 30],
@@ -9,13 +9,13 @@ export function timeAgo(input: number | Date | string) {
     ['hours', 3600],
     ['minutes', 60],
     ['seconds', 1],
-  ] as const;
-  const secondsElapsed = (date.getTime() - Date.now()) / 1000;
+  ] as const
+  const secondsElapsed = (date.getTime() - Date.now()) / 1000
 
   for (const [rangeType, rangeVal] of ranges) {
     if (rangeVal < Math.abs(secondsElapsed)) {
-      const delta = secondsElapsed / rangeVal;
-      return formatter.format(Math.round(delta), rangeType);
+      const delta = secondsElapsed / rangeVal
+      return formatter.format(Math.round(delta), rangeType)
     }
   }
 }

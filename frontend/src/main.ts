@@ -1,11 +1,11 @@
-import './style/index.scss'
-import { createApp } from '@dolanske/pantry'
-import RouteList from './routes/RouteList'
 import type { TrackmaniaMap, TrackmaniaPlayer } from './types'
+import { createApp } from '@dolanske/pantry'
+import { getRecords, maps, players } from './api'
 import Navigation from './components/Navigation'
-import { getRecords, maps, players, } from './api'
+import RouteList from './routes/RouteList'
 import RoutePlayers from './routes/RoutePlayers'
 import RouteStats from './routes/RouteStats'
+import './style/index.scss'
 
 export const app = createApp({
   '/records': {
@@ -26,16 +26,16 @@ export const app = createApp({
         maps.get<TrackmaniaMap[]>(),
         players.get<TrackmaniaPlayer[]>(),
       ])
-    }
+    },
   },
   '/players': {
     component: RoutePlayers,
-    loader: () => players.get<TrackmaniaPlayer[]>()
-  }
+    loader: () => players.get<TrackmaniaPlayer[]>(),
+  },
 })
 
 app.run('#router')
 
 // Mount navigation outside of the router boundary so it persists between
 // page navigations.
-Navigation().mount("#nav")
+Navigation().mount('#nav')

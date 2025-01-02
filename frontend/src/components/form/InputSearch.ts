@@ -1,6 +1,7 @@
-import { reusable, input, button, span } from "@dolanske/cascade";
-import { MaybeRef, Ref, computed } from "@vue/reactivity";
-import { Icon } from "../Icon";
+import type { MaybeRef, Ref } from '@vue/reactivity'
+import { button, input, reusable, span } from '@dolanske/cascade'
+import { computed } from '@vue/reactivity'
+import { Icon } from '../Icon'
 
 interface Props {
   disabled?: MaybeRef<boolean>
@@ -8,7 +9,7 @@ interface Props {
   modelValue: Ref<string>
 }
 
-export default reusable('div', (ctx, props: Props) => {
+export default reusable<Props>('div', (ctx, props) => {
   const hasInput = computed(() => props.modelValue.value.length > 0)
   ctx.class('form-item').class('form-search').class({ 'has-input': hasInput })
   ctx.nest(
@@ -19,6 +20,6 @@ export default reusable('div', (ctx, props: Props) => {
       .attr('disabled', props.disabled === true),
     button().class('form-clear-icon').html(Icon.close).show(hasInput).click(() => {
       props.modelValue.value = ''
-    })
+    }),
   )
 })

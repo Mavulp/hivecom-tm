@@ -17,17 +17,17 @@ export interface TrackmaniaRecord {
 }
 
 export interface TrackmaniaPlayer {
-  name: string,
-  country: string,
-  maps: number,
-  records: number,
+  name: string
+  country: string
+  maps: number
+  records: number
   latest: {
     id: number
     date: string
     map_name: string
     time: string
     unix_date: number
-  },
+  }
 }
 
 export interface RouteProps<T> {

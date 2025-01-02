@@ -1,14 +1,14 @@
-import { div, h2 } from "@dolanske/cascade"
-import { RouteProps, TrackmaniaMap, TrackmaniaPlayer } from "../types"
-import MapStatistics from "../components/stats/MapStats"
-import CountryStatistics from "../components/stats/CountryStats"
+import type { RouteProps, TrackmaniaMap, TrackmaniaPlayer } from '../types'
+import { div, h2 } from '@dolanske/cascade'
+import CountryStatistics from '../components/stats/CountryStats'
+import MapStatistics from '../components/stats/MapStats'
 
 type Props = RouteProps<[
   TrackmaniaMap[],
-  TrackmaniaPlayer[]
+  TrackmaniaPlayer[],
 ]>
 
-export default div().setup((ctx, props: Props) => {
+export default div<Props>().setup((ctx, props) => {
   const [$maps, $players] = props.$data
 
   ctx.class('container').class('route-stats')
@@ -16,6 +16,6 @@ export default div().setup((ctx, props: Props) => {
     h2('Countries'),
     CountryStatistics($players),
     h2('Maps'),
-    MapStatistics($maps)
+    MapStatistics($maps),
   )
 })

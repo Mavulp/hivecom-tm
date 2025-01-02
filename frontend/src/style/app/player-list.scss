@@ -32,7 +32,6 @@
         color: var(--color-text-lighter);
         background-color: var(--color-bg-base);
 
-
         &:first-child {
           border-top-left-radius: 12px;
         }
@@ -66,7 +65,7 @@
 
           &:before {
             @include t();
-            content: "";
+            content: '';
             opacity: 0;
             position: absolute;
             inset: -8px -12px;
@@ -100,12 +99,11 @@
             color: var(--color-accent);
           }
 
-          &+span {
+          & + span {
             font-size: 1rem;
             color: var(--color-text-lighter);
           }
         }
-
       }
     }
   }

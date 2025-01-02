@@ -1,15 +1,16 @@
-import { Country, getCountry } from "../../countries";
-import { TrackmaniaPlayer } from "../../types";
-import { ul, li, div, span, strong, canvas, p } from "@dolanske/cascade"
-import { getFlagHTML } from "../Icon";
+import type { Country } from '../../countries'
+import type { TrackmaniaPlayer } from '../../types'
+import { canvas, div, li, p, span, strong, ul } from '@dolanske/cascade'
+import { watch } from '@vue-reactivity/watch'
+import { computed, ref } from '@vue/reactivity'
 import Chart from 'chart.js/auto'
-import { partialPercentage, PieOptions } from "../../util/common";
-import InputSelect from "../form/InputSelect";
-import { computed, ref } from "@vue/reactivity";
-import { watch } from "@vue-reactivity/watch";
+import { getCountry } from '../../countries'
+import { partialPercentage, PieOptions } from '../../util/common'
+import InputSelect from '../form/InputSelect'
+import { getFlagHTML } from '../Icon'
 
 type CountryStats = Record<string, {
-  country: Country,
+  country: Country
   records: number
   players: TrackmaniaPlayer[]
 }>
@@ -24,11 +25,12 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
     if (group[item.country]) {
       group[item.country].players.push(item)
       group[item.country].records += item.records
-    } else {
+    }
+    else {
       group[item.country] = {
         country: getCountry(item.country.toUpperCase() as any),
         records: item.records,
-        players: [item]
+        players: [item],
       }
     }
     return group
@@ -37,13 +39,13 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
   // Sort dataset and remove invalid countries
   const countriesSorted = computed(() => Object
     .values(countriesRaw)
-    .filter((item) => item.country)
+    .filter(item => item.country)
     .sort((a, b) => {
       if (sortingOn.value === 'Players') {
         return a.players.length > b.players.length ? -1 : 1
       }
       return a.records > b.records ? -1 : 1
-    })
+    }),
   )
   // Summed up totals from the dataset
   const total = computed(() => {
@@ -58,7 +60,7 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
     div(
       div().class('chart-wrap').nest(
         canvas().id('player-chart').setup((ctx) => {
-          let chart: Chart<'pie'> | undefined;
+          let chart: Chart<'pie'> | undefined
           ctx.onMount(() => {
             chart = new Chart(
               ctx.el as HTMLCanvasElement,
@@ -70,8 +72,8 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
                     label: 'Players',
                     data: countriesSorted.value.map(item => item.players.length),
                   }],
-                }
-              }
+                },
+              },
             )
           })
 
@@ -83,16 +85,17 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
                   labels: countriesSorted.value.map(item => item.country.name),
                   datasets: [{
                     label: 'Players',
-                    data: countriesSorted.value.map(item => item.players.length)
-                  }]
+                    data: countriesSorted.value.map(item => item.players.length),
+                  }],
                 }
-              } else {
+              }
+              else {
                 chart.data = {
                   labels: countriesSorted.value.map(item => item.country.name),
                   datasets: [{
                     label: 'Records',
-                    data: countriesSorted.value.map(item => item.records)
-                  }]
+                    data: countriesSorted.value.map(item => item.records),
+                  }],
                 }
               }
 
@@ -100,25 +103,25 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
             }
           })
         }),
-        p().html(`<b>${data.length}</b> players from <b>${countriesSorted.value.length}</b> countries`)
-      )
+        p().html(`<b>${data.length}</b> players from <b>${countriesSorted.value.length}</b> countries`),
+      ),
     ),
     ul().class('player-stats').for(countriesSorted, (country) => {
       return li().nest(
         div().class('title').nest(
           span().html(getFlagHTML(country.country.code, 32)),
-          span(country.country.name)
+          span(country.country.name),
         ),
         div().class('numbers').nest(
           div().nest(
             span('Players'),
-            strong().html(`${country.players.length} <i>(${partialPercentage(country.players.length, total.value.players)}%)</i>`)
+            strong().html(`${country.players.length} <i>(${partialPercentage(country.players.length, total.value.players)}%)</i>`),
           ),
           div().nest(
             span('Records'),
-            strong().html(`${country.records} <i>(${partialPercentage(country.records, total.value.records)}%)</i>`)
-          )
-        )
+            strong().html(`${country.records} <i>(${partialPercentage(country.records, total.value.records)}%)</i>`),
+          ),
+        ),
       )
     }),
     InputSelect().style('width', '116px').props({
@@ -127,6 +130,6 @@ export default function ProcessPlayers(data: TrackmaniaPlayer[]) {
       modelValue: sortingOn,
       single: true,
       showSelected: true,
-    }).attr('data-title-left', 'Sort by')
+    }).attr('data-title-left', 'Sort by'),
   )
 }

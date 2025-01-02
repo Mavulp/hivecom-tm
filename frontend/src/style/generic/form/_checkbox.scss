@@ -1,10 +1,10 @@
 .form-checkbox {
-  &.highlight input[type="checkbox"]+label {
+  &.highlight input[type='checkbox'] + label {
     position: relative;
     z-index: 5;
 
     &:after {
-      content: "";
+      content: '';
       position: absolute;
       right: 1px;
       top: 1px;
@@ -17,10 +17,10 @@
     }
   }
 
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     display: none;
 
-    &+label {
+    & + label {
       @include flex(15px, center, center);
       cursor: pointer;
       width: var(--form-item-height);
@@ -41,9 +41,8 @@
       }
     }
 
-    &:checked+label {
+    &:checked + label {
       background-color: var(--color-bg-light-active);
-
     }
   }
 }
