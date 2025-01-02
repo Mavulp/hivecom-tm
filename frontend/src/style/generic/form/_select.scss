@@ -42,7 +42,7 @@
 
       &:before {
         @include t();
-        content: "";
+        content: '';
         width: 8px;
         height: 8px;
         position: absolute;

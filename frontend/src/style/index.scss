@@ -17,9 +17,9 @@ The folder structure for styles is divided into 4 types.
 
 */
 
-@import "./setup/";
+@import './setup/';
 
-@import "./generic/";
+@import './generic/';
 
 html {
   @include font(400);
@@ -38,6 +38,6 @@ html {
   }
 }
 
-@import "./app/";
+@import './app/';
 
-@import "./overrides/";
+@import './overrides/';

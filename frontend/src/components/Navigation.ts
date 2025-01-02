@@ -1,11 +1,11 @@
-import { nav, fragment, div, img, button } from "@dolanske/cascade";
-import { onRouteResolve, onNavigation } from "@dolanske/crumbs"
-import { computed, ref } from "@vue/reactivity";
-import { Link } from "@dolanske/pantry";
-import { watchEffect } from "@vue-reactivity/watch";
-import { Icon } from "./Icon";
-import { throttle } from "../util/timing";
-import LoadingBar from "./LoadingBar";
+import { button, div, fragment, img, nav } from '@dolanske/cascade'
+import { onNavigation, onRouteResolve } from '@dolanske/crumbs'
+import { Link } from '@dolanske/pantry'
+import { watchEffect } from '@vue-reactivity/watch'
+import { computed, ref } from '@vue/reactivity'
+import { throttle } from '../util/timing'
+import { Icon } from './Icon'
+import LoadingBar from './LoadingBar'
 
 function isDefaultDark() {
   const defaultState = localStorage.getItem('dark-theme')
@@ -18,7 +18,7 @@ function isDefaultDark() {
 
 export default function () {
   const activeButton = ref('records')
-  const buttons = ['records', "stats", 'players']
+  const buttons = ['records', 'stats', 'players']
   const loading = ref(false)
 
   onNavigation(() => {
@@ -36,8 +36,8 @@ export default function () {
       div().class('logo-wrap').nest(
         img().attrs({
           src: '/logo.svg',
-          alt: 'Hivecom Records Logo'
-        })
+          alt: 'Hivecom Records Logo',
+        }),
       ),
       div().class('flex-1'),
       button().setup((ctx) => {
@@ -57,7 +57,7 @@ export default function () {
         ctx.class('active', isDark)
         ctx.click(() => isDark.value = !isDark.value)
         ctx.html(buttonIcon)
-        ctx.attr('data-title-left', "Switch Theme")
+        ctx.attr('data-title-left', 'Switch Theme')
       }),
       div()
         .class('nav-links')
@@ -77,13 +77,13 @@ export default function () {
         })
         .class('scroll-up')
         .html(Icon.arrowUp)
-        .attr('data-title-top', "Scroll up")
+        .attr('data-title-top', 'Scroll up')
         .click(() => {
           window.scrollTo({
             top: 0,
-            behavior: 'smooth'
+            behavior: 'smooth',
           })
-        })
-    )
+        }),
+    ),
   )
 }

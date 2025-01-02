@@ -1,8 +1,8 @@
-@import "./filters.scss";
-@import "./navigation";
-@import "./map-list";
-@import "./player-list";
-@import "./statistics";
+@import './filters.scss';
+@import './navigation';
+@import './map-list';
+@import './player-list';
+@import './statistics';
 
 // Globally available styles
 .player-item {
@@ -32,6 +32,6 @@
   }
 
   &.active {
-    opacity: 1
+    opacity: 1;
   }
 }

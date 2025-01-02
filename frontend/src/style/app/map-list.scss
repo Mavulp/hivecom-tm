@@ -22,7 +22,6 @@
       position: relative;
 
       &:first-child {
-
         &,
         .details-button {
           border-top-left-radius: 12px;
@@ -41,10 +40,9 @@
       }
 
       &.is-highlight {
-
         &:after,
         &:before {
-          content: "";
+          content: '';
           position: absolute;
           left: -24px;
           top: 16px;
@@ -71,7 +69,7 @@
           }
 
           &:after {
-            content: "NEW WR";
+            content: 'NEW WR';
             @include t(0.15s);
             @include font(700);
             @include flex(0, center, center);
@@ -142,7 +140,6 @@
         .map-details,
         .map-players {
           padding: 24px 16px;
-
         }
 
         .map-details {
@@ -152,7 +149,6 @@
             width: 100%;
 
             tr:last-child {
-
               th,
               td {
                 padding-bottom: 0;

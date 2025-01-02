@@ -1,9 +1,9 @@
-import { TrackmaniaMap } from "../../types";
-import { div, ul, li, strong, span, canvas, h5 } from "@dolanske/cascade"
-import { convertTimeToMs } from "../../util/format";
-import { navigate } from "@dolanske/crumbs";
-import { Chart } from "chart.js";
-import { PieOptions } from "../../util/common";
+import type { TrackmaniaMap } from '../../types'
+import { canvas, div, h5, li, span, strong, ul } from '@dolanske/cascade'
+import { navigate } from '@dolanske/crumbs'
+import { Chart } from 'chart.js'
+import { PieOptions } from '../../util/common'
+import { convertTimeToMs } from '../../util/format'
 
 function Cell(title: string, value: string | number, mapId?: number) {
   return li().setup((ctx) => {
@@ -12,14 +12,14 @@ function Cell(title: string, value: string | number, mapId?: number) {
       ctx.class('clickable')
       ctx.click(() => {
         navigate('/records', {
-          hash: mapId
+          hash: mapId,
         })
       })
     }
 
     ctx.nest(
       strong().html(String(value)),
-      span(title)
+      span(title),
     )
   })
 }
@@ -62,10 +62,10 @@ export default function ProcessMaps(data: TrackmaniaMap[]) {
         Cell('Most played', sortedByRecords[0].name, sortedByRecords[0].id),
         Cell('Shortest map', shortestMap.name, shortestMap.id),
         Cell('Longest map', longestMap.name, longestMap.id),
-        Cell("Most styled name", sortedByStyledName[0].name_styled, sortedByStyledName[0].id),
-        Cell("Shortest name", shortestName.name, shortestName.id),
-        Cell("Longest name", longestName.name, longestName.id),
-      )
+        Cell('Most styled name', sortedByStyledName[0].name_styled, sortedByStyledName[0].id),
+        Cell('Shortest name', shortestName.name, shortestName.id),
+        Cell('Longest name', longestName.name, longestName.id),
+      ),
     ),
     // div().class('split-wrapper').class('normal').nest([
     //   div(),
@@ -93,14 +93,14 @@ export default function ProcessMaps(data: TrackmaniaMap[]) {
                   data: {
                     labels: Object.keys(environments),
                     datasets: [{
-                      data: Object.values(environments).map(item => item.length)
-                    }]
-                  }
-                }
-              )
+                      data: Object.values(environments).map(item => item.length),
+                    }],
+                  },
+                },
+              ),
             )
-          })
-        )
+          }),
+        ),
       ),
       div([
         h5('Environments'),
@@ -118,22 +118,22 @@ export default function ProcessMaps(data: TrackmaniaMap[]) {
             return li().nest(
               div().class('title').nest(
                 span(`#${index + 1}`).style({ color: 'var(--color-text-lighter)' }),
-                span(env[0].environment)
+                span(env[0].environment),
               ),
               div().class('numbers').nest(
                 div().nest(
                   span('Maps'),
-                  strong(env.length)
+                  strong(env.length),
                 ),
                 div().nest(
                   span('Players'),
-                  strong(uniquePlayers.length)
+                  strong(uniquePlayers.length),
                 ),
-              )
+              ),
             )
-          }
-        )
-      ])
-    )
+          },
+        ),
+      ]),
+    ),
   )
 }

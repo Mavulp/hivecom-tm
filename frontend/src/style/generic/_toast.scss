@@ -42,7 +42,7 @@ This is the styling for toast notifications
         }
 
         &:before {
-          content: "";
+          content: '';
           @include radius(var(--radius-sm));
           display: block;
           position: absolute;

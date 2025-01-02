@@ -1,10 +1,11 @@
-import { span, reusable, strong, fragment, div, table, tr, th, td } from '@dolanske/cascade'
+import type { Ref } from '@vue/reactivity'
 import type { TrackmaniaMap } from '../types'
-import { Ref, computed, ref } from '@vue/reactivity'
-import Detail from './Detail'
+import { div, fragment, reusable, span, strong, table, td, th, tr } from '@dolanske/cascade'
+import { getRoute } from '@dolanske/crumbs'
+import { computed, ref } from '@vue/reactivity'
 import { timeAgo } from '../util/time'
+import Detail from './Detail'
 import RecordList from './RecordList'
-import { getRoute } from "@dolanske/crumbs"
 
 interface Props {
   map: TrackmaniaMap
@@ -12,7 +13,7 @@ interface Props {
   isNewRecord: Ref<boolean>
 }
 
-export default reusable('li', (ctx, props: Props) => {
+export default reusable<Props>('li', (ctx, props) => {
   const wr = props.map.records.toSorted((a, b) => a.time > b.time ? 1 : -1)[0]
   const name = computed(() => props.showFormattedNames.value ? props.map.name_styled : props.map.name)
   const active = ref(false)
@@ -33,25 +34,24 @@ export default reusable('li', (ctx, props: Props) => {
       button: fragment([
         span().class('map-name').html(name),
         strong(wr.player).class('map-player'),
-        strong(wr.time).class('map-time')
+        strong(wr.time).class('map-time'),
       ]),
-      content: div().class('map-content')
-        .nest(
-          div().class('map-details').nest(
-            table([
-              tr([th('Environment'), td(props.map.environment)]),
-              tr([th('Author'), td(props.map.author)]),
-              tr([th('Records'), td(props.map.records.length)]),
-              tr([th('Latest time'), td().setup((ctx) => {
-                const latest = props.map.records.sort((a, b) => a.unixDate > b.unixDate ? -1 : 1)[0]
-                ctx.text(`${latest.player}, ${timeAgo(Number(`${latest.unixDate}000`))}`)
-              })])
-            ])
-          ),
-          div().class('map-players').nest(RecordList().props({
-            records: props.map.records
-          }))
-        )
-    })
+      content: div().class('map-content').nest(
+        div().class('map-details').nest(
+          table([
+            tr([th('Environment'), td(props.map.environment)]),
+            tr([th('Author'), td(props.map.author)]),
+            tr([th('Records'), td(props.map.records.length)]),
+            tr([th('Latest time'), td().setup((ctx) => {
+              const latest = props.map.records.sort((a, b) => a.unixDate > b.unixDate ? -1 : 1)[0]
+              ctx.text(`${latest.player}, ${timeAgo(Number(`${latest.unixDate}000`))}`)
+            })]),
+          ]),
+        ),
+        div().class('map-players').nest(RecordList().props({
+          records: props.map.records,
+        })),
+      ),
+    }),
   )
 })

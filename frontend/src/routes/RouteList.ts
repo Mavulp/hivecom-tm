@@ -1,15 +1,15 @@
-import { div, ul, span } from '@dolanske/cascade'
 import type { RouteProps, TrackmaniaMap, TrackmaniaPlayer } from '../types'
-import MapItem from '../components/MapItem'
-import InputSearch from '../components/form/InputSearch'
-import { computed, ref } from '@vue/reactivity'
-import { searchInStr } from '../util/search-in'
-import InputSelect from '../components/form/InputSelect'
-import InputCheckbox from '../components/form/InputCheckbox'
-import { Icon } from '../components/Icon'
-import { FETCH_INTERVAL, getRecords } from '../api'
-import { getRoute } from "@dolanske/crumbs"
+import { div, span, ul } from '@dolanske/cascade'
+import { getRoute } from '@dolanske/crumbs'
 import { watch } from '@vue-reactivity/watch'
+import { computed, ref } from '@vue/reactivity'
+import { FETCH_INTERVAL, getRecords } from '../api'
+import InputCheckbox from '../components/form/InputCheckbox'
+import InputSearch from '../components/form/InputSearch'
+import InputSelect from '../components/form/InputSelect'
+import { Icon } from '../components/Icon'
+import MapItem from '../components/MapItem'
+import { searchInStr } from '../util/search-in'
 
 function extractKey(data: TrackmaniaMap[], key: keyof TrackmaniaMap) {
   return data
@@ -21,7 +21,7 @@ function extractKey(data: TrackmaniaMap[], key: keyof TrackmaniaMap) {
     .sort()
 }
 
-export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>) => {
+export default div<RouteProps<[number[], TrackmaniaMap[], TrackmaniaPlayer[]]>>().setup((ctx, props) => {
   const $records = ref(props.$data[0])
   const $maps = props.$data[1]
   const $players = props.$data[2]
@@ -52,16 +52,22 @@ export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], T
   const toRender = computed(() => $maps
     // Make sure every selected player is in the map's saved records
     .filter(item => (
-      plaFilters.value.length > 0 ? plaFilters.value.some(p => item.records.find(r => r.player === p)) : true
-        && envFilters.value.length > 0 ? envFilters.value.some(e => e === item.environment) : true
-          && autFilters.value.length > 0 ? autFilters.value.some(a => a === item.author) : true
+      plaFilters.value.length > 0
+        ? plaFilters.value.some(p => item.records.find(r => r.player === p))
+        : true
+          && envFilters.value.length > 0
+          ? envFilters.value.includes(item.environment)
+          : true
+            && autFilters.value.length > 0
+            ? autFilters.value.includes(item.author)
+            : true
     ))
     .filter(item => searchInStr(item.name, search.value))
     .filter((item) => {
       if (!showOnlyRecords.value)
         return true
       return $records.value.includes(item.id)
-    })
+    }),
   )
 
   // Is set to true, if new records have been added since user loaded this page
@@ -87,24 +93,22 @@ export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], T
         return
       el?.scrollIntoView({
         behavior: 'smooth',
-        block: 'center'
+        block: 'center',
       })
     }
   })
-
 
   ctx.class('container').class('route-map-list')
   ctx.nest(
     div().class('filter-wrap').nest(
       InputSearch().props({
         placeholder: 'Search maps',
-        label: 'Search',
-        modelValue: search
+        modelValue: search,
       }),
       InputSelect().props({
         label: 'Environment',
         options: envOptions,
-        modelValue: envFilters
+        modelValue: envFilters,
       }).style({ 'min-width': '156px' }),
       InputSelect().props({
         label: 'Player',
@@ -114,32 +118,31 @@ export default div().setup((ctx, props: RouteProps<[number[], TrackmaniaMap[], T
       InputSelect().props({
         label: 'Author',
         options: autOptions,
-        modelValue: autFilters
+        modelValue: autFilters,
       }).style({ 'min-width': '136px' }),
       InputCheckbox().props({
         modelValue: showFormattedNames,
-        icon: Icon.palette
+        icon: Icon.palette,
       }).attr('data-title-bottom', 'Show formatted map names'),
       InputCheckbox()
         .props({
           modelValue: showOnlyRecords,
-          icon: Icon.medal
+          icon: Icon.medal,
         })
-        .attr('data-title-bottom', "Show new records only")
-        .class('highlight', hasNewRecords)
+        .attr('data-title-bottom', 'Show new records only')
+        .class('highlight', hasNewRecords),
     ),
     div().class('map-list').nest(
       ul().for(toRender, (map) => {
         return MapItem().props({
           map,
           showFormattedNames,
-          isNewRecord: computed(() => $records.value.includes(map.id))
+          isNewRecord: computed(() => $records.value.includes(map.id)),
         })
       }),
       div(span('Looks like there are no maps here :/'))
         .if(computed(() => toRender.value.length === 0))
-        .class('empty-state')
+        .class('empty-state'),
     ),
   )
 })
-

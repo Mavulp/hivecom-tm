@@ -122,7 +122,6 @@
       &.normal {
         border-bottom: 1px solid var(--color-border);
         display: block;
-
       }
 
       .chart-wrap {
@@ -161,8 +160,8 @@
           border-bottom: 1px solid var(--color-border);
           background-color: var(--color-bg-base);
 
-          &:nth-of-type(3n+1),
-          &:nth-of-type(3n+2) {
+          &:nth-of-type(3n + 1),
+          &:nth-of-type(3n + 2) {
             border-right: 1px solid var(--color-border);
           }
 
@@ -181,7 +180,6 @@
 
             strong {
               color: var(--color-accent);
-
             }
           }
 
@@ -204,7 +202,6 @@
             span {
               display: inline;
               font-size: inherit;
-
             }
           }
         }

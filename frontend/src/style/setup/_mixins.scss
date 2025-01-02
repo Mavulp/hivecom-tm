@@ -3,7 +3,7 @@
 //
 
 @function is-number($value) {
-  @return type-of($value)=="number";
+  @return type-of($value) == 'number';
 }
 
 @mixin noselect() {
@@ -82,9 +82,7 @@
 
   @if is-number($columns) {
     grid-template-columns: repeat($columns, 1fr);
-  }
-
-  @else {
+  } @else {
     grid-template-columns: $columns;
   }
 }
