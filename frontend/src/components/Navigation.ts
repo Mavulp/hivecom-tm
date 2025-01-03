@@ -1,8 +1,7 @@
 import { button, div, fragment, img, nav } from '@dolanske/cascade'
 import { onNavigation, onRouteResolve } from '@dolanske/crumbs'
 import { Link } from '@dolanske/pantry'
-import { watchEffect } from '@vue-reactivity/watch'
-import { computed, ref } from '@vue/reactivity'
+import { computed, effect, ref } from '@vue/reactivity'
 import { throttle } from '../util/timing'
 import { Icon } from './Icon'
 import LoadingBar from './LoadingBar'
@@ -34,16 +33,13 @@ export default function () {
     LoadingBar().prop('active', loading),
     nav().class('navigation').nest(
       div().class('logo-wrap').nest(
-        img().attrs({
-          src: '/logo.svg',
-          alt: 'Hivecom Records Logo',
-        }),
+        img('/logo.svg').alt('Hivecom Records Logo'),
       ),
       div().class('flex-1'),
       button().setup((ctx) => {
         const isDark = ref(isDefaultDark())
 
-        watchEffect(() => {
+        effect(() => {
           localStorage.setItem('dark-theme', String(isDark.value))
           if (isDark.value)
             document.documentElement.classList.add('dark-theme')

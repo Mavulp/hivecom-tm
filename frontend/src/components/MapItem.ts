@@ -29,6 +29,7 @@ export default reusable<Props>('li', (ctx, props) => {
   ctx.class('map-item').class('is-highlight', active)
 
   ctx.id(props.map.id)
+
   ctx.nest(
     Detail().props({
       button: fragment([

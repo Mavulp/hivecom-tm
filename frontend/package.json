@@ -15,7 +15,6 @@
     "@dolanske/crumbs": "^1.1.0",
     "@dolanske/eru": "^0.0.15",
     "@dolanske/pantry": "^0.4.3",
-    "@vue-reactivity/watch": "^0.2.0",
     "@vue/reactivity": "^3.5.13",
     "chart.js": "^4.4.7",
     "npm": "^11.0.0",

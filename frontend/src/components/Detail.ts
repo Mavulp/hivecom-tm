@@ -1,8 +1,7 @@
 import type { Component } from '@dolanske/cascade'
 import type { MaybeRef } from '@vue/reactivity'
 import { button, div, reusable } from '@dolanske/cascade'
-import { watch } from '@vue-reactivity/watch'
-import { isRef, ref } from '@vue/reactivity'
+import { isRef, ref, watch } from '@vue/reactivity'
 
 interface Props {
   button: Component<any>
@@ -11,11 +10,7 @@ interface Props {
 }
 
 export default reusable<Props>('div', (ctx, props) => {
-  const open = props.open
-    ? isRef(props.open)
-      ? props.open
-      : ref(props.open)
-    : ref(false)
+  const open = isRef(props.open) ? props.open : ref(props.open || false)
 
   ctx.class('details')
 
