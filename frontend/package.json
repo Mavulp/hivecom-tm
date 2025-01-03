@@ -11,10 +11,10 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "@dolanske/cascade": "^2.4.4",
-    "@dolanske/crumbs": "^1.1.0",
+    "@dolanske/cascade": "^2.4.5",
+    "@dolanske/crumbs": "^1.1.1",
     "@dolanske/eru": "^0.0.15",
-    "@dolanske/pantry": "^0.4.3",
+    "@dolanske/pantry": "^0.4.4",
     "@vue/reactivity": "^3.5.13",
     "chart.js": "^4.4.7",
     "npm": "^11.0.0",
